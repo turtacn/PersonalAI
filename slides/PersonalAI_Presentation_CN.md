@@ -34,6 +34,7 @@ style: |
   }
 ---
 
+
 <!-- 幻灯片1: 封面 -->
 # 先用AI，先进起来
 
@@ -42,9 +43,22 @@ style: |
 <div class="center">
 <img src="assets/images/personalai-logo.png" alt="PersonalAI Logo" width="250px" />
 
-**PersonalAI 项目**
+**PersonalAI 项目**  
 https://github.com/turtacn/PersonalAI
 </div>
+
+---
+
+<!-- 幻灯片2: 内容概览 -->
+# 内容概览
+
+- **研发面临的挑战与机遇**
+- **AI技术革新与研发融合**
+- **"产研GPT三级火箭"理念介绍**
+- **实践案例与价值展示**
+- **落地路径与资源获取**
+
+> "让顶尖AI模型为研发团队打工"
 
 ---
 
