@@ -38,12 +38,14 @@
         * [开发工作流](templates/workflows/development-workflow.md)
         * [知识产权工作流](templates/workflows/ipr-workflow.md)
 
-* [工具与实例](tools/README.md)
+* [工具与实例]
+    * [本章说明](tools/README.md)
     * [配置工具使用](tools/configs/README.md)
     * [插件使用](tools/plugins/README.md)
     * [脚本工具](tools/scripts/README.md)
         
-* [实例与案例](examples/README.md)
+* [实例与案例]
+    * [本章说明](examples/README.md)
     * [原型案例](examples/prototype/README.md)
     * [开发案例](examples/development/README.md)
     * [知识产权案例](examples/ipr/README.md)
