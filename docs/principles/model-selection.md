@@ -10,21 +10,7 @@
 
 ### 2.1 按规模与能力分类
 
-```mermaid
-graph TD
-    A[模型分类] --> B[超大规模模型<br>1000亿+参数]
-    A --> C[大型模型<br>100-1000亿参数]
-    A --> D[中等规模模型<br>10-100亿参数]
-    A --> E[小型模型<br>1-10亿参数]
-    A --> F[专用微调模型<br>特定领域优化]
-    
-    style A fill:#d4f1f9,stroke:#05728f
-    style B fill:#d5f5e3,stroke:#1e8449
-    style C fill:#d5f5e3,stroke:#1e8449
-    style D fill:#d5f5e3,stroke:#1e8449
-    style E fill:#d5f5e3,stroke:#1e8449
-    style F fill:#d5f5e3,stroke:#1e8449
-```
+<img src="../../slides/assets/images/modelselection-modelsize.png" width="100%" />
 
 | 模型类型 | 代表模型 | 主要特点 | 适用场景 |
 |---------|---------|---------|---------|
@@ -47,23 +33,7 @@ graph TD
 
 ### 3.1 功能因素
 
-```mermaid
-graph TD
-    A[功能评估维度] --> B[上下文窗口大小]
-    A --> C[推理能力]
-    A --> D[指令遵循能力]
-    A --> E[代码质量]
-    A --> F[多模态支持]
-    A --> G[特定领域知识]
-    
-    style A fill:#d4f1f9,stroke:#05728f
-    style B fill:#fadbd8,stroke:#943126
-    style C fill:#fadbd8,stroke:#943126
-    style D fill:#fadbd8,stroke:#943126
-    style E fill:#fadbd8,stroke:#943126
-    style F fill:#fadbd8,stroke:#943126
-    style G fill:#fadbd8,stroke:#943126
-```
+<img src="../../slides/assets/images/modelselection-func.png"  width="100%" />
 
 | 评估维度 | 重要性 | 评估方法 |
 |---------|-------|---------|
@@ -122,26 +92,7 @@ graph TD
 
 ### 5.1 部署模式对比
 
-```mermaid
-graph LR
-    A[部署模式] --> B[云API调用]
-    A --> C[本地部署]
-    A --> D[混合部署]
-    
-    B --> B1[优势: 零维护/持续更新]
-    B --> B2[劣势: 成本高/数据外传]
-    
-    C --> C1[优势: 数据安全/成本可控]
-    C --> C2[劣势: 维护复杂/性能受限]
-    
-    D --> D1[优势: 场景灵活配置]
-    D --> D2[劣势: 架构复杂性增加]
-    
-    style A fill:#d4f1f9,stroke:#05728f
-    style B fill:#fdebd0,stroke:#9c640c
-    style C fill:#fdebd0,stroke:#9c640c
-    style D fill:#fdebd0,stroke:#9c640c
-```
+<img src="../../slides/assets/images/modelselection-deploy.png"  width="100%" />
 
 ### 5.2 硬件要求与规划
 
@@ -215,21 +166,7 @@ graph LR
 2. **增强层**：重要场景使用中等规模/性能模型
 3. **关键层**：核心决策使用最高性能模型
 
-```mermaid
-graph TD
-    A[分级模型策略] --> B[基础层<br>本地部署开源模型]
-    A --> C[增强层<br>中等商业模型/开源大模型]
-    A --> D[关键层<br>顶级商业模型]
-    
-    B --> B1[日常代码补全<br>简单问题咨询]
-    C --> C1[代码生成<br>架构辅助设计]
-    D --> D1[关键创新决策<br>复杂系统设计]
-    
-    style A fill:#d4f1f9,stroke:#05728f
-    style B fill:#ebdef0,stroke:#8e44ad
-    style C fill:#ebdef0,stroke:#8e44ad
-    style D fill:#ebdef0,stroke:#8e44ad
-```
+<img src="../../slides/assets/images/modelselection-level.png"  width="100%" />
 
 ### 7.2 成本优化技术
 

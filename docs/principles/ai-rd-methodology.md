@@ -30,22 +30,7 @@
 
 "产研GPT三级火箭"是PersonalAI项目提出的核心方法论框架，将AI赋能研发流程划分为三个递进阶段，同时配合系统智能诊断形成完整闭环。
 
-```mermaid
-graph LR
-    subgraph TPR[产研GPT三级火箭]
-        P1[一级火箭:<br/>PrototypeGPT] --> P2[二级火箭:<br/>DevelopGPT]
-        P2 --> P3[三级火箭:<br/>IPRGPT]
-    end
-
-    subgraph SD[系统智能诊断]
-        S1[智能诊断] --> S2[排障处理]
-        S2 --> S3[系统监测]
-        S3 -.-> S1
-    end
-    
-    P3 -.反馈优化.-> P1
-    SD -.支持.-> TPR
-```
+<img src="../../slides/assets/images/three-rockets-arch.png" width="100%" />
 
 ### 3.1 PrototypeGPT：快速系统原型化
 
@@ -133,19 +118,7 @@ graph LR
 
 ### 4.2 阶段实施策略
 
-```mermaid
-graph TD
-    A[评估与规划] --> B[试点实施]
-    B --> C[推广扩展]
-    C --> D[标准化与优化]
-    D --> E[创新驱动]
-    
-    style A fill:#d4f1f9,stroke:#05728f
-    style B fill:#d4f1f9,stroke:#05728f
-    style C fill:#d4f1f9,stroke:#05728f
-    style D fill:#d4f1f9,stroke:#05728f
-    style E fill:#d4f1f9,stroke:#05728f
-```
+<img src="../../slides/assets/images/three-rockets-plan.png" width="100%" />
 
 #### 第一阶段：评估与规划
 - 识别AI应用机会点与价值潜力
