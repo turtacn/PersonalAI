@@ -24,7 +24,7 @@
 2. **DevelopGPT** - 快速系统设计与实现，高效完成60%+开发工作
 3. **IPRGPT** - 知识产权草案生成，加速创新成果保护与积累
 
-同时配合系统智能诊断能力，实现研发全链路的AI赋能。
+同时配合系统智能诊断能力，例如[Chasi-SREagent：An open source GPT enhanced automatic SRE agent for Chasi applications & platform](https://github.com/turtacn/chasi-sreagent)，实现研发全链路的AI赋能。
 
 ## 🌟 核心特性
 
