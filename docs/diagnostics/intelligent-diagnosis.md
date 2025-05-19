@@ -24,20 +24,7 @@
 
 智能诊断系统采用分层设计，实现从数据采集到智能决策的完整诊断闭环：
 
-```mermaid
-graph TD
-    A[多源数据采集层] --> B[数据处理与分析层]
-    B --> C[智能诊断引擎]
-    C --> D[解决方案推荐层]
-    D --> E[执行与反馈层]
-    E --> A
-    
-    style A fill:#d4f1f9,stroke:#05728f
-    style B fill:#d5f5e3,stroke:#1e8449
-    style C fill:#d5f5e3,stroke:#1e8449
-    style D fill:#d5f5e3,stroke:#1e8449
-    style E fill:#d4f1f9,stroke:#05728f
-```
+<img src="../../slides/assets/images/personalai-intelligent-diagnosis.png" width="100%" />
 
 ### 2.1 多源数据采集层
 

@@ -25,25 +25,7 @@ IPRGPT是"产研GPT三级火箭"的第三级，专注于将技术创新转化为
 
 IPRGPT采用系统化的工作流程，将研发成果转化为全面的知识产权保护：
 
-```mermaid
-graph TD
-    A[技术成果接收] --> B[创新点提取与分析]
-    B --> C[专利检索与评估]
-    C --> D[专利文档生成]
-    D --> E[权利要求优化]
-    E --> F[技术保护策略制定]
-    F --> G[申请资料准备]
-    G --> H[持续创新指导]
-    
-    style A fill:#d4f1f9,stroke:#05728f
-    style B fill:#d5f5e3,stroke:#1e8449
-    style C fill:#d5f5e3,stroke:#1e8449
-    style D fill:#d5f5e3,stroke:#1e8449
-    style E fill:#d5f5e3,stroke:#1e8449
-    style F fill:#d5f5e3,stroke:#1e8449
-    style G fill:#d5f5e3,stroke:#1e8449
-    style H fill:#d4f1f9,stroke:#05728f
-```
+<img src="../../slides/assets/images/iprgpt-flow.png" width="100%" />
 
 ### 2.1 技术成果接收
 

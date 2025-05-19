@@ -24,25 +24,7 @@ DevelopGPT是"产研GPT三级火箭"的第二级，专注于利用大型语言�
 
 DevelopGPT采用分阶段的系统化开发流程，充分发挥AI在代码生成与优化环节的优势：
 
-```mermaid
-graph TD
-    A[原型成果接收] --> B[系统架构设计]
-    B --> C[API与接口定义]
-    C --> D[核心代码生成]
-    D --> E[测试用例生成与执行]
-    E --> F[代码审查与优化]
-    F --> G[文档与注释生成]
-    G --> H[交付集成]
-    
-    style A fill:#d4f1f9,stroke:#05728f
-    style B fill:#d5f5e3,stroke:#1e8449
-    style C fill:#d5f5e3,stroke:#1e8449
-    style D fill:#d5f5e3,stroke:#1e8449
-    style E fill:#d5f5e3,stroke:#1e8449
-    style F fill:#d5f5e3,stroke:#1e8449
-    style G fill:#d5f5e3,stroke:#1e8449
-    style H fill:#d4f1f9,stroke:#05728f
-```
+<img src="../../slides/assets/images/developgpt-flow.png" width="100%" />
 
 ### 2.1 原型成果接收
 

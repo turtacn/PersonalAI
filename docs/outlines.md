@@ -6,29 +6,7 @@ PersonalAI项目旨在创建一个全面的文档资源库，聚焦于"先用AI�
 
 ### 1.1 项目核心架构
 
-```mermaid
-graph TD
-    %% 项目整体架构图
-    subgraph PA[PersonalAI 核心架构]
-        A1[理念与方法论（Theory & Methodology）] --> A2[实践案例（Practical Cases）]
-        A1 --> A3[工具与资源（Tools & Resources）]
-        A2 --> A4[最佳实践（Best Practices）]
-        A3 --> A4
-    end
-
-    subgraph TP[三级火箭（Three-Phase Rocket）]
-        B1[PrototypeGPT<br/>快速系统原型化] --> B2[DevelopGPT<br/>快速系统设计实现]
-        B2 --> B3[IPRGPT<br/>知识产权草案生成]
-    end
-
-    subgraph SD[系统智能（System Diagnostics）]
-        C1[智能诊断（Intelligent Diagnostics）] --> C2[排障处理（Troubleshooting）]
-        C2 --> C3[系统检测（System Monitoring）]
-    end
-
-    PA --- TP
-    PA --- SD
-```
+<img src="../slides/assets/images/personalai-arch.png"  width="100%"/>
 
 ### 1.2 价值主张
 
@@ -75,21 +53,8 @@ PersonalAI项目立足于实现人工智能技术在研发全流程中的深度�
 ### 2.3 "产研GPT三级火箭"理念
 
 **幻灯片5: 三级火箭总览**
-```mermaid
-flowchart LR
-    %% 三级火箭概念图
-    subgraph TPR[产研GPT三级火箭]
-        P1[一级:<br/>PrototypeGPT] --> P2[二级:<br/>DevelopGPT]
-        P2 --> P3[三级:<br/>IPRGPT]
-    end
 
-    subgraph SD[系统智能]
-        S1[诊断<br/>Diagnosis] <--> S2[排障<br/>Troubleshoot]
-        S2 <--> S3[检测<br/>Monitor]
-    end
-    
-    TPR --- SD
-```
+<img src="../slides/assets/images/three-rockets.png" width="100%"/>
 
 **幻灯片6: 一级火箭 - PrototypeGPT**
 - 快速系统原型化的核心价值
@@ -159,26 +124,8 @@ flowchart LR
 - 成本与效益平衡分析
 
 **幻灯片15: 工程实践**
-```mermaid
-graph TD
-    %% AI开发工程实践流程
-    subgraph PE[工程实践（Engineering Practice）]
-        E1[工具链构建<br/>（Toolchain Setup）] --> E2[能力培养<br/>（Capability Building）]
-        E2 --> E3[流程调整<br/>（Process Adaptation）]
-        E3 --> E4[监控评估<br/>（Monitoring & Evaluation）]
-        E4 --> E5[持续优化<br/>（Continuous Improvement）]
-        E5 --> E1
-    end
 
-    subgraph RT[资源类型（Resource Types）]
-        R1[模型资源<br/>（Model Resources）]
-        R2[提示模板<br/>（Prompt Templates）]
-        R3[工具脚本<br/>（Tool Scripts）]
-        R4[最佳实践<br/>（Best Practices）]
-    end
-
-    PE --- RT
-```
+<img src="../slides/assets/images/ai-engineering-practice.png" width="100%" />
 
 **幻灯片16: 团队转型**
 - 研发团队角色变化
@@ -204,20 +151,8 @@ graph TD
 - 持续更新机制
 
 **幻灯片19: 实施路线图**
-```mermaid
-gantt
-    title PersonalAI实施路线图
-    dateFormat  YYYY-MM
-    section 准备阶段
-    技术选型与评估    :a1, 2024-01, 1M
-    团队培训与赋能    :a2, after a1, 1M
-    section 试点阶段
-    小规模验证项目    :b1, after a2, 2M
-    经验总结与调整    :b2, after b1, 1M
-    section 推广阶段
-    全面实施       :c1, after b2, 3M
-    持续优化与迭代   :c2, after c1, 6M
-```
+
+<img src="../slides/assets/images/personalai-timeplan.png" width="100%" />
 
 **幻灯片20: 总结与展望**
 - 核心价值重申

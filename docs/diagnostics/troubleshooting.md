@@ -26,26 +26,7 @@
 
 系统化的故障排查流程可提高效率并确保问题得到彻底解决：
 
-```mermaid
-graph TD
-    A[故障发现与确认] --> B[初步评估与分类]
-    B --> C[信息收集与分析]
-    C --> D[形成假设与验证]
-    D --> E{定位根因?}
-    E -->|否| C
-    E -->|是| F[解决方案设计]
-    F --> G[实施与验证]
-    G --> H[复盘与沉淀]
-    
-    style A fill:#d4f1f9,stroke:#05728f
-    style B fill:#d5f5e3,stroke:#1e8449
-    style C fill:#d5f5e3,stroke:#1e8449
-    style D fill:#d5f5e3,stroke:#1e8449
-    style E fill:#fadbd8,stroke:#943126
-    style F fill:#d5f5e3,stroke:#1e8449
-    style G fill:#d5f5e3,stroke:#1e8449
-    style H fill:#d4f1f9,stroke:#05728f
-```
+<img src="../../slides/assets/images/troubleshooting-flow.png" width="100%" />
 
 ### 2.1 故障发现与确认
 

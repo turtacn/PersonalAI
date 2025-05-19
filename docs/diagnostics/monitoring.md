@@ -1,6 +1,3 @@
-
-
-```markdown:docs/diagnostics/monitoring.md
 # 监控系统设计指南
 
 ## 1. 概述
@@ -22,42 +19,7 @@
 
 全面的监控体系应覆盖以下关键维度：
 
-```mermaid
-graph TD
-    A[监控维度] --> B[基础设施监控]
-    A --> C[应用性能监控]
-    A --> D[业务指标监控]
-    A --> E[用户体验监控]
-    A --> F[安全监控]
-    
-    B --> B1[服务器资源]
-    B --> B2[网络性能]
-    B --> B3[存储系统]
-    B --> B4[容器平台]
-    
-    C --> C1[应用性能]
-    C --> C2[服务调用]
-    C --> C3[数据库操作]
-    C --> C4[缓存效率]
-    
-    D --> D1[业务KPI]
-    D --> D2[功能使用]
-    D --> D3[转化流程]
-    D --> D4[用户活动]
-    
-    E --> E1[页面加载]
-    E --> E2[交互响应]
-    E --> E3[错误率]
-    E --> E4[满意度]
-    
-    F --> F1[访问模式]
-    F --> F2[漏洞扫描]
-    F --> F3[合规审计]
-    F --> F4[威胁检测]
-    
-    style A fill:#d4f1f9,stroke:#05728f
-    style B,C,D,E,F fill:#d5f5e3,stroke:#1e8449
-```
+<img src="../../slides/assets/images/monitor-dimesions.png" width="100%" />
 
 ## 2. 监控系统设计原则
 
@@ -198,19 +160,7 @@ http_requests_total{method="GET", endpoint="/api/users", status="200"} 24 162798
 
 现代监控系统通常采用分层架构，包含以下核心组件：
 
-```mermaid
-graph TD
-    A[数据采集层] --> B[数据处理层]
-    B --> C[数据存储层]
-    C --> D[分析与可视化层]
-    D --> E[告警与响应层]
-    
-    style A fill:#d4f1f9,stroke:#05728f
-    style B fill:#d5f5e3,stroke:#1e8449
-    style C fill:#d5f5e3,stroke:#1e8449
-    style D fill:#d5f5e3,stroke:#1e8449
-    style E fill:#d4f1f9,stroke:#05728f
-```
+<img src="../../slides/assets/images/monitor-arch.png" width="100%" />
 
 ### 3.2 数据采集层
 

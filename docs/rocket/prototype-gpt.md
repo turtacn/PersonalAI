@@ -24,26 +24,7 @@ PrototypeGPT是"产研GPT三级火箭"的第一级，专注于利用大型语言
 
 PrototypeGPT采用迭代式工作流程，充分发挥AI在需求理解和原型生成环节的优势：
 
-```mermaid
-graph TD
-    A[需求收集与整理] --> B[AI辅助需求分析]
-    B --> C[用户场景与流程生成]
-    C --> D[UI/UX原型设计]
-    D --> E[交互Demo构建]
-    E --> F[反馈收集与分析]
-    F --> G{需求稳定?}
-    G -->|否| B
-    G -->|是| H[移交正式开发]
-    
-    style A fill:#d4f1f9,stroke:#05728f
-    style B fill:#d5f5e3,stroke:#1e8449
-    style C fill:#d5f5e3,stroke:#1e8449
-    style D fill:#d5f5e3,stroke:#1e8449
-    style E fill:#d5f5e3,stroke:#1e8449
-    style F fill:#d5f5e3,stroke:#1e8449
-    style G fill:#fadbd8,stroke:#943126
-    style H fill:#d4f1f9,stroke:#05728f
-```
+<img src="../../slides/assets/images/prototypegpt-flow.png" width="100%" />
 
 ### 2.1 需求收集与整理
 

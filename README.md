@@ -103,19 +103,7 @@ PersonalAI/
 
 ## 📊 项目路线图
 
-```mermaid
-gantt
-    title PersonalAI项目路线图
-    dateFormat  YYYY-MM
-    section 第一阶段
-    核心文档完善     :2025-01, 2M
-    section 第二阶段
-    案例与模板扩充    :2025-03, 2M
-    section 第三阶段
-    工具开发与优化    :2025-05, 7M
-    section 持续维护
-    社区建设与更新    :2025-12, 8M
-```
+<img src="slides/assets/images/personalai-timeplan.png" width="100%" />
 
 ## 📄 许可证
 
