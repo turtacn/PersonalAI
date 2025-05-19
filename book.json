@@ -1,13 +1,103 @@
 {
+  "title": "PersonalAI - 先用AI，先进起来",
+  "description": "人工智能赋能研发全过程的实践指南,让顶尖AI模型为研发团队打工",
+  "author": "turta",
+  "language": "zh-hans",
+  "plugins": [
+    "favicon-absolute",
+    "edit-link",
+    "-lunr",
+    "-search",
+    "search-plus",
+    "expandable-chapters-small",
+    "back-to-top-button",
+    "page-toc-button",
+    "katex",
+    "pagefooter-freedom",
+    "hide-element",
+    "-highlight",
+    "prism",
+    "prism-themes",
+    "github-buttons",
+    "summary-logo",
+    "code",
+    "todo",
+    "flexible-alerts",
+    "theme-comscore",
+    "language-picker",
+    "get-pdf",
+    "password-pro"
+  ],
   "pdf": {
-    "pageNumbers": true,
-    "fontSize": 12,
-    "paperSize": "a4",
-    "margin": {
-      "right": 62,
-      "left": 62,
-      "top": 56,
-      "bottom": 56
+    "fontSize": 12
+  },
+  "pluginsConfig": {
+    "favicon-absolute": {
+      "favicon": "",
+      "appleTouchIconPrecomposed152": "/assets/logo.png"
+    },
+    "edit-link": {
+      "base": "https://github.com/turtacn/PersonalAI",
+      "label": ""
+    },
+    "flexible-alerts": {
+      "style": "flat",
+      "comment": {
+        "label": "Comment",
+        "icon": "fa fa-comments",
+        "className": "info"
+      },
+
+      "update": {
+        "label": "Update",
+        "icon": "fa fa-upload",
+        "className": "tip"
+      }
+    },
+    "pagefooter-freedom": {
+      "copyright":"Copyright © all Sangforers all right reserved;  ",
+      "modify_label": "修订时间: ",
+      "modify_format": "YYYY-MM-DD HH:mm:ss",
+      "hide": false
+    },
+    "hide-element": {
+      "elements": [
+        ".gitbook-link"
+      ]
+    },
+    "prism": {
+      "css": [
+        "prism-themes/themes/prism-one-light.css"
+      ],
+      "lang": {
+        "shell": "bash",
+        "dockerfile": "bash"
+      }
+    },
+    "github-buttons": {
+      "buttons": [
+        {
+          "user": "Turta",
+          "repo": "Personal.AI",
+          "type": "star",
+          "size": "small"
+        }
+      ]
+    },
+    "summary-logo": {
+      "logo": "slides/assets/images/personalai-logo.png",
+      "link": "https://github.com/turtacn",
+      "style": "background:#24572c;max-width:300px"
+    },
+    "code": {
+      "copyButtons": true
+    },
+    "get-pdf": {
+      "base": "https://github.com/turtacn/PersonalAI/tree/claude-sonnet-3.7-thinking/slides/assets",
+      "prefix": "book",
+      "label": ""
+    },
+    "password-pro": {
     }
   }
 }
