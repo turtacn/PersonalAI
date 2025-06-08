@@ -24,9 +24,14 @@
 2. **DevelopGPT** - 快速系统设计与实现，高效完成60%+开发工作
 3. **IPRGPT** - 知识产权草案生成，加速创新成果保护与积累
 
+参考设计&实现，如下：
+
+1. **[ProtoForge](hhttps://github.com/turtacn/protoforge)** - an open-source ai-agent and agentic ai framework for autonomous code generation, product prototyping, iterative development, and IP protection — powered by composable LLM agents and designed for private, full-stack R&D workflow.
+
 同时配合系统智能诊断能力，例如:
 
 1. **[Chasi-SREagent](https://github.com/turtacn/chasi-sreagent)** - An open source GPT enhanced automatic SRE agent for Chasi applications & platform
+
 
 实现研发全链路的AI赋能。
 
@@ -122,6 +127,7 @@ PersonalAI/
 - [deepseek-engineer](https://github.com/Doriandarko/deepseek-engineer)
 - [gopool](https://pro.devchat.ai/devchat-ai/gopool/)
 - [devchat](https://www.devchat.ai/)
+- [llm-course](https://github.com/mlabonne/llm-course)
 
 ## 📢 联系我们
 
