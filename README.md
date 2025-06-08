@@ -26,7 +26,7 @@
 
 参考设计&实现，如下：
 
-1. **[ProtoForge](hhttps://github.com/turtacn/protoforge)** - an open-source ai-agent and agentic ai framework for autonomous code generation, product prototyping, iterative development, and IP protection — powered by composable LLM agents and designed for private, full-stack R&D workflow.
+1. **[ProtoForge](https://github.com/turtacn/protoforge)** - an open-source ai-agent and agentic ai framework for autonomous code generation, product prototyping, iterative development, and IP protection — powered by composable LLM agents and designed for private, full-stack R&D workflow.
 
 同时配合系统智能诊断能力，例如:
 
