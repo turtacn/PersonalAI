@@ -26,14 +26,19 @@
 
 参考设计&实现，如下：
 
-1. **[ProtoForge](https://github.com/turtacn/protoforge)** - an open-source ai-agent and agentic ai framework for autonomous code generation, product prototyping, iterative development, and IP protection — powered by composable LLM agents and designed for private, full-stack R&D workflow.
+1. **[ProtoForge](https://github.com/turtacn/protoforge)** - An open-source ai-agent and agentic ai framework for autonomous code generation, product prototyping, iterative development, and IP protection — powered by composable LLM agents and designed for private, full-stack R&D workflow.
 
 同时配合系统智能诊断能力，例如:
 
 1. **[Chasi-SREagent](https://github.com/turtacn/chasi-sreagent)** - An open source GPT enhanced automatic SRE agent for Chasi applications & platform
 
-
 实现研发全链路的AI赋能。
+
+特别关注非功能性需求场景，运用DFX方法，实现现代软件的质量综合治理，例如：
+
+1. **[NFR-DFX-Quality-Toolkit](https://github.com/turtacn/NFR-DFX-Quality-Toolkit)** - An open-source toolkit that applies DFX (Design for eXcellence) methods on non-functional requirements to modern software quality.
+
+实现质量设计的逻辑。
 
 ## 🌟 核心特性
 
