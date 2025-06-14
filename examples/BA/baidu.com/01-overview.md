@@ -2,7 +2,7 @@
 
 ### I. 引言（Introduction）
 
-作为一名资深的顶级证券分析师，同时兼具产品、业务和技术大师的视角，本报告旨在对百度公司（以下简称“该公司”）进行一次全面、深入且富有前瞻性的分析。分析将涵盖其财务状况、战略布局、核心业务表现、市场竞争力，并结合人工智能、云计算及自动驾驶等前沿技术趋势，探讨其未来的增长潜力和面临的挑战。
+作为一名全面优雅的分析师@PersonalAI，本报告旨在对百度公司（以下简称“该公司”）进行一次全面、深入且富有前瞻性的分析。分析将涵盖其财务状况、战略布局、核心业务表现、市场竞争力，并结合人工智能、云计算及自动驾驶等前沿技术趋势，探讨其未来的增长潜力和面临的挑战。
 
 本次分析将灵活运用多种专业的公司分析方法与模型，包括但不限于PESTEL分析宏观环境、SWOT分析内部优势与劣势、波特五力模型剖析行业竞争、财务比率分析评估财务健康度等。我们将特别关注人工智能技术在百度各项业务中的渗透与赋能作用，并深入洞察未来3-5年国内外市场和技术趋势，力求为读者提供全面、深刻且具指导意义的洞察。
 
@@ -180,14 +180,7 @@
 **战术建议：**
 
 ```mermaid
-graph TD
-    %% Legend for strategic suggestions
-    legend
-        A[核心战略]
-        B[战术建议]
-        C[支持措施]
-        D[预期成果]
-    end
+graph LR 
 
     A1[以文心一言为核心<br/>构建开放创新生态] --> B1[降低开发者门槛（Ease Developer Entry）]
     A1 --> B2[驱动应用创新与商业化（Drive Application Innovation & Commercialization）]
@@ -339,14 +332,9 @@ graph TD
 百度的技术路线图围绕“AI核心，技术创新驱动”展开：
 
 ```mermaid
-graph TD
+graph LR
     %% Legend for technology roadmap
-    legend
-        A[核心层]
-        B[技术基础]
-        C[应用层]
-        D[战略方向]
-    end
+
 
     subgraph CL[核心层（Core Layer）]
         CL1[昆仑芯（Kunlun AI Chip）] --> CL2[飞桨（PaddlePaddle DL Framework）]
@@ -389,6 +377,7 @@ graph TD
     CL --> TB
     TB --> AL
     AL --> SD
+
 ```
 
 **创新路径：**
@@ -443,11 +432,11 @@ graph TD
 
 ### XI. 参考资料（References）
 
-\[1] 百度官网：关于百度. [https://www.baidu.com/](https://www.baidu.com/)
-\[2] 百度投资者关系：财报中心. [http://ir.baidu.com/](http://ir.baidu.com/) (具体财报数据需在此查阅最新季度和年度报告)
-\[3] 东方财富Choice数据：百度集团-SW (09888). [https://data.eastmoney.com/](https://data.eastmoney.com/) (用于获取市场公开的财务指标和分析师预测)
-\[4] 中国网信网：《生成式人工智能服务管理暂行办法》. [http://www.cac.gov.cn/2023-07/13/c\_1690074251786198.htm](http://www.cac.gov.cn/2023-07/13/c_1690074251786198.htm)
-\[5] 百度投资者关系：公司治理. [http://ir.baidu.com/governance/](http://ir.baidu.com/governance/)
-\[6] 国家知识产权局（CNIPA）或相关行业报告 (具体AI专利排名数据需查阅最新公开报告，如IncoPat或第三方专利分析机构报告)
-\[7] 各季度财报中披露的研发费用数据
-\[8] 百度可持续发展报告 (Sustainability Report). [https://csr.baidu.com/](https://csr.baidu.com/) (具体ESG实践数据需查阅最新报告)
+- \[1] 百度官网：关于百度. [https://www.baidu.com/](https://www.baidu.com/)
+- \[2] 百度投资者关系：财报中心. [http://ir.baidu.com/](http://ir.baidu.com/) (具体财报数据需在此查阅最新季度和年度报告)
+- \[3] 东方财富Choice数据：百度集团-SW (09888). [https://data.eastmoney.com/](https://data.eastmoney.com/) (用于获取市场公开的财务指标和分析师预测)
+- \[4] 中国网信网：《生成式人工智能服务管理暂行办法》. [http://www.cac.gov.cn/2023-07/13/c\_1690074251786198.htm](http://www.cac.gov.cn/2023-07/13/c_1690074251786198.htm)
+- \[5] 百度投资者关系：公司治理. [http://ir.baidu.com/governance/](http://ir.baidu.com/governance/)
+- \[6] 国家知识产权局（CNIPA）或相关行业报告 (具体AI专利排名数据需查阅最新公开报告，如IncoPat或第三方专利分析机构报告)
+- \[7] 各季度财报中披露的研发费用数据
+- \[8] 百度可持续发展报告 (Sustainability Report). [https://csr.baidu.com/](https://csr.baidu.com/) (具体ESG实践数据需查阅最新报告)
