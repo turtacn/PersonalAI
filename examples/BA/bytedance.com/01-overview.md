@@ -21,13 +21,9 @@
 我们分析影响字节跳动发展的外部宏观因素及其带来的行业痛点。
 
 ```mermaid
-graph TD
-    %% 图例：分析维度与影响方向
-    legend
-        A[宏观维度] --- B[影响方向]
-    end
+graph LR
 
-    subgraph PESTEL宏观环境分析（PESTEL Macro-Environmental Analysis）
+    subgraph PESTEL[宏观环境分析（PESTEL Macro-Environmental Analysis）]
         P[政治与政策（Political & Policy）] --> P1[数据安全与算法监管收紧（Data Security & Algorithm Regulation Tightening）]
         P --> P2[地缘政治紧张加剧（Geopolitical Tensions Escalating）]
         P --> P3[反垄断常态化（Anti-Monopoly Normalization）]
