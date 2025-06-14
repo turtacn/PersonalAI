@@ -42,8 +42,8 @@
 
 所有业务与技术分析来源于，对"企业"这种商业体的全面业务与技术分析，例如
 
-* 1. **[baidu.com商业分析](examples/BA/baidu.com/01-overview.md)** 
-* 2. **[bytedance.com商业分析](examples/BA/bytedance.com/01-overview.md)** 
+* **[baidu.com 公司分析](examples/BA/baidu.com/01-overview.md)** 
+* **[bytedance.com 公司分析](examples/BA/bytedance.com/01-overview.md)** 
 
  
 ## 🌟 核心特性
