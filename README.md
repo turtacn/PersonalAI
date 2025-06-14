@@ -40,6 +40,12 @@
 
 实现质量设计的逻辑。
 
+所有业务与技术分析来源于，对"企业"这种商业体的全面业务与技术分析，例如
+
+* 1. **[baidu.com商业分析](examples/BA/baidu.com/01-overview.md)** 
+* 2. **[bytedance.com商业分析](examples/BA/bytedance.com/01-overview.md)** 
+
+ 
 ## 🌟 核心特性
 
 - **全面的方法论体系**：提供从需求分析到知识产权保护的完整AI应用方法论
