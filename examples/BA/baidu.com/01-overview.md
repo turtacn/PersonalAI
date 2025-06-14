@@ -179,7 +179,7 @@
 
 **战术建议：**
 
-![战术建议](images/01.png){ width=\linewidth }
+![战术建议](images/01.png)
 
 **战术建议具体阐述：**
 
@@ -288,7 +288,7 @@
 
 百度的技术路线图围绕“AI核心，技术创新驱动”展开：
 
-![创新路径](images/02.png){ width=\linewidth }
+![创新路径](images/02.png)
 
 **创新路径：**
 
