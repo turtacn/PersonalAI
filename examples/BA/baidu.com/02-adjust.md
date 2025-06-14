@@ -158,7 +158,7 @@
 
 为更好地承接“AI First”战略，尤其是大模型时代的挑战与机遇，建议百度在现有基础上进行以下组织架构优化：
 
-<img src="images/03.png" width="100%" />
+![关键优化](images/03.png){ width=\linewidth }
 
 **关键优化点：**
 
@@ -241,7 +241,7 @@
 
 #### 5.1 营收增长驱动因素预测
 
-<img src="images/04.png" width="100%" />
+![增长因素](images/04.png){ width=\linewidth }
 
 **预测趋势：**
 
