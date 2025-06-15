@@ -47,72 +47,11 @@ HSDS由三个核心层级构成，并由字节跳动强大的技术中台支撑�
      * **数字社交与协作：** 虚拟分身社交、AI辅助创作、共同体验虚拟场景。
      * **数字资产与经济：** 赋能用户创建和拥有AI生成内容（UGC/AIGC）的数字产权，形成AI创作经济。
 
-### 2.3 架构原型描述（Mermaid Diagram）
+### 2.3 架构原型描述
 
-```mermaid
-graph 
+![架构原型](images/06.png)
 
 
-    subgraph HSDS[“超感官数字共生体”生态（Hyper-Sensory Digital Symbiote Ecosystem）]
-        subgraph PerceptionLayer[1.感知与理解层（Perception & Understanding Layer）]
-            UserSense[多模态用户感知（Multimodal User Sensing）] -->
-            BioSignals[（生物信号<br/>（穿戴设备））]
-            UserSense --> Behavior[（用户行为<br/>（点击、停留、互动））]
-            UserSense --> Context[（情景感知<br/>（时间、地点、环境））]
-            UserSense --> Voice[（语音语调<br/>（情绪识别））]
-            UserSense --> Visual[（视觉表情<br/>（情绪识别））]
-
-            MultimodalLLM[多模态大模型（Multimodal LLM）] --> UserSense
-            MultimodalLLM --> UserProfileGraph[深度用户画像与兴趣图谱（Deep User Profile & Interest Graph）]
-        end
-
-        subgraph GenerationLayer[2.生成与交互层（Generation & Interaction Layer）]
-            AIGCEngine[AIGC生成引擎（AIGC Generation Engine）] --> AI_Content[（AI内容生成<br/>（视频、图片、3D、文本、音频））]
-            AIGCEngine --> Virtual_Human[（虚拟数字人<br/>（情绪表达、具身智能））]
-            AIGCEngine --> Interactive_Env[（交互式场景/环境生成<br/>（XR空间））]
-
-            XRPlatform[空间计算与XR渲染平台（Spatial Computing & XR Rendering）] --> Interactive_Env
-            XRPlatform --> Pico[（Pico VR/AR设备<br/>接入）]
-
-            NaturalInteraction[自然交互接口（Natural Interaction Interface）] --> Voice_AI[（语音AI）]
-            NaturalInteraction --> Gesture_Control[（手势控制）]
-            NaturalInteraction --> Brain_Computer_Interface[（脑机接口<br/>（未来展望））]
-
-            MultimodalLLM --> AIGCEngine
-            AIGCEngine -- 驱动 --> NaturalInteraction
-        end
-
-        subgraph ServiceLayer[3.服务与连接层（Service & Connection Layer）]
-            HyperPersonalStream[超个性化内容流（Hyper-Personalized Content Stream）]
-            ContextualEcom[情景电商与即时服务（Contextual E-commerce & Instant Service）]
-            DigitalSocial[数字社交与协作（Digital Social & Collaboration）]
-            AICreationEconomy[AI创作经济（AI Creation Economy）]
-
-            AI_Content --> HyperPersonalStream
-            Virtual_Human --> DigitalSocial
-            Interactive_Env --> ContextualEcom
-            AI_Content --> AICreationEconomy
-        end
-
-        subgraph TechFoundation[底层技术中台（Underlying Tech Foundation）]
-            BigDataAI[大数据与AI算力平台（Big Data & AI Computing Platform）]
-            PrivacyCompute[隐私计算与联邦学习（Privacy Computing & Federated Learning）]
-            BlockchainDID[区块链与数字身份（Blockchain & Digital Identity）]
-            VolcanoEngine[火山引擎（Volcano Engine）]
-
-            BigDataAI --支持--> MultimodalLLM
-            PrivacyCompute --确保--> UserProfileGraph
-            BlockchainDID --赋能--> AICreationEconomy
-            VolcanoEngine --对外赋能--> PerceptionLayer
-        end
-
-        PerceptionLayer --> GenerationLayer
-        GenerationLayer --> ServiceLayer
-        TechFoundation --> PerceptionLayer
-        TechFoundation --> GenerationLayer
-        TechFoundation --> ServiceLayer
-    end
-```
 
 ### 2.4 商业模式画布（Business Model Canvas）
 
@@ -181,68 +120,11 @@ IEH将基于火山引擎现有基础，深度融合AI能力，并向垂直行业
      * **RPA与BPMN集成：** 机器人流程自动化与业务流程管理工具集成，实现端到端的业务流程自动化。
      * **智能知识库与问答：** 飞书深度集成企业私有知识，员工通过自然语言提问获取信息和解决方案。
 
-### 3.3 架构原型描述（Mermaid Diagram）
+### 3.3 架构原型描述
 
-```mermaid
-graph TD
-    subgraph IEH[“智能效率中枢”生态（Intelligent Efficiency Hub Ecosystem）]
-        subgraph DecisionLayer[1.决策辅助与洞察层（Decision Support & Insights Layer）]
-            IndustryLLM[行业大模型（Industry-Specific LLM）] --> EnterpriseKnowledge[（企业私域知识库）]
-            IndustryLLM --> VerticalData[（垂直行业数据）]
 
-            SmartAnalytics[智能数据分析（Smart Data Analytics）] --> BI[（商业智能BI）]
-            SmartAnalytics --> Prediction[（预测性分析）]
+![架构原型](images/07.png)
 
-            DecisionOptimization[决策优化AI（Decision Optimization AI）] --> MarketingOpt[（营销策略优化）]
-            DecisionOptimization --> SupplyChainOpt[（供应链优化）]
-            DecisionOptimization --> CustomerServiceOpt[（客服效能提升）]
-
-            IndustryLLM --- SmartAnalytics
-            SmartAnalytics --- DecisionOptimization
-        end
-
-        subgraph ContentCreativeLayer[2.智能内容与创意层（Smart Content & Creative Layer）]
-            EnterpriseAIGC[企业级AIGC平台（Enterprise AIGC Platform）] --> MarketingContent[（营销内容生成<br/>（文案、海报、视频））]
-            EnterpriseAIGC --> ProductContent[（产品内容生成<br/>（说明书、教程））]
-            EnterpriseAIGC --> TrainingContent[（培训/内训内容生成）]
-
-            DigitalHumanService[数字人营销/服务（Digital Human Marketing/Service）] --> VirtualSpokesperson[（虚拟代言人）]
-            DigitalHumanService --> AICustomerService[（AI智能客服）]
-
-            ContentSmartDist[内容智能分发（Content Smart Distribution）] --> TargetedPush[（精准推送）]
-            ContentSmartDist --> InternalRec[（内部知识推荐）]
-
-            EnterpriseAIGC --- DigitalHumanService
-            EnterpriseAIGC --- ContentSmartDist
-        end
-
-        subgraph ProcessAutomationLayer[3.流程自动化与协作层（Process Automation & Collaboration Layer）]
-            AIAgent[AI智能体（AI Agent）] --> TaskAuto[（任务自动化）]
-            AIAgent --> InfoRetrieve[（信息检索）]
-
-            RPAIntegration[RPA与BPMN集成（RPA & BPMN Integration）] --> WorkflowAuto[（业务流程自动化）]
-
-            SmartKnowledgeBase[智能知识库与问答（Smart Knowledge Base & Q&A）] --> EmployeeSupport[（员工自助支持）]
-
-            AIAgent --- RPAIntegration
-            AIAgent --- SmartKnowledgeBase
-        end
-
-        subgraph TechCore[底层核心技术（Underlying Core Technology）]
-            VolcanoEngineCore[火山引擎PaaS/SaaS（Volcano Engine PaaS/SaaS）] --> CloudCompute[（云计算与存储）]
-            VolcanoEngineCore --> MLPlatform[（机器学习平台）]
-            VolcanoEngineCore --> RecSysEngine[（推荐系统引擎）]
-            VolcanoEngineCore --> DataWarehouse[（数据湖仓）]
-            VolcanoEngineCore --> PrivacyCompute[（隐私计算）]
-        end
-
-        DecisionLayer --> TechCore
-        ContentCreativeLayer --> TechCore
-        ProcessAutomationLayer --> TechCore
-        TechCore --> DecisionLayer 
-        %% IEH由底层技术核心支撑
-    end
-```
 
 ### 3.4 商业模式画布（Business Model Canvas）
 

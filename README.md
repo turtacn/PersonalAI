@@ -30,7 +30,7 @@
 
 同时配合系统智能诊断能力，例如:
 
-1. **[Chasi-SREagent](https://github.com/turtacn/chasi-sreagent)** - An open source GPT enhanced automatic SRE agent for Chasi applications & platform
+1. **[SREagent](https://github.com/turtacn/chasi-sreagent)** - An open source GPT enhanced automatic SRE agent for Chasi applications & platform
 
 实现研发全链路的AI赋能。
 
@@ -42,8 +42,8 @@
 
 所有业务与技术分析来源于，对"企业"这种商业体的全面业务与技术分析，例如
 
-* **[baidu.com 公司分析](examples/BA/baidu.com/01-overview.md)** 
-* **[bytedance.com 公司分析](examples/BA/bytedance.com/01-overview.md)** 
+* **[baidu.com](examples/BA/baidu.com/01-overview.md)** 
+* **[bytedance.com](examples/BA/bytedance.com/01-overview.md)** 
 
  
 ## 🌟 核心特性

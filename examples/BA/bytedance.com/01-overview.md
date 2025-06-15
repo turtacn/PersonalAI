@@ -20,45 +20,8 @@
 
 我们分析影响字节跳动发展的外部宏观因素及其带来的行业痛点。
 
-```mermaid
-graph LR
+![宏观环境分析](images/01.png)
 
-    subgraph PESTEL[宏观环境分析（PESTEL Macro-Environmental Analysis）]
-        P[政治与政策（Political & Policy）] --> P1[数据安全与算法监管收紧（Data Security & Algorithm Regulation Tightening）]
-        P --> P2[地缘政治紧张加剧（Geopolitical Tensions Escalating）]
-        P --> P3[反垄断常态化（Anti-Monopoly Normalization）]
-
-        E[经济环境（Economic Environment）] --> E1[全球经济增长放缓（Global Economic Growth Deceleration）]
-        E --> E2[广告市场竞争白热化（Advertising Market Fierce Competition）]
-        E --> E3[用户消费习惯多元化（Diversified User Consumption Habits）]
-
-        S[社会文化（Socio-Cultural）] --> S1[用户注意力碎片化（Fragmented User Attention）]
-        S --> S2[内容消费需求升级（Content Consumption Demand Upgrade）]
-        S --> S3[Z世代与社区文化崛起（Rise of Gen Z & Community Culture）]
-
-        T[技术发展（Technological Development）] --> T1[生成式AI与大模型爆发（Generative AI & LLMs Boom）]
-        T --> T2[边缘计算与元宇宙（Edge Computing & Metaverse）]
-        T --> T3[音视频技术持续迭代（Continuous Iteration of A/V Technology）]
-
-        EN[环境因素（Environmental Factors）] --> EN1[ESG合规要求提升（Increased ESG Compliance Requirements）]
-        EN --> EN2[绿色数据中心建设（Green Data Center Construction）]
-
-        L[法律法规（Legal & Regulatory）] --> L1[数据隐私与合规性挑战（Data Privacy & Compliance Challenges）]
-        L --> L2[未成年人保护法规收紧（Stricter Minor Protection Regulations）]
-        L --> L3[内容版权与知识产权保护（Content Copyright & IP Protection）]
-
-        P1 & P2 & P3 & E1 & E2 & E3 & S1 & S2 & S3 & T1 & T2 & T3 & EN1 & EN2 & L1 & L2 & L3
-        -->
-        PainPoints[可预见的行业/客户痛点（Foreseeable Industry/Customer Pain Points）]
-    end
-
-    PainPoints --> FP1[用户注意力争夺加剧（Intensified User Attention Competition）]
-    PainPoints --> FP2[内容同质化与算法茧房（Content Homogenization & Algorithmic Echo Chambers）]
-    PainPoints --> FP3[数据隐私与合规高压（High Pressure on Data Privacy & Compliance）]
-    PainPoints --> FP4[商业化变现模式单一（Single Monetization Model）]
-    PainPoints --> FP5[AIGC带来内容生产与审核新挑战（AIGC's New Challenges for Content Production & Moderation）]
-    PainPoints --> FP6[全球化运营本地化挑战（Globalization Localized Operation Challenges）]
-```
 
 **解释：**
 PESTEL分析揭示了字节跳动面临的复杂外部环境。政治和法律层面，全球范围内的数据安全、算法监管、反垄断及未成年人保护法规日益收紧，这直接增加了运营成本和合规风险，并可能限制其全球扩张。经济放缓则对广告收入造成压力，也加速了广告市场的竞争白热化。社会文化方面，用户对内容质量、社区氛围、个性化体验的需求不断升级，同时也对“算法茧房”和信息茧房效应提出质疑。技术是字节跳动的核心优势，但生成式AI和大模型的爆发既是机遇也是挑战，需要持续高投入。环境因素虽非直接业务核心，但ESG合规已成为全球企业的重要考量。这些宏观趋势共同构成了字节跳动未来3-5年发展中必须应对的挑战和客户/行业痛点。
@@ -106,44 +69,9 @@ PESTEL分析揭示了字节跳动面临的复杂外部环境。政治和法律�
 
 ### 5.2 市场竞争环境
 
-我们运用波特五力模型，分析字节跳动所处的市场竞争态势。
+我们分析字节跳动所处的市场竞争态势。
 
-```mermaid
-graph 
-    subgraph MCA[字节跳动市场竞争分析（ByteDance Market Competition Analysis）]
-        BuyerPower[买方议价能力（Bargaining Power of Buyers）]
-        SupplierPower[供应商议价能力（Bargaining Power of Suppliers）]
-        NewEntrants[新进入者的威胁（Threat of New Entrants）]
-        Substitutes[替代品的威胁（Threat of Substitutes）]
-        IndustryRivalry[现有竞争者之间的竞争（Rivalry Among Existing Competitors）]
-
-        BuyerPower --> BP1[用户注意力分散（User Attention Fragmentation）]
-        BuyerPower --> BP2[广告主ROI要求高（Advertisers' High ROI Demands）]
-        BuyerPower --> BP3[内容创作者平台选择多（Content Creators' Diverse Platform Choices）]
-
-        SupplierPower --> SP1[高素质人才稀缺（Scarcity of High-Caliber Talent）]
-        SupplierPower --> SP2[核心技术供应商依赖（Dependence on Core Technology Suppliers）]
-        SupplierPower --> SP3[内容版权方议价能力增强（Increased Bargaining Power of Content Owners）]
-
-        NewEntrants --> NE1[高研发投入与技术壁垒（High R&D Investment & Tech Barriers）]
-        NewEntrants --> NE2[规模效应与网络效应（Economies of Scale & Network Effects）]
-        NewEntrants --> NE3[品牌认知与用户习惯（Brand Recognition & User Habits）]
-        NewEntrants --> NE4[政策监管趋严（Stricter Regulatory Policies）]
-
-        Substitutes --> Sub1[传统媒体与线下娱乐（Traditional Media & Offline Entertainment）]
-        Substitutes --> Sub2[其他内容形式（长视频、图文、播客）（Other Content Forms （Long Video, Text, Podcast））]
-        Substitutes --> Sub3[线下社交与社区（Offline Social & Community）]
-
-        IndustryRivalry --> IR1[巨头全面竞争（如腾讯、Meta、快手）（All-Round Competition from Giants （e.g., Tencent, Meta, Kuaishou））]
-        IndustryRivalry --> IR2[内容、广告、电商、本地生活多战场混战（Multi-Front War in Content, Ads, E-commerce, Local Services）]
-        IndustryRivalry --> IR3[全球化市场摩擦加剧（Intensified Friction in Global Markets）]
-
-        BuyerPower --- IndustryRivalry
-        SupplierPower --- IndustryRivalry
-        NewEntrants --- IndustryRivalry
-        Substitutes --- IndustryRivalry
-    end
-```
+![市场竞争](images/02.png)
 
 **解释：**
 
@@ -190,53 +118,8 @@ graph
 
 **6.2.2 产品对比**
 
-```mermaid
-graph LR
+![产品对比](images/03.png)
 
-    subgraph CP[字节跳动核心产品（ByteDance Core Products）]
-        Douyin[抖音（Douyin）]
-        TikTok[TikTok]
-        CapCut[剪映（CapCut）]
-        Toutiao[今日头条（Toutiao）]
-        Feishu[飞书（Lark）]
-        JuliangEngine[巨量引擎（Juliang Engine）]
-        DouyinEcom[抖音电商（Douyin E-commerce）]
-        VolcanoEngine[火山引擎（Volcano Engine）]
-        Nuverse[朝夕光年（Nuverse）]
-
-        Douyin -- 内容分发 & 社交 & 电商 --> TikTok
-        TikTok -- 视频剪辑工具 --> CapCut
-        Toutiao -- 信息分发 --> Douyin
-        Feishu -- 企业协作 --> VolcanoEngine
-        JuliangEngine -- 广告变现 --> DouyinEcom
-        DouyinEcom -- 流量变现 --> Douyin
-        Nuverse -- 游戏发行 & 运营 --> Douyin
-    end
-
-    subgraph MCP[Meta核心产品（Meta Core Products）]
-        Facebook[Facebook]
-        Instagram[Instagram]
-        WhatsApp[WhatsApp]
-        Messenger[Messenger]
-        Reels[Reels]
-        Quest[Quest VR]
-        MetaAds[Meta Ads Platform]
-        MetaBusiness[Meta Business Suite]
-
-        Facebook -- 社交 --> Instagram
-        Instagram -- 短视频功能 --> Reels
-        Facebook -- 即时通讯 --> WhatsApp
-        Facebook -- 商业化 --> MetaAds
-        MetaAds -- 广告投放 --> Instagram
-        Quest -- VR/AR硬件 --> MetaAds
-        MetaBusiness -- 企业服务 --> Facebook
-    end
-
-    Douyin <--> Reels
-    TikTok <--> Reels
-    JuliangEngine <--> MetaAds
-    Feishu <--> MetaBusiness
-```
 
 **解释：**
 字节跳动的核心产品以“内容”和“兴趣”为驱动，强调信息流的效率和内容的消费体验。抖音和TikTok通过短视频和算法推荐构建了庞大的用户池，并以此为基础拓展了电商和本地生活服务，形成了“流量+内容+交易”的闭环。飞书和火山引擎则代表了其在B端市场的布局，将内部技术能力产品化。
@@ -278,71 +161,8 @@ Meta的核心产品以“社交关系链”为基础，强调“人与人”的�
 
 我们将通过一个架构图来展示这一生态的建设路径。
 
-```mermaid
-graph LR 
-    subgraph ISDE[智能内容生成与分发生态（Intelligent Content Generation & Distribution Ecosystem）]
-        subgraph CoreTech[核心技术平台（Core Technology Platform）]
-            LMM[多模态大模型（Large Multimodal Models）] --> LLM[语言大模型（Language Models）]
-            LMM --> VLM[视觉大模型（Vision Models）]
-            LMM --> ALM[音频大模型（Audio Models）]
-            RecSys[大规模推荐系统（Large-Scale Recommendation Systems）] --> UserProfile[用户画像与兴趣图谱（User Profile & Interest Graph）]
-            RecSys --> RealtimeRec[实时推荐引擎（Real-time Recommendation Engine）]
-            RecSys --> FedLearning[联邦学习与隐私计算（Federated Learning & Privacy Computing）]
+![生态建设](images/04.png)
 
-            LMM --- Connect[连接层（Connection Layer）]
-            RecSys --- Connect
-            Connect --> DataPlatform[大数据与算力平台（Big Data & Computing Platform）]
-            DataPlatform --> VolcanoEngine[火山引擎（Volcano Engine）] 
-            %% 技术中台输出
-        end
-
-        subgraph ContentProd[内容生产层（Content Production Layer）]
-            AIGCTool[AIGC内容生产工具（AIGC Content Production Tools）] --> VirtualHuman[虚拟数字人（Virtual Digital Human）]
-            AIGCTool --> AIWriter[AI文案/脚本生成器（AI Copywriter/Script Generator）]
-            AIGCTool --> AIVideoEditor[AI视频剪辑工具（AI Video Editing Tools）]
-            AIGCTool --> AIAssetGen[AI素材生成器（AI Asset Generator）]
-
-            ContentCreator[内容创作者（Content Creators）] --> AIGCTool
-            ContentCreator --> OriginalContent[原创内容（Original Content）]
-            OriginalContent --> Moderation[内容审核（Content Moderation）]
-        end
-
-        subgraph BusinessApp[业务应用层（Business Application Layer）]
-            DouyinTikTok[抖音/TikTok（Douyin/TikTok）]
-            ECommerce[电商直播（E-commerce Live Streaming）]
-            AdsPlatform[巨量引擎广告平台（Juliang Engine Ad Platform）]
-            Feishu[飞书（Feishu）]
-            Education[教育产品（Education Products）]
-            LocalService[本地生活服务（Local Life Services）]
-
-            DouyinTikTok --> ECommerce
-            DouyinTikTok --> AdsPlatform
-            Feishu --> Education
-        end
-
-        CoreTech --> ContentProd
-        ContentProd --> Moderation
-        Moderation --> BusinessApp
-        CoreTech --> BusinessApp 
-        %% 核心技术直接赋能业务
-    end
-
-    %% 生态建设建议
-    tactical_suggestions[战术建议（Tactical Suggestions）]
-    tactical_suggestions --> TS1[深化大模型研发与应用（Deepen LLM R&D & Application）]
-    tactical_suggestions --> TS2[构建创作者赋能工具（Build Creator Empowerment Tools）]
-    tactical_suggestions --> TS3[拓展多模态交互体验（Expand Multimodal Interactive Experience）]
-    tactical_suggestions --> TS4[提升数据合规与隐私计算（Enhance Data Compliance & Privacy Computing）]
-    tactical_suggestions --> TS5[加强火山引擎对外赋能（Strengthen Volcano Engine External Empowerment）]
-    tactical_suggestions --> TS6[推进跨业务场景融合（Promote Cross-Business Scenario Integration）]
-
-    TS1 --> LMM
-    TS2 --> AIGCTool
-    TS3 --> DouyinTikTok
-    TS4 --> FedLearning
-    TS5 --> VolcanoEngine
-    TS6 --> ECommerce
-```
 
 **7.2.1 战术建议详解**
 

@@ -115,34 +115,9 @@
 
 以下是我们对字节跳动未来3-5年可能面临的主要风险，并提出相应应对策略的可视化图。
 
-```mermaid
-graph 
-    subgraph RM[字节跳动风险管理（ByteDance Risk Management）]
-        ComplianceRisk[1.合规与政策风险（Compliance & Policy Risk）] --> CR1[积极与全球监管机构沟通（Proactive Engagement with Regulators）]
-        ComplianceRisk --> CR2[深化本地化数据治理与存储（Deepen Localized Data Governance & Storage）]
-        ComplianceRisk --> CR3[提升算法透明度与可解释性（Enhance Algorithm Transparency & Explainability）]
-        ComplianceRisk --> CR4[加强内容审核与未成年人保护（Strengthen Content Moderation & Minor Protection）]
+![主要风险](images/05.png)
 
-        CompetitionRisk[2.市场竞争风险（Market Competition Risk）] --> MR1[持续产品创新与用户体验优化（Continuous Product Innovation & UX Optimization）]
-        CompetitionRisk --> MR2[加速多元化商业模式探索（Accelerate Diversified Business Model Exploration）]
-        CompetitionRisk --> MR3[构建差异化技术壁垒（Build Differentiated Technology Barriers）]
-        CompetitionRisk --> MR4[深化生态伙伴合作（Deepen Ecosystem Partnership）]
 
-        TechRisk[3.技术与创新风险（Technology & Innovation Risk）] --> TR1[持续高投入AI基础研究与应用（Sustained High Investment in AI R&D）]
-        TechRisk --> TR2[构建开放技术生态与合作（Build Open Tech Ecosystem & Partnerships）]
-        TechRisk --> TR3[提升数据安全与隐私计算能力（Enhance Data Security & Privacy Computing）]
-        TechRisk --> TR4[储备多维度技术人才（Cultivate Multi-Dimensional Tech Talent Pool）]
-
-        OperationRisk[4.运营与组织风险（Operational & Organizational Risk）] --> OR1[优化跨业务线协同机制（Optimize Cross-Business Collaboration Mechanisms）]
-        OperationRisk --> OR2[强化高管团队与人才梯队建设（Strengthen Executive Team & Talent Pipeline）]
-        OperationRisk --> OR3[提升全球化运营效率与本地化能力（Improve Global Operational Efficiency & Localization）]
-        OperationRisk --> OR4[完善内部控制与风险内控体系（Perfect Internal Control & Risk Management System）]
-
-        GeoPoliticalRisk[5.地缘政治风险（Geopolitical Risk）] --> GPR1[多元化全球业务布局（Diversify Global Business Layout）]
-        GeoPoliticalRisk --> GPR2[加强与当地利益相关方沟通（Strengthen Communication with Local Stakeholders）]
-        GeoPoliticalRisk --> GPR3[做好最坏情况预案（Prepare for Worst-Case Scenarios）]
-    end
-```
 
 **解释：**
 
