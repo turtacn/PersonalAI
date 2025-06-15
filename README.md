@@ -30,7 +30,7 @@
 
 同时配合系统智能诊断能力，例如:
 
-1. **[SREagent](https://github.com/turtacn/chasi-sreagent)** - An open source GPT enhanced automatic SRE agent for Chasi applications & platform
+1. **[SREagent](https://github.com/turtacn/chasi-sreagent)** - An open source GPT enhanced automatic SRE agent for applications & platform
 
 实现研发全链路的AI赋能。
 
