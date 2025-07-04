@@ -399,59 +399,59 @@
 
         ```mermaid
         flowchart TD
-        %% Data Sources
-        subgraph DS [数据源（Data Sources）]
-            FW[防火墙日志]
-            EDR[终端事件]
-            WAF[WAF日志]
-            Cloud[云平台日志<br/>（来自Nexus Cloud）]
-            TI[外部威胁情报]
-        end
-
-        %% Data Ingestion & Processing
-        subgraph DP [数据处理层（Data Processing）]
-            COLLECT[数据采集器] --> PARSE[范式化与扩充]
-            PARSE --> BIG_DATA[大数据存储与索引<br/>（Hadoop/ES）]
-        end
-        
-        %% AI Analytics Engine (Powered by Astraea)
-        subgraph AI_CORE [AI分析引擎（Powered by Astraea AI）]
-            direction LR
-            UEBA[用户实体行为分析]
-            CORR[跨源日志关联分析]
-            ALERT_TRIAGE[AI告警研判]
-        end
-
-        %% SOAR & Response
-        subgraph SOAR [编排与自动化响应层]
-            INCIDENT[事件生成与定级] --> PLAYBOOK[自动化剧本引擎]
-            PLAYBOOK --> RESPONSE[响应执行器]
-        end
-        
-        %% Response Actions
-        subgraph ACTIONS [联动处置动作]
-            BLOCK_IP[防火墙策略下发]
-            ISOLATE_HOST[终端隔离]
-            KILL_PROCESS[结束恶意进程]
-            TICKET[生成工单]
-        end
-        
-        %% User Interface
-        subgraph UI [可视化与报告]
-            DASHBOARD[安全态势大屏]
-            HUNTING[威胁猎捕界面]
-            REPORT[合规报告]
-        end
-
-        %% Connections
-        DS --> COLLECT
-        DP --> AI_CORE
-        BIG_DATA -- 原始数据查询 --> AI_CORE
-        AI_CORE -- 生成高质量事件 --> INCIDENT
-        SOAR --> ACTIONS
-        SOAR --> UI
-        
-        style AI_CORE fill:#ffc,stroke:#f60,stroke-width:2px
+            %% Data Sources
+            subgraph DS [数据源（Data Sources）]
+                FW[防火墙日志]
+                EDR[终端事件]
+                WAF[WAF日志]
+                Cloud[云平台日志<br/>（来自Nexus Cloud）]
+                TI[外部威胁情报]
+            end
+    
+            %% Data Ingestion & Processing
+            subgraph DP [数据处理层（Data Processing）]
+                COLLECT[数据采集器] --> PARSE[范式化与扩充]
+                PARSE --> BIG_DATA[大数据存储与索引<br/>（Hadoop/ES）]
+            end
+            
+            %% AI Analytics Engine (Powered by Astraea)
+            subgraph AI_CORE [AI分析引擎（Powered by Astraea AI）]
+                direction LR
+                UEBA[用户实体行为分析]
+                CORR[跨源日志关联分析]
+                ALERT_TRIAGE[AI告警研判]
+            end
+    
+            %% SOAR & Response
+            subgraph SOAR [编排与自动化响应层]
+                INCIDENT[事件生成与定级] --> PLAYBOOK[自动化剧本引擎]
+                PLAYBOOK --> RESPONSE[响应执行器]
+            end
+            
+            %% Response Actions
+            subgraph ACTIONS [联动处置动作]
+                BLOCK_IP[防火墙策略下发]
+                ISOLATE_HOST[终端隔离]
+                KILL_PROCESS[结束恶意进程]
+                TICKET[生成工单]
+            end
+            
+            %% User Interface
+            subgraph UI [可视化与报告]
+                DASHBOARD[安全态势大屏]
+                HUNTING[威胁猎捕界面]
+                REPORT[合规报告]
+            end
+    
+            %% Connections
+            DS --> COLLECT
+            DP --> AI_CORE
+            BIG_DATA -- 原始数据查询 --> AI_CORE
+            AI_CORE -- 生成高质量事件 --> INCIDENT
+            SOAR --> ACTIONS
+            SOAR --> UI
+            
+            style AI_CORE fill:#ffc,stroke:#f60,stroke-width:2px
         ```
 
 #### **第四阶段：优化迭代与周期管理**
