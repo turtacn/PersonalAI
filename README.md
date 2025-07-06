@@ -46,6 +46,10 @@
 * **[bytedance.com](examples/BA/bytedance.com/01-overview.md)** 
 * **...**
 
+再进一步，围绕给定的企业现状，针对发挥自我优势、所在行业的技术趋势、关联的业务板块，给出完整的产品产略分析，例如
+
+* **[sec-ai-cloud](examples/prototype/security-cloud-ai.md)**
+* **...**
  
 ## 🌟 核心特性
 
