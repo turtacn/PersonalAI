@@ -1,4 +1,4 @@
-文章“[What Would a Kubernetes 2.0 Look Like](https://matduggan.com/what-would-a-kubernetes-2-0-look-like/)”及其评论进行的洞察分析。基于材料中的内容进行总结和推理，避免任何外部猜测或未提及的事实。分析分为您查询的四个部分：Kubernetes做对了什么、它的缺陷、它的未来，以及如果被取代会是什么样的“物种”。用清晰的结构呈现，并引用关键点以支持观点。
+文章“[What Would a Kubernetes 2.0 Look Like](https://matduggan.com/what-would-a-kubernetes-2-0-look-like/)”及其评论进行的洞察分析。基于材料中的内容进行总结和推理，避免任何外部猜测或未提及的事实。分析分为四个部分：Kubernetes做对了什么、它的缺陷、它的未来，以及如果被取代会是什么样的“物种”。用清晰的结构呈现，并引用关键点以支持观点。
 
 ### 1. Kubernetes到底做对了什么？
 
