@@ -45,7 +45,7 @@ graph TD
     classDef finalNode fill:#DDA0DD,stroke:#8B008B,stroke-width:3px
     classDef workload fill:#F0F8FF,stroke:#000080,stroke-width:1px,stroke-dasharray: 5 5
     
-    START[SASE&#64;XOS<br/>当前状态]
+    START[SASE#64;XOS<br/>当前状态]
     
     %% 路径一：APEX统一平台
     subgraph PATH1[路径一：APEX平台统一融合]
