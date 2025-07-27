@@ -59,7 +59,7 @@ graph TD
     %% 路径一：APEX统一平台
     subgraph PATH1[路径一：APEX平台统一融合]
         P1_STEP1[SASE#64;XOS --> SASE#64;APEX<br/>原地升级]
-        P1_WORK1[升级包适配：300人天<br/>原地升级服务：600人天]
+        P1_WORK1[升级包适配（业务负责）：300人天<br/>原地升级服务（目标平台负责）：600人天]
         P1_STEP2[ZTP#64;APEX直接开启<br/>0人天]
         P1_FINAL[APEX平台统一<br/>SASE+ZTP融合]
         
@@ -71,9 +71,9 @@ graph TD
     %% 路径二：VC平台部署
     subgraph PATH2[路径二：VC平台部署方案]
         P2_STEP1[SASE#64;XOS --> （SASE#64;XOS）#64;VC<br/>VC平台迁移]
-        P2_WORK1[SASE迁移工作量：140人天]
+        P2_WORK1[SASE迁移工作量（平台负责，业务少量参与）：140人天]
         P2_STEP2[ZTP#64;APEX --> （ZTP#64;APEX）#64;VC<br/>VC平台迁移]
-        P2_WORK2[ZTP迁移工作量：300人天]
+        P2_WORK2[ZTP迁移工作量（平台负责，业务少量参与）：300人天]
         P2_FINAL[VC平台统一<br/>SASE+ZTP融合]
         
         P2_STEP1 --> P2_WORK1
