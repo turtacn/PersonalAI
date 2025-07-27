@@ -16,10 +16,10 @@ graph TB
     subgraph CURRENT[当前部署状态]
         XOS[XOS平台]
         APEX[APEX平台]
-        VC[VC平台]
+        VC[VC平台，基础平台提供的虚拟集群能力]
         
-        SASE_XOS[SASE&#64;XOS<br/>正在运行]
-        ZTP_APEX[ZTP&#64;APEX<br/>已就绪]
+        SASE_XOS[SASE&#64;XOS<br/>P包已交付，正在运行，正迭代开发]
+        ZTP_APEX[ZTP&#64;APEX<br/>已就绪，正迭代开发]
         
         XOS --> SASE_XOS
         APEX --> ZTP_APEX
@@ -61,9 +61,9 @@ graph TD
     
     %% 路径二：VC平台部署
     subgraph PATH2[路径二：VC平台部署方案]
-        P2_STEP1[SASE&#64;XOS --> SASE&#64;XOS&#64;VC<br/>VC平台迁移]
+        P2_STEP1[SASE&#64;XOS --> （SASE&#64;XOS）&#64;VC<br/>VC平台迁移]
         P2_WORK1[SASE迁移工作量：140人天]
-        P2_STEP2[ZTP&#64;APEX --> ZTP&#64;APEX&#64;VC<br/>VC平台迁移]
+        P2_STEP2[ZTP&#64;APEX --> （ZTP&#64;APEX）&#64;VC<br/>VC平台迁移]
         P2_WORK2[ZTP迁移工作量：300人天]
         P2_FINAL[VC平台统一<br/>SASE+ZTP融合]
         
@@ -172,8 +172,8 @@ sequenceDiagram
 
 通过上述图表分析，可以得出以下关键结论：
 
-**路径一（APEX统一方案）**的优势在于最终实现了在单一APEX平台上的完整业务融合，ZTP业务无需额外迁移工作。但其总工作量较高（900人天），主要集中在原地升级服务的复杂性上。
+**路径一 APEX统一方案**的优势在于最终实现了在单一APEX平台上的完整业务融合，ZTP业务无需额外迁移工作。但其总工作量较高（900人天），主要集中在原地升级服务的复杂性上。
 
-**路径二（VC平台方案）**的优势在于总工作量相对较少（440人天），迁移风险相对可控。但需要同时处理两个业务的平台迁移，协调复杂度较高。
+**路径二 VC平台方案**的优势在于总工作量相对较少（440人天），迁移风险相对可控。但需要同时处理两个业务的平台迁移，协调复杂度较高。
 
 基于工作量和风险平衡考虑，建议优先考虑路径二，同时制定详细的迁移时序规划，确保SASE和ZTP业务的平滑过渡和最终融合。
