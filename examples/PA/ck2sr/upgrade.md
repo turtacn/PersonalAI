@@ -818,7 +818,7 @@ J1 --> End([查询完成])
 ### 8.1 全链路监控架构
 
 ```mermaid
-graph TB
+graph TD
 %% 全链路监控架构
 subgraph ML[监控层（Monitor Layer）]
     direction TB
