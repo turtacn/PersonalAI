@@ -718,7 +718,7 @@ end
 ### 7.1 多维度灰度控制架构
 
 ```mermaid
-graph TB
+graph TD
 %% 多维度灰度控制架构
 subgraph GC[灰度控制中心（Gray Control Center）]
     direction TB
