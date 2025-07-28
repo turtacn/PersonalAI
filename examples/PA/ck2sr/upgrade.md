@@ -601,6 +601,7 @@ SL_SYNC <--> SL_SR
 ### 6.2 多租户SaaS平台场景迁移
 
 ```mermaid
+graph TD
 %% 多租户SaaS平台场景迁移架构
 subgraph TM[租户管理（Tenant Management）]
    direction TB
