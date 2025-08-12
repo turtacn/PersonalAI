@@ -1,5 +1,9 @@
 # "Kubernetes AI Conformance"：技术趋势与业务价值洞察
 
+在 Kubernetes 上运行大规模 AI/ML 工作负载，既面临复杂挑战，也蕴藏巨大机遇。挑战在于要在高性能计算需求、动态资源调度、海量数据高效流转、安全合规与成本可控之间保持平衡：训练和推理任务需要精确分配 GPU、TPU、CPU 等稀缺资源，并在集群高并发、批量训练或多集群混合部署中保持调度高效；数据层面需解决存储性能瓶颈、跨节点/跨云的数据延迟以及模型版本管理难题；安全方面则要防范数据投毒、模型漂移、镜像篡改、横向渗透等威胁，并在全生命周期中落实镜像签名、零信任网络、RBAC 权限控制和持续安全扫描。机遇在于，借助智能扩缩容、数据本地化与缓存优化、CI/CD 自动化与 GitOps 管理，以及监控、日志、分布式追踪和安全事件关联分析等能力，团队可以打造一个高弹性、可观测、可追踪且安全的 AI 平台，显著降低资源浪费和运营成本，加快从数据准备到模型上线的迭代速度，并在安全可控的前提下持续释放 AI 创新价值。
+
+Kubernetes AI Conformance 工作组旨在通过制定统一的 AI/ML 工作负载运行规范，推动 Kubernetes 在人工智能领域的标准化与生态建设。该社区致力于明确 Kubernetes 集群应具备的关键能力、API 和配置，以简化 AI/ML 业务的部署与运维，加速技术采用，确保不同平台间的互操作性和可移植性。工作组首阶段聚焦于发布自评问卷形式的规范草案，待规范广泛认可后，逐步推动由相关 SIG 接手测试与维护工作，最终实现规范的长期稳定发展和生态繁荣。整个过程遵循透明公开的治理机制，促进多方协作，确保规范既专业又具实操性，助力 Kubernetes 成为 AI/ML 领域的行业标准基础。
+
 本文围绕“Kubernetes AI Conformance”议题，深入分析 Kubernetes 在 AI/ML 工作负载中的技术趋势与业务价值，聚焦技术预见性（如遥测、存储、安全、调度、轻量化、新硬件、AI 框架基础设施等）。
 
 ---
@@ -257,3 +261,5 @@ Kubernetes 在智慧城市、金融风控、智能制造、生命科学和 RAG/L
 * 8. NVIDIA 开发者博客 – *MPS and GPU Sharing on Kubernetes*
 * 9. KubeEdge 官方文档 – *Cloud-Edge Collaboration for AI Inference*
 * 10. Milvus 文档 – *Vector Database for RAG on Kubernetes*
+* 11. [https://www.wiz.io/academy/ai-ml-kubernetes-best-practices](https://www.wiz.io/academy/ai-ml-kubernetes-best-practices) - https://www.wiz.io/academy/ai-ml-kubernetes-best-practices
+* 12. [https://github.com/kubernetes/community/blob/master/wg-ai-conformance/charter.md](https://github.com/kubernetes/community/blob/master/wg-ai-conformance/charter.md) - https://github.com/kubernetes/community/blob/master/wg-ai-conformance/charter.md
