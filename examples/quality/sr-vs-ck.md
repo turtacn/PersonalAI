@@ -1,4 +1,4 @@
-### **StarRocks vs ClickHouse 性能对比测试总结**
+### **根据测试报告看：StarRocks vs ClickHouse 性能对比测试总结**
 
 #### **1. 硬件规格**
 测试在StarRocks与ClickHouse使用同等资源配置下进行。
