@@ -5,76 +5,122 @@
 ### 1. 整体实体关系图
 
 ```mermaid
-erDiagram
-    %% 核心维度表
-    tenant_dim ||--o{ user_dim : "contains"
-    tenant_dim ||--o{ device_dim : "contains"
-    tenant_dim ||--o{ application_dim : "contains"
-    tenant_dim ||--o{ policy_dim : "manages"
-    tenant_dim ||--o{ sase_node_dim : "operates"
+graph LR
+    %% ================= 核心维度 =================
+    subgraph CORE[核心维度（Core Dimensions）]
+        style CORE fill:#fef3c7,stroke:#fbbf24,stroke-width:2px
+        TENANT[租户维度（Tenant Dimension）]
+        USER[用户维度（User Dimension）]
+        DEVICE[设备维度（Device Dimension）]
+        APP[应用维度（Application Dimension）]
+        POLICY[策略维度（Policy Dimension）]
+        NODE[SASE节点维度（SASE Node Dimension）]
 
-    %% 用户相关
-    user_dim ||--o{ user_session_fact : "creates"
-    user_dim ||--o{ ztna_access_fact : "accesses"
-    user_dim ||--o{ casb_activity_fact : "performs"
+        USER_SESSION[用户会话事实（User Session Fact）]
+        DEVICE_POSTURE[设备状态事实（Device Posture Fact）]
+    end
 
-    %% 设备相关
-    device_dim ||--o{ device_posture_fact : "reports"
-    device_dim ||--o{ user_session_fact : "from"
-    device_dim ||--o{ ztna_access_fact : "from"
+    TENANT -->|拥有<br/>（has）| USER
+    TENANT -->|拥有<br/>（has）| DEVICE
+    TENANT -->|包含应用<br/>（has app）| APP
+    TENANT -->|管理<br/>（manages）| POLICY
+    TENANT -->|运行节点<br/>（operates）| NODE
+    USER -->|创建会话<br/>（create session）| USER_SESSION
+    DEVICE -->|上报状态<br/>（report posture）| DEVICE_POSTURE
 
-    %% 应用相关
-    application_dim ||--o{ ztna_access_fact : "targets"
-    application_dim ||--o{ casb_activity_fact : "involves"
-    application_dim ||--o{ swg_web_activity_fact : "accesses"
+    %% ================= SASE会话中心 =================
+    subgraph SESSION[核心会话中心（SASE Session Center）]
+        style SESSION fill:#dbeafe,stroke:#3b82f6,stroke-width:2px
+        SASE_SESSION[SASE会话事实（SASE Session Fact）]
+    end
 
-    %% 策略相关
-    policy_dim ||--o{ policy_evaluation_fact : "evaluated_in"
-    policy_dim ||--o{ ztna_access_fact : "governs"
+    NODE -->|处理<br/>（process）| SASE_SESSION
+    SASE_SESSION -->|用户<br/>（user）| USER
+    SASE_SESSION -->|设备<br/>（device）| DEVICE
 
-    %% SASE核心事实表
-    sase_node_dim ||--o{ sase_session_fact : "processes"
-    sase_session_fact ||--|| user_dim : "for_user"
-    sase_session_fact ||--|| device_dim : "from_device"
-    sase_session_fact ||--o{ ztna_access_fact : "contains"
-    sase_session_fact ||--o{ casb_activity_fact : "contains"
-    sase_session_fact ||--o{ swg_web_activity_fact : "contains"
+    %% ================= ZTNA =================
+    subgraph ZTNA[零信任网络访问（Zero Trust Network Access, ZTNA）]
+        style ZTNA fill:#dcfce7,stroke:#22c55e,stroke-width:2px
+        ZTNA_ACCESS[ZTNA访问事实（ZTNA Access Fact）]
+        ZTNA_POLICY[ZTNA策略评估事实（ZTNA Policy Evaluation Fact）]
+    end
 
-    %% ZTNA相关
-    ztna_access_fact ||--|| user_dim : "user"
-    ztna_access_fact ||--|| device_dim : "device"
-    ztna_access_fact ||--|| application_dim : "application"
-    ztna_access_fact ||--o{ ztna_policy_evaluation_fact : "triggers"
+    SASE_SESSION -->|包含<br/>（include）| ZTNA_ACCESS
+    ZTNA_ACCESS -->|用户<br/>（user）| USER
+    ZTNA_ACCESS -->|设备<br/>（device）| DEVICE
+    ZTNA_ACCESS -->|目标应用<br/>（target app）| APP
+    ZTNA_ACCESS -->|触发策略评估<br/>（trigger policy evaluation）| ZTNA_POLICY
 
-    %% CASB相关
-    casb_activity_fact ||--|| user_dim : "user"
-    casb_activity_fact ||--|| application_dim : "cloud_app"
-    casb_activity_fact ||--o{ casb_dlp_violation_fact : "may_violate"
-    casb_activity_fact ||--o{ casb_threat_detection_fact : "may_detect"
+    %% ================= CASB =================
+    subgraph CASB[云访问安全代理（Cloud Access Security Broker, CASB）]
+        style CASB fill:#fee2e2,stroke:#ef4444,stroke-width:2px
+        CASB_ACTIVITY[CASB活动事实（CASB Activity Fact）]
+        CASB_DLP[CASB数据泄露违规事实（CASB DLP Violation Fact）]
+        CASB_THREAT[CASB威胁检测事实（CASB Threat Detection Fact）]
+    end
 
-    %% SWG相关
-    swg_web_activity_fact ||--|| user_dim : "user"
-    swg_web_activity_fact ||--|| device_dim : "device"
-    swg_web_activity_fact ||--o{ swg_threat_detection_fact : "may_detect"
-    swg_web_activity_fact ||--o{ swg_dlp_incident_fact : "may_cause"
+    SASE_SESSION -->|包含<br/>（include）| CASB_ACTIVITY
+    CASB_ACTIVITY -->|用户<br/>（user）| USER
+    CASB_ACTIVITY -->|云应用<br/>（cloud app）| APP
+    CASB_ACTIVITY -->|违规<br/>（violate）| CASB_DLP
+    CASB_ACTIVITY -->|威胁检测<br/>（detect threat）| CASB_THREAT
 
-    %% SD-WAN相关
-    sdwan_connection_fact ||--|| sase_node_dim : "from_node"
-    sdwan_connection_fact ||--|| sase_node_dim : "to_node"
-    sdwan_performance_fact ||--|| sase_node_dim : "measured_at"
+    %% ================= SWG =================
+    subgraph SWG[安全Web网关（Secure Web Gateway, SWG）]
+        style SWG fill:#f0fdf4,stroke:#10b981,stroke-width:2px
+        SWG_ACTIVITY[SWG网页访问事实（SWG Web Activity Fact）]
+        SWG_THREAT[SWG威胁检测事实（SWG Threat Detection Fact）]
+        SWG_DLP[SWG数据泄露事件事实（SWG DLP Incident Fact）]
+    end
 
-    %% FWaaS相关
-    fwaas_traffic_fact ||--|| sase_node_dim : "processed_by"
-    fwaas_traffic_fact ||--o{ fwaas_threat_detection_fact : "may_detect"
+    APP -->|访问<br/>（access）| SWG_ACTIVITY
+    SASE_SESSION -->|包含<br/>（include）| SWG_ACTIVITY
+    SWG_ACTIVITY -->|用户<br/>（user）| USER
+    SWG_ACTIVITY -->|设备<br/>（device）| DEVICE
+    SWG_ACTIVITY -->|威胁检测<br/>（detect）| SWG_THREAT
+    SWG_ACTIVITY -->|数据泄露事件<br/>（incident）| SWG_DLP
 
-    %% 安全事件关联
-    security_incident_fact ||--o{ ztna_access_fact : "may_include"
-    security_incident_fact ||--o{ casb_activity_fact : "may_include"
-    security_incident_fact ||--o{ swg_web_activity_fact : "may_include"
+    %% ================= SD-WAN =================
+    subgraph SDWAN[软件定义广域网（Software-Defined WAN, SD-WAN）]
+        style SDWAN fill:#e0f2fe,stroke:#0284c7,stroke-width:2px
+        SDWAN_CONN[SD-WAN连接事实（SD-WAN Connection Fact）]
+        SDWAN_PERF[SD-WAN性能事实（SD-WAN Performance Fact）]
+    end
 
-    %% 数据治理
-    data_classification ||--o{ casb_activity_fact : "classifies_data_in"
-    compliance_check_results ||--|| tenant_dim : "for_tenant"
+    SDWAN_CONN -->|源节点<br/>（from node）| NODE
+    SDWAN_CONN -->|目标节点<br/>（to node）| NODE
+    SDWAN_PERF -->|性能测量<br/>（measure）| NODE
+
+    %% ================= FWaaS =================
+    subgraph FWAAS[防火墙即服务（Firewall as a Service, FWaaS）]
+        style FWAAS fill:#fef2f2,stroke:#b91c1c,stroke-width:2px
+        FWAAS_TRAFFIC[FWaaS流量事实（FWaaS Traffic Fact）]
+        FWAAS_THREAT[FWaaS威胁检测事实（FWaaS Threat Detection Fact）]
+    end
+
+    FWAAS_TRAFFIC -->|处理流量<br/>（process traffic）| NODE
+    FWAAS_TRAFFIC -->|威胁检测<br/>（detect）| FWAAS_THREAT
+
+    %% ================= 安全事件 =================
+    subgraph INCIDENTS[安全事件（Security Incidents）]
+        style INCIDENTS fill:#fef9c3,stroke:#f59e0b,stroke-width:2px
+        INCIDENT[安全事件事实（Security Incident Fact）]
+    end
+
+    INCIDENT -->|涉及<br/>（include）| ZTNA_ACCESS
+    INCIDENT -->|涉及<br/>（include）| CASB_ACTIVITY
+    INCIDENT -->|涉及<br/>（include）| SWG_ACTIVITY
+
+    %% ================= 数据治理 =================
+    subgraph GOVERN[数据治理与合规（Data Governance & Compliance）]
+        style GOVERN fill:#ede9fe,stroke:#7c3aed,stroke-width:2px
+        DATA_CLASS[数据分类（Data Classification）]
+        COMPLIANCE[合规检查结果（Compliance Check Results）]
+    end
+
+    DATA_CLASS -->|数据分类<br/>（classify data）| CASB_ACTIVITY
+    COMPLIANCE -->|合规检查<br/>（compliance check）| TENANT
+
 ```
 
 ### 2. SASE核心维度表详细定义
@@ -1821,9 +1867,13 @@ $$;
 
 该设计能够支持：
 ✓ **千万级**并发用户的SASE服务
+
 ✓ **PB级**数据的高效存储和查询
+
 ✓ **毫秒级**实时威胁检测响应
+
 ✓ **多云环境**的统一安全管理
+
 ✓ **Zero Trust**架构的完整实现
 
 可根据具体业务需求进行定制化调整和扩展。
