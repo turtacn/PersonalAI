@@ -8,7 +8,7 @@
 
 **最近更新：** 2025年8月21日
 
-***这是一份与CNCF和[AI Conformance WG](https://github.com/kubernetes/community/tree/master/wg-ai-conformance)合作的公开文档***
+***这是一份与CNCF和[AI Conformance WG](https://github.com/kubernetes/community/tree/master/wg-ai-conformance)合作的公开文档的中文版***
 
 ![k8s-ai-conformance-cerfitication](assets/k8s-ai-conformance-cerfitication.png)  
 
