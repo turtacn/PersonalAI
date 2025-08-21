@@ -177,4 +177,9 @@ AI一致性测试验证平台对其指定API契约或其组件行为的遵循，
 | 2025年10月底 | **第一轮自我认证的截止日期** |
 | 2025年11月中旬 | 在KubeCon NA 2025上进行一次重大公告和展示 |
 
+## 参考
+
+* [https://docs.google.com/document/d/1hXoSdh9FEs13Yde8DivCYjjXyxa7j4J8erjZPEGWuzc/edit?tab=t.0#heading=h.9j85ih1tpsk](https://docs.google.com/document/d/1hXoSdh9FEs13Yde8DivCYjjXyxa7j4J8erjZPEGWuzc/edit?tab=t.0#heading=h.9j85ih1tpsk)
+
+* [https://www.youtube.com/watch?list=PLj6h78yzYM2P1xtALqTcCmRAa6142uERl&t=308&v=etvB-QGFtns&feature=youtu.be](https://www.youtube.com/watch?list=PLj6h78yzYM2P1xtALqTcCmRAa6142uERl&t=308&v=etvB-QGFtns&feature=youtu.be)
 
