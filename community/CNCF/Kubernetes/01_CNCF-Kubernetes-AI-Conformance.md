@@ -79,8 +79,8 @@ AI一致性将有助于确保AI/ML工作负载的可移植性，从而降低总�
 | | **AI/ML推理高级入口（Advanced Ingress for AI/ML Inference）** | **MUST (必须)：** 支持Kubernetes `Gateway` API及其针对推理服务的高级流量管理实现，该实现能够实现加权流量拆分、基于头的路由（针对OpenAI协议头），以及与服务网格（service meshes）的可选集成。如何测试：验证所有`gateway.networking.k8s.io/v1` Gateway API资源已启用。 |
 | | | **SHOULD (应该)：** 支持Gateway API推理扩展（Inference Extension）的实现，该扩展具有以下特点：使用模型服务平台在Kubernetes上托管模型；专门服务LLMs；基于模型服务平台公布的指标和能力，为LLM推理做出高级路由决策（例如K/V缓存感知路由）。 |
 | | **网络策略实施（Network Policy Enforcement）** | **SHOULD (应该)：** 支持默认安装并激活的网络策略提供商，该提供商能够实施用户定义的`NetworkPolicy`资源，从而允许对标准pod网络接口上的AI工作负载进行细粒度流量控制。对于标准NetworkPolicy实现可能面临限制的大规模集群，提供清晰的指导或替代方案。 |
-| **调度与编排（Scheduling & Orchestration）** | **增强型批处理作业管理（Enhanced Batch Job Management）** | **SHOULD (应该)：** 通过支持[`JobSet`](https://www.google.com/search?q=%5Bhttps://jobset.sigs.k8s.io/docs/overview/%5D\(https://jobset.sigs.k8s.io/docs/overview/\)) API (`jobset.x-k8s.io`) 的机制，支持将相互依赖的Kubernetes作业组作为单个单元进行管理，这对于启用MPI作业等紧密耦合的分布式工作负载至关重要。 |
-| | | **SHOULD (应该)：** 通过支持[`Kueue`](https://www.google.com/search?q=%5Bhttps://kueue.sigs.k8s.io/%5D\(https://kueue.sigs.k8s.io/\)) API (`kueue.x-k8s.io`) 的机制，支持AI批处理工作负载的作业排队、公平共享和“集体调度”（gang scheduling）。 |
+| **调度与编排（Scheduling & Orchestration）** | **增强型批处理作业管理（Enhanced Batch Job Management）** | **SHOULD (应该)：** 通过支持[`JobSet`](https://www.google.com/search?q=%5Bhttps://jobset.sigs.k8s.io/docs/overview/%5D(https://jobset.sigs.k8s.io/docs/overview/)) API (`jobset.x-k8s.io`) 的机制，支持将相互依赖的Kubernetes作业组作为单个单元进行管理，这对于启用MPI作业等紧密耦合的分布式工作负载至关重要。 |
+| | | **SHOULD (应该)：** 通过支持[`Kueue`](https://www.google.com/search?q=%5Bhttps://kueue.sigs.k8s.io/%5D(https://kueue.sigs.k8s.io/)) API (`kueue.x-k8s.io`) 的机制，支持AI批处理工作负载的作业排队、公平共享和“集体调度”（gang scheduling）。 |
 | | **AI工作负载的有效自动伸缩（Effective Autoscaling for AI Workloads）** | **MUST (必须)：** 集群自动伸缩器（Cluster autoscaler）或其等效组件必须能够根据请求这些加速器的待定（pending）pod来扩容/缩容包含特定加速器类型的节点组。如何测试：准备一个配置了特定加速器类型的节点池，最小规模为N，最大规模至少为N+1。创建N+1个Pod，每个都请求来自该池的一个加速器资源。验证至少有一个Pod无法调度（Pending），且集群自动伸缩器将增加节点数量至N+1，从而使该Pod进入运行状态（Running）。删除该Pod，然后集群自动伸缩器将移除空闲的加速器节点，使节点数量返回到N。 |
 | | | **MUST (必须)：** `HorizontalPodAutoscaler`必须能够对使用加速器的pod正常工作。这包括能够根据与AI/ML工作负载相关的自定义指标来伸缩这些Pod。这与下方的[加速器性能指标](https://www.google.com/search?q=%23bookmark%3Dkix.h93u3hesy481)相关。如何测试：配置一个自定义指标管道，以向HPA暴露与加速器相关的自定义指标。创建一个Deployment，其中每个Pod请求一个加速器并暴露一个自定义指标。创建一个以该Deployment为目标的HorizontalPodAutoscaler。引入负载到示例应用程序，使平均自定义指标值显著超过目标值，触发扩容。然后移除负载，触发缩容。 |
 | | | **SHOULD (应该)：** 平台的自动伸缩和调度系统应支持异构节点组（通常称为节点组或节点池）的管理，允许AI工作负载表达亲和性/反亲和性（affinity/anti-affinity）或污点/容忍度（taints/tolerations），以便在合适的节点上进行调度，从而实现跨工作负载类型的部署（例如，AI工作负载在AI优化节点上运行，反之亦然）。集群自动伸缩器应感知这些放置约束。 |
@@ -99,7 +99,7 @@ AI一致性将有助于确保AI/ML工作负载的可移植性，从而降低总�
 
 ### 一致性测试（Conformance Testing）
 
-Kubernetes AI一致性测试套件将专门测试这些\*\*MUST (必须)\*\*的附加要求。它将假定已成功完成标准Kubernetes一致性套件。
+Kubernetes AI一致性测试套件将专门测试这些 **MUST (必须)：** 的附加要求。它将假定已成功完成标准Kubernetes一致性套件。
 
 AI一致性测试，类似于标准Kubernetes一致性测试，将有一个严格的通过/失败结果。获得AI一致性认证需要通过所有AI一致性测试。
 
@@ -172,7 +172,7 @@ AI一致性测试验证平台对其指定API契约或其组件行为的遵循，
 | :---- | :---- |
 | 约2025年8月 | 在[cncf/ai-conformance](https://github.com/cncf/ai-conformance)存储库中发布v1版AI一致性 |
 | 约2025年9月 | **公司和供应商开始自我认证过程** |
-| 2025年8月底 | Kubernetes 1.34发布，预计将包含DRA的GA版本 |
+| 2025年8月底 | **Kubernetes 1.34发布，预计将包含DRA的GA版本** |
 | 2025年9月 | CNCF理事会会议 |
 | 2025年10月底 | **第一轮自我认证的截止日期** |
 | 2025年11月中旬 | 在KubeCon NA 2025上进行一次重大公告和展示 |
