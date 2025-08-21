@@ -1,9 +1,9 @@
 ### CNCF Kubernetes AI 一致性（Conformance）
 
 **作者：** Janet Kuo ([@janetkuo](https://github.com/janetkuo))、Mario Fahlandt ([@mfahlandt](https://github.com/mfahlandt))、[wg-ai-conformance@kubernetes.io](mailto:wg-ai-conformance@kubernetes.io)、Jorge Castro ([@castrojo](https://github.com/castrojo))、Jeffrey Sica ([@jeefy](https://github.com/jeefy))  
-**翻译：** Personal.AI 
+**翻译：** Turtacn ([@turtacn](https://github.com/turtacn))
 **状态：** 正在审核中  
-**最近更新：** 2025年8月6日
+**最近更新：** 2025年8月21日
 
 ***这是一份与CNCF和[AI Conformance WG](https://github.com/kubernetes/community/tree/master/wg-ai-conformance)合作的公开文档***
 
