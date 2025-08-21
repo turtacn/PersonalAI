@@ -1,8 +1,11 @@
 ### CNCF Kubernetes AI 一致性（Conformance）
 
 **作者：** Janet Kuo ([@janetkuo](https://github.com/janetkuo))、Mario Fahlandt ([@mfahlandt](https://github.com/mfahlandt))、[wg-ai-conformance@kubernetes.io](mailto:wg-ai-conformance@kubernetes.io)、Jorge Castro ([@castrojo](https://github.com/castrojo))、Jeffrey Sica ([@jeefy](https://github.com/jeefy))  
+
 **翻译：** Turtacn ([@turtacn](https://github.com/turtacn))
+
 **状态：** 正在审核中  
+
 **最近更新：** 2025年8月21日
 
 ***这是一份与CNCF和[AI Conformance WG](https://github.com/kubernetes/community/tree/master/wg-ai-conformance)合作的公开文档***
@@ -168,8 +171,8 @@ AI一致性测试验证平台对其指定API契约或其组件行为的遵循，
 | 2025年6月底 | 组建Kubernetes [AI一致性工作组](https://groups.google.com/a/kubernetes.io/g/dev/c/u6I_mCRC4lE/m/tBWyGOAmAwAJ) |
 | :---- | :---- |
 | 约2025年8月 | 在[cncf/ai-conformance](https://github.com/cncf/ai-conformance)存储库中发布v1版AI一致性 |
-| 约2025年9月 | 公司和供应商开始自我认证过程 |
+| 约2025年9月 | **公司和供应商开始自我认证过程** |
 | 2025年8月底 | Kubernetes 1.34发布，预计将包含DRA的GA版本 |
 | 2025年9月 | CNCF理事会会议 |
-| 2025年10月底 | 第一轮自我认证的截止日期 |
+| 2025年10月底 | **第一轮自我认证的截止日期** |
 | 2025年11月中旬 | 在KubeCon NA 2025上进行一次重大公告和展示 |
