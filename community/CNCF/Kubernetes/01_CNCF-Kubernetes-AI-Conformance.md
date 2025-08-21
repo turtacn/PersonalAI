@@ -1,4 +1,4 @@
-### CNCF Kubernetes AI 一致性（Conformance）
+# CNCF Kubernetes AI 一致性（Conformance）
 
 **作者：** Janet Kuo ([@janetkuo](https://github.com/janetkuo))、Mario Fahlandt ([@mfahlandt](https://github.com/mfahlandt))、[wg-ai-conformance@kubernetes.io](mailto:wg-ai-conformance@kubernetes.io)、Jorge Castro ([@castrojo](https://github.com/castrojo))、Jeffrey Sica ([@jeefy](https://github.com/jeefy))  
 
@@ -13,19 +13,19 @@
 ![k8s-ai-conformance-cerfitication](assets/k8s-ai-conformance-cerfitication.png)  
 
 
-### 概览
+# 概览
 
 CNCF Kubernetes AI 一致性定义了一套Kubernetes集群必须在**标准CNCF Kubernetes一致性之上**提供的额外能力、API和配置，以可靠且高效地运行AI/ML工作负载。
 
 一个Kubernetes平台或发行版必须先获得Kubernetes一致性认证，才能获得AI一致性认证。
 
-#### 主要目标
+## 主要目标
 
   * 简化Kubernetes上的AI/ML并加速其采用
   * 确保AI工作负载的互操作性和可移植性
   * 在行业标准基础上促进AI工具生态系统的增长
 
-#### 范围
+## 范围
 
 **在范围内（In Scope）：**
 
@@ -39,7 +39,7 @@ CNCF Kubernetes AI 一致性定义了一套Kubernetes集群必须在**标准CNCF
   * 标准Kubernetes一致性已测试的功能（除非需要特定的AI相关配置）。
   * 针对模型服务（model servers）和框架（frameworks）等组件的测试。尽管此一致性将提及对这些组件的要求，但它不会提供全面的测试。
 
-#### 统一的AI一致性
+## 统一的AI一致性
 
 我们认为，在中期内，AI/ML工作负载将与非AI工作负载保持区别，并将需要Kubernetes提供不同的能力。
 
@@ -49,7 +49,7 @@ AI一致性将有助于确保AI/ML工作负载的可移植性，从而降低总�
 
 因此，为了建立一个基础且广泛适用的标准来鼓励这种融合，此一致性的初始版本将侧重于通用的底层能力。因此，在一致性方面，工作负载类型没有区分。
 
-#### 指导性用例
+## 指导性用例
 
 本文档中的要求源于支持一组常见、高价值AI/ML用例在标准化、可移植平台上运行的需要。
 
@@ -57,7 +57,7 @@ AI一致性将有助于确保AI/ML工作负载的可移植性，从而降低总�
   * **高性能推理（High-performance Inference）：** 关键平台要求包括访问加速器、高级流量管理以及用于监控延迟和吞吐量的标准化指标。
   * **MLOps管道（MLOps Pipelines）：** 关键平台要求包括一个健壮的批处理作业系统、一个用于管理资源争用的队列系统、安全访问对象存储和模型注册表等其他服务，以及可靠的CRD/Operator支持。
 
-### 要求
+## 要求
 
   * **MUST (必须)** 表示一致性的强制性要求。
   * **SHOULD (应该)** 表示推荐的实践或期望的目标。虽然不是强制性的，但它标志着社区正在朝着这个方向发展，并相信这将带来更好的结果、改进的互操作性或增强的功能。预计随着实践的成熟和对其普遍益处的共识固化，SHOULD 要求可能会在标准的未来迭代中演变为 MUST 要求。
@@ -97,7 +97,7 @@ AI一致性将有助于确保AI/ML工作负载的可移植性，从而降低总�
 | | **高度连接节点的集体维护（Gang maintenance for highly connected nodes）** | **SHOULD (应该)：** 允许对高度连接的节点进行集体维护。在高度连接的节点情况下，单个节点的不可用通常可能意味着整个节点集（gang）不可用。在这种情况下，应允许集体维护以最小化中断。 |
 | **AI框架与Operator赋能（AI Framework & Operator Enablement）** | **健壮的CRD与Controller操作（Robust CRD and Controller Operation）** | **MUST (必须)：** 确保复杂CRD及其关联控制器（在AI/ML Operator中很常见，例如Ray、Kubeflow）的安装和操作能够可靠地运行。平台不得施加超出标准Kubernetes资源配额的非标准限制，导致失败。此类被禁止的限制示例包括：过于激进的API服务器限速，导致正常的Operator协调被节流；对已安装的CRD或webhook数量的隐藏限制；导致webhook执行不可靠或负载下控制器协调缓慢的控制平面资源约束。如何测试：部署一个代表性的AI Operator，验证Operator的所有Pod及其webhook都在运行，并且其CRD已在API服务器注册。验证无效尝试（例如无效的spec）应被其准入webhook拒绝。验证自定义资源的有效实例可以被协调。 |
 
-### 一致性测试（Conformance Testing）
+## 一致性测试（Conformance Testing）
 
 Kubernetes AI一致性测试套件将专门测试这些 **MUST (必须)：** 的附加要求。它将假定已成功完成标准Kubernetes一致性套件。
 
@@ -105,7 +105,7 @@ AI一致性测试，类似于标准Kubernetes一致性测试，将有一个严�
 
 一致性测试将验证AI特定API、配置和能力的存在及其正确行为。供应商将能够运行这些测试来认证他们的Kubernetes发行版/平台为“Kubernetes AI Conformant”。
 
-#### 2025年计划：自我评估问卷
+## 2025年计划：自我评估问卷
 
 为了促进2025年的初始一致性，每个公司/供应商将在指定存储库中完成一份问卷。CNCF将随后审查此提交作为完整测试程序投入运行之前的初步步骤。
 
@@ -144,7 +144,7 @@ spec:
 
 注意：`status`字段可以是“不适用（N/A）”。选择此状态的供应商必须在`notes`字段中提供理由，解释为什么该要求不适用于其平台的架构（例如，“这是一个没有外部网络访问的气隙（air-gapped）平台，因此对云服务的workload identity要求不适用”）。
 
-#### 一致性有效性与续期
+## 一致性有效性与续期
 
 维护Kubernetes AI一致性状态的过程将随着该计划从最初的、基于问卷的阶段成熟到完全自动化的测试套件而演变。
 
@@ -162,11 +162,11 @@ AI一致性测试验证平台对其指定API契约或其组件行为的遵循，
 
 要声明对较新Kubernetes版本或更新版本的AI一致性的一致性，平台必须成功运行相应的新版本一致性测试套件。这使认证周期与Kubernetes和AI一致性的发布周期保持一致。如果供应商使用的组件API中的一项破坏性更改（breaking change）影响了其与认证版本的一致性状态，则也需要重新提交认证。
 
-#### 版本控制（Versioning）
+## 版本控制（Versioning）
 
 它将进行版本控制以适应不断发展的AI/ML领域。每个版本将指定一套能力，一致性测试将验证它们的存在和正确功能。每个版本将锚定到特定的Kubernetes版本。初始版本将依赖于Kubernetes v1.34。
 
-#### 时间表（Timeline）
+## 时间表（Timeline）
 
 | 2025年6月底 | 组建Kubernetes [AI一致性工作组](https://groups.google.com/a/kubernetes.io/g/dev/c/u6I_mCRC4lE/m/tBWyGOAmAwAJ) |
 | :---- | :---- |
@@ -176,3 +176,5 @@ AI一致性测试验证平台对其指定API契约或其组件行为的遵循，
 | 2025年9月 | CNCF理事会会议 |
 | 2025年10月底 | **第一轮自我认证的截止日期** |
 | 2025年11月中旬 | 在KubeCon NA 2025上进行一次重大公告和展示 |
+
+
