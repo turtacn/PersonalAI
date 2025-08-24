@@ -3,7 +3,9 @@
 **A Proposal for Enterprise-Grade Kubernetes Conformance for Agentic AI Platforms**
 
 **版本**: 0.9 (草案)
+
 **作者**: CNCF SIG-AI (贡献者: [turtacn/Organization Here])
+
 **日期**: 2025年8月24日
 
 ## **摘要**
