@@ -4,7 +4,7 @@
 
 **Version**: 0.9 (Draft)
 
-**Author**: CNCF SIG-AI (Contributors: [Your Name/Organization Here])
+**Author**: CNCF SIG-AI (Contributors: [turtacn/Organization Here])
 
 **Date**: August 24, 2025
 
