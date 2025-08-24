@@ -74,7 +74,7 @@
 
 %% 图例：颜色用于区分层级，图中英文在中文后以全角括号标注
 ```mermaid
-flowchart TB
+flowchart LR
     %% 模块命名规则示例"大写缩写[中文名称（English Term）]"
     subgraph HW[硬件层（Hardware Layer）]
         A1[CPU 节点池（CPU Pool）]
