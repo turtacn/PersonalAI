@@ -70,7 +70,7 @@
 
 ## 四、参考架构（Architecture Overview）
 
-下面的架构图（Mermaid）展示硬件、Kubernetes 平台、治理中间件与 Agent 层如何协同（图下有要点说明）。
+下面的架构图展示硬件、Kubernetes 平台、治理中间件与 Agent 层如何协同（图下有要点说明）。
 
 ```mermaid
 flowchart LR
@@ -330,3 +330,5 @@ flowchart LR
 10. K8s 相关技术（JobSet / Kueue，DRA 动态资源分配）社区讨论与实现文档。
 
 11. 各云厂商与平台能力公告（如 AWS Bedrock AgentCore、OpenAI Agent 模式、Microsoft Copilot Agent）—行业发布与白皮书汇总。
+
+12. 本文连接，[RA on agentic AI platform](https://github.com/turtacn/PersonalAI/blob/master/examples/trends/04_agentic-ai-reference-architecture%26platform.md)
