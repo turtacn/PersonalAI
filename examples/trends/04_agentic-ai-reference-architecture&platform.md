@@ -72,7 +72,6 @@
 
 下面的架构图（Mermaid）展示硬件、Kubernetes 平台、治理中间件与 Agent 层如何协同（图下有要点说明）。
 
-%% 图例：颜色用于区分层级，图中英文在中文后以全角括号标注
 ```mermaid
 flowchart LR
     %% 模块命名规则示例"大写缩写[中文名称（English Term）]"
