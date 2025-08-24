@@ -127,10 +127,11 @@ graph TD
 
 ## **附录 A: Kubernetes AI Conformance 自我评估清单 (Markdown模板)**
 
-```markdown
-# Kubernetes AI Conformance 自我评估清单 V0.9
+### Kubernetes AI Conformance 自我评估清单 V0.9
 
-**供应商:** **产品/版本:** **评估日期:** | 领域 | ID | 要求 | 支持级别 (No/Partial/Full) | 备注/实现方式 |
+**供应商:** **产品/版本:** **评估日期:** 
+
+| 领域 | ID | 要求 | 支持级别 (No/Partial/Full) | 备注/实现方式 |
 | :--- | :--- | :--- | :--- | :--- |
 | **硬件与资源管理** | HW-1.1 | **[MUST]** 支持DRA管理AI加速器 | | |
 | | HW-1.2 | **[MUST]** 暴露GPU利用率和显存指标 | | |
@@ -150,7 +151,6 @@ graph TD
 | | SEC-5.5 | **[SHOULD]** 支持镜像签名验证 | | |
 | **可观测性** | OBS-6.1 | **[MUST]** 自动采集AI服务指标 | | |
 | | OBS-6.2 | **[SHOULD]** 支持OpenTelemetry全链路追踪 | | |
-```
 
 ## **附录 B: 最小化回归评测流水线示例 (YAML占位符)**
 

@@ -88,9 +88,9 @@ This diagram illustrates how the core components of a Kubernetes platform under 
 ```mermaid
 graph TD
     subgraph SW[AI Application/Software Layer]
-        W1[🤖 Large-Scale Training/Fine-tuning <br> (via JobSet & Kueue)]
-        W2[🚀 High-Performance Inference Serving <br> (via Gateway API & KServe)]
-        W3[🕵️ Agentic Runtime <br> (in Sandboxed Runtime)]
+        W1[🤖 Large-Scale Training/Fine-tuning <br> （via JobSet & Kueue）]
+        W2[🚀 High-Performance Inference Serving <br> （via Gateway API & KServe）]
+        W3[🕵️ Agentic Runtime <br> （in Sandboxed Runtime）]
     end
 
     subgraph PL[Kubernetes Platform Layer with AI Conformance]
@@ -106,14 +106,14 @@ graph TD
         end
         subgraph OBS[Observability]
             METRICS[Standard Metrics Endpoint]
-            OTEL[Distributed Tracing<br>(OpenTelemetry Collector)]
+            OTEL[Distributed Tracing<br>（OpenTelemetry Collector）]
         end
     end
 
     subgraph HW[Hardware Layer]
-        A[Accelerators<br>(GPUs, TPUs)]
-        B[High-Speed Networking<br>(RDMA NICs)]
-        C[High-Performance Storage<br>(NVMe)]
+        A[Accelerators<br>（GPUs, TPUs）]
+        B[High-Speed Networking<br>（RDMA NICs）]
+        C[High-Performance Storage<br>（NVMe）]
     end
 
     %% Relationships
@@ -127,10 +127,12 @@ graph TD
 
 ## **Appendix A: Kubernetes AI Conformance Self-Assessment Checklist (Markdown Template)**
 
-```markdown
-# Kubernetes AI Conformance Self-Assessment Checklist V0.9
 
-**Vendor:** **Product/Version:** **Assessment Date:** | Domain | ID | Requirement | Support Level (No/Partial/Full) | Notes/Implementation Details |
+### Kubernetes AI Conformance Self-Assessment Checklist V0.9
+
+**Vendor:** **Product/Version:** **Assessment Date:** 
+
+| Domain | ID | Requirement | Support Level (No/Partial/Full) | Notes/Implementation Details |
 | :--- | :--- | :--- | :--- | :--- |
 | **Hardware & Resource Mgmt** | HW-1.1 | **[MUST]** Support DRA for AI accelerators | | |
 | | HW-1.2 | **[MUST]** Expose GPU utilization & memory metrics | | |
@@ -150,7 +152,6 @@ graph TD
 | | SEC-5.5 | **[SHOULD]** Support image signature verification | | |
 | **Observability** | OBS-6.1 | **[MUST]** Auto-collect AI service metrics | | |
 | | OBS-6.2 | **[SHOULD]** Support OpenTelemetry end-to-end tracing | | |
-```
 
 ## **Appendix B: Minimal Regression Testing Pipeline Example (YAML Placeholder)**
 
