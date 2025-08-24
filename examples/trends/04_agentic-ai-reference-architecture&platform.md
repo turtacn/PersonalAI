@@ -153,7 +153,7 @@ flowchart LR
 
 ### 计算（Compute）
 
-| 编号 | 技术需求（What）                               | 业务价值（Why）                 | 可量化基线 / SLO（How measured）                    | 简单易用建议（Developer UX）                              | 稳定可靠实践（Ops / Risk）                 | 快速落地建议（0–3 个月）                            |
+| 编号 | 技术需求（What）                               | 业务价值（Why）                 | 可量化基线 / SLO（How measured）                    | 简单易用建议（Developer UX）                              | 稳定可靠实践（Ops / Risk）                 | 可快速落地分析                            |
 | -: | ---------------------------------------- | ------------------------- | -------------------------------------------- | ------------------------------------------------- | ---------------------------------- | ----------------------------------------- |
 | C1 | 异构加速器统一登记与属性描述（GPU/TPU/FPGA，含 MIG、驱动、拓扑） | 精准调度、减少性能抖动，提升资源利用率与预测性成本 | 每卡显存使用率、Per-accelerator 利用率；目标：显存利用率报警阈值 70% | 提供资源模板（如 `accelerator: nvidia/a100,mig:2`），隐藏复杂参数 | 使用 DRA 或兼容层暴露属性；设备指标暴露到 Prometheus | 部署 GPU exporter + DevicePlugin；在控制台显示拓扑视图 |
 | C2 | 拓扑感知调度（NUMA、NVLink、PCIe 亲和）              | 降低跨节点通信延迟，提升训练/推理吞吐       | 分布式训练通信延迟、JobSet 启动成功率；Gang job 成功率 ≥ 99%    | 模板化配置分布式作业（一键 gang-schedule）                      | 使用 Kueue/JobSet 或调度扩展，做亲和策略和回退     | 在测试集群运行小规模 gang 作业并记录基线                   |
@@ -225,7 +225,7 @@ flowchart LR
 
 * **按维度分解技术点**，同时用“简单易用 → 稳定可靠”两条线并行推进，能在短期内交付可用且合规的 On-Prem Agentic AI 平台基础能力；长期逐步引入 DRA、拓扑感知和高性能网络存储以实现规模化与成本优化。
 * **度量与基线必须从一开始就建立**（显存利用率、P95 延迟、审计覆盖率、成本/任务），并把基准化测试纳入 CI（WebArena/AgentBench + 自建场景）。
-* **快速落地路线（0–3 个月）**：优先把治理（身份、API、审计）与向量检索/推理入口做好，这是确保可用性与合规的“最低可用企业级平台”。
+* **可快速落地路线分析**：优先把治理（身份、API、审计）与向量检索/推理入口做好，这是确保可用性与合规的“最低可用企业级平台”。
 
 ---
 
@@ -260,7 +260,7 @@ flowchart LR
 
 * **问题**：海量设备时序数据，需要在 PB 级存储与数百万数字孪生基础上做预测性维护。
 * **方案**：构建强类型的企业模型层，K8s 支撑 PB 存储与批量训练，JobSet/Kueue 管理分布式训练作业。
-* **效果**：比传统自建数据湖缩短项目上线周期 6–12 个月（参见 C3 AI 公开案例与分析 \[9]）。
+* **效果**：比传统自建数据湖缩短项目上线周期（参见 C3 AI 公开案例与分析 \[9]）。
 
 ### 案例 C：SaaS 平台供应商（Agent 化客服）
 
@@ -296,14 +296,14 @@ flowchart LR
 
 1. **Kubernetes 将成为 AI 基础设施的事实控制面，但需要 AI-native 扩展（DRA、JobSet、Kueue、Gateway API）**。
 2. **合规与数据主权推动本地化/混合云优先架构**；离线/air-gap 环境将成为金融、医疗等行业常态。
-3. **工具协议化（MCP）与 Agent-to-Agent 标准将加速生态互操作**，但从协议到行业采纳需 12–24 个月。
+3. **工具协议化（MCP）与 Agent-to-Agent 标准将加速生态互操作**，但从协议到行业采纳周期。
 4. **自动化基准与 Conformance 流水线（如 CNCF AI Conformance）会成为采购/上线门槛**。
 
 ---
 
 ## 十、结论（Conclusion）
 
-要把 Agentic AI 从 PoC 推向企业生产，必须在协议（MCP/OpenAPI）、平台（K8s 扩展）、治理（API 管理、身份、审计）和硬件（拓扑感知、异构调度）四方面同时发力。短期落地靠 Tool Gateway 与可观测，中期依赖 K8s v1.34+DRA 等能力，长期以行业共识（Conformance）固化可移植与 SLA。本文给出的基线、架构与实施步阵，旨在帮助技术团队在 6–12 个月内完成从试点到可复制生产的转变。
+要把 Agentic AI 从 PoC 推向企业生产，必须在协议（MCP/OpenAPI）、平台（K8s 扩展）、治理（API 管理、身份、审计）和硬件（拓扑感知、异构调度）四方面同时发力。短期落地靠 Tool Gateway 与可观测，中期依赖 K8s v1.34+DRA 等能力，长期以行业共识（Conformance）固化可移植与 SLA。本文给出的基线、架构与实施步阵，旨在帮助技术团队完成从试点到可复制生产的转变。
 
 ---
 
@@ -331,4 +331,4 @@ flowchart LR
 
 11. 各云厂商与平台能力公告（如 AWS Bedrock AgentCore、OpenAI Agent 模式、Microsoft Copilot Agent）—行业发布与白皮书汇总。
 
-12. 本文连接，[RA on agentic AI platform](https://github.com/turtacn/PersonalAI/blob/master/examples/trends/04_agentic-ai-reference-architecture%26platform.md)
+12. 本文全文连接，[RA on agentic AI platform](https://github.com/turtacn/PersonalAI/blob/master/examples/trends/04_agentic-ai-reference-architecture%26platform.md)
