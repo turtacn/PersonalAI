@@ -101,8 +101,8 @@ Eskil Steenberg 的系统工程思维，让我试着去想如何重新定义开�
 
 希望这个软文，既有行业背景、理论支撑和实践路径，能让人更**深深信服**AI的前景，也激发更多人尝试 AI 驱动的系统工程方法。
 
-* [1]: https://www.youtube.com/watch?v=sSpULGNHyoI&utm_source=chatgpt.com "Architecting LARGE software projects. - YouTube"
-* [2]: https://www.geeky-gadgets.com/building-large-robust-software-systems/?utm_source=chatgpt.com "How to Build Scalable and Maintainable Software Systems - Geeky Gadgets"
-* [3]: https://github.com/turtacn/PersonalAI/blob/master/architecture-prompts "GitHub - turtacn/PersonalAI/.../architecture-prompts"
-* [4]: https://sebokwiki.org/wiki/Systems_Engineering_Principles?utm_source=chatgpt.com "Systems Engineering Principles - SEBoK"
-* [5]: https://ieeesystemscouncil.org/files/ieeesyscouncil/2023-10/Systems%20Engineering%20Principles.pdf?utm_source=chatgpt.com "SYSTEMS ENGINEERING PRINCIPLES"
+* [1]: ["Architecting LARGE software projects. - YouTube"](https://www.youtube.com/watch?v=sSpULGNHyoI&utm_source=chatgpt.com)
+* [2]: ["How to Build Scalable and Maintainable Software Systems - Geeky Gadgets"](https://www.geeky-gadgets.com/building-large-robust-software-systems/?utm_source=chatgpt.com) 
+* [3]: ["GitHub - turtacn/PersonalAI/.../architecture-prompts"](https://github.com/turtacn/PersonalAI/blob/master/architecture-prompts )
+* [4]: ["Systems Engineering Principles - SEBoK"](https://sebokwiki.org/wiki/Systems_Engineering_Principles?utm_source=chatgpt.com) 
+* [5]: ["SYSTEMS ENGINEERING PRINCIPLES"](https://ieeesystemscouncil.org/files/ieeesyscouncil/2023-10/Systems%20Engineering%20Principles.pdf?utm_source=chatgpt.com) 
