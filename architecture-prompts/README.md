@@ -304,5 +304,5 @@ const MentionInput = ({ adapter }: { adapter: DOMAdapter }) => {
 
 ---
 
-_本项目与 Anthropic、Eskil Steenberg 或提及的任何工具均无关联，均为公共知识、经验的分享与提示。
+_本项目与 Anthropic、Eskil Steenberg 或提及的任何工具/项目均无关联，均为公共知识、经验的分享与提示。
 
