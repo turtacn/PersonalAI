@@ -89,12 +89,12 @@
 
 ### 总结寄语
 
-Eskil Steenberg 的系统工程思维，让我跳出 React 与 DOM 的困局，重新定义开发方式。在 AI 横空出世的时代，我们不再被复杂代码束缚：通过“黑盒 + 可替换模块 + 连续开发节奏”，AI 不是带来混乱，而是一种让系统更可控、更强大的力量。
+Eskil Steenberg 的系统工程思维，让我试着去想如何重新定义开发方式。在 AI 横空出世的时代，我们不再被复杂代码束缚：通过“黑盒 + 可替换模块 + 连续开发节奏”，AI 不是带来混乱，而是一种让系统更可控、更强大的力量。
 
 如果你愿意挑战思维边界，我推荐你：
 
 1. 观看 Eskil 的讲演视频，体验核心思想。
-2. 克隆 “AI Architecture Prompts” 仓库，感受 Prompt 在项目中的实际应用。
+2. 参考 [Personal.AI-Architecure Prompts](https://github.com/turtacn/PersonalAI/blob/master/architecture-prompts)，感受 Prompt 在项目中的实际应用。
 3. 尝试将这种方法用于新项目或重构老项目，看看 AI 与系统工程结合后的魔力。
 
 ---
