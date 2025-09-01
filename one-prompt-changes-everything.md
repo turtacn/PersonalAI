@@ -4,7 +4,7 @@
 
 最近一位 C 语言系统工程师 Eskil Steenberg 的演讲，彻底改变了许多人设计软件架构的方式。让许多人彻底重塑了思维，并由此打造了几条 AI Prompt，期望成为大家每次重构或启动新项目时最得力的伙伴。
 
-好的，这段视频
+<img src="images/one-prompt-changes-everything.png"  width="100%"/>
 
 视频中，演讲者Eskil Steenberg通过他开发视频编辑器、数字医疗系统和战斗机软件的经验，总结出了一套软件架构实操方法；主要针对在开发大型软件项目时，如何通过模块化、平台抽象化、插件化等方式来构建一个可靠、可扩展、可维护的软件架构。其主要内容包括：
 
@@ -50,7 +50,7 @@
 
 ---
 
-## 强化改写 — 更强更全面的软文版本
+## 增强
 
 ---
 
@@ -58,7 +58,7 @@
 
 **从传奇专家的系统工程演讲，到 AI 引领下的革命性开发实践**
 
-回顾上个月，我在解决 Mentis（一款使用 React 的开源项目）中复杂 DOM bug 的过程中，遭遇了开发瓶颈：一处修复常导致另一处失效，DOM 渲染与测试覆盖不断失衡。在这种几近崩溃的边缘，我偶然看到 C 语言系统工程师 **Eskil Steenberg** 的讲座《Architecting LARGE Software Projects》。他构建从 3D 引擎到网络游戏的系统经验，仿佛照亮了我的开发黑暗——
+回顾上个月，偶然看到 C 语言系统工程师 **Eskil Steenberg** 的讲座《Architecting LARGE Software Projects》。他构建从 3D 引擎到网络游戏的系统经验，仿佛照亮了我的开发黑暗——
 
 > **“保持稳定的开发速度；单模块、一人负责；模块可替换；黑盒接口；写五行取代未来不断修改一行”**
 > 这些核心原则令我恍然大悟：我面对的挑战远不及他设计战斗机系统时的复杂程度，但需要的是同样的思考方式。
@@ -71,7 +71,7 @@
 
 搭配上下文提取工具（如 `repomix`、`onefilellm`），这些 Prompts 可以适配任何语言、框架，并引导 AI 用**系统规模**思维去分析问题 ([GitHub][3])。
 
-在处理 Mentis 项目时，我将整个代码库上下文与架构 Prompt 交给 Claude，结果令人惊艳——Claude 建议创建一个与 DOM 接口交互的黑盒层，而非直接与 React DOM 纠结。这个设计不仅修复了现有 DOM bug，还实现了跨框架兼容性，让代码能在 React、Vue、Svelte 或原生 JS 间复用。
+在许多创意项目中，我将整个项目上下文与架构 Prompt 交给 Claude，结果令人惊艳——Claude 的架构建议的创意，叹为观止。
 
 ---
 
@@ -82,7 +82,8 @@
 * **黑盒接口 + 清晰契约：** 每个模块都通过简洁 API 交互，易于理解、测试、替换。
 * **AI友好架构：** Prompt 常驻意识形态，让 Claude / ChatGPT / Cursor 成为懂架构的助手，而不仅是代码生成器。
 
-我把所有 Prompts、使用指南、演讲原文、示例项目打包上传至 GitHub——实用性已通过数周实战验证，无愧“创新工作流”的称号 ([GitHub][3])。
+
+所有 Prompts、使用指南、演讲原文、示例项目打包上传至 GitHub——实用性已通过数周实战验证，无愧“创新工作流”的称号 ([GitHub][3])。
 
 ---
 
@@ -98,10 +99,10 @@ Eskil Steenberg 的系统工程思维，让我跳出 React 与 DOM 的困局，�
 
 ---
 
-希望这个强化版软文，不仅保留了原文的实用价值，也补充了行业背景、理论支撑和实践路径，能让读者更信服，也激发更多人尝试 AI 驱动的系统工程方法。
+希望这个软文，既有行业背景、理论支撑和实践路径，能让人更**深深信服**AI的前景，也激发更多人尝试 AI 驱动的系统工程方法。
 
 [1]: https://www.youtube.com/watch?v=sSpULGNHyoI&utm_source=chatgpt.com "Architecting LARGE software projects. - YouTube"
 [2]: https://www.geeky-gadgets.com/building-large-robust-software-systems/?utm_source=chatgpt.com "How to Build Scalable and Maintainable Software Systems - Geeky Gadgets"
-[3]: https://github.com/Alexanderdunlop/ai-architecture-prompts?utm_source=chatgpt.com "GitHub - Alexanderdunlop/ai-architecture-prompts: AI prompts that teach ..."
+[3]: https://github.com/turtacn/PersonalAI/blob/master/architecture-prompts "GitHub - turtacn/PersonalAI/.../architecture-prompts"
 [4]: https://sebokwiki.org/wiki/Systems_Engineering_Principles?utm_source=chatgpt.com "Systems Engineering Principles - SEBoK"
 [5]: https://ieeesystemscouncil.org/files/ieeesyscouncil/2023-10/Systems%20Engineering%20Principles.pdf?utm_source=chatgpt.com "SYSTEMS ENGINEERING PRINCIPLES"
