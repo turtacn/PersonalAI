@@ -2,7 +2,7 @@
 
 **导语**
 
-最近一位 C 语言系统工程师 Eskil Steenberg 的演讲，彻底改变了许多人设计软件架构的方式。让许多人彻底重塑了思维，并由此打造了几条 AI Prompt，期望成为大家每次重构或启动新项目时最得力的伙伴。
+最近一位 C 语言系统工程师 Eskil Steenberg (看起来已然是非常成熟的程序员) 的演讲，彻底改变了许多人设计软件架构的方式。让许多人彻底重塑了思维，并由此打造了几条 AI Prompt，期望成为大家每次重构或启动新项目时最得力的伙伴。
 
 <img src="images/one-prompt-changes-everything.png"  width="100%"/>
 
