@@ -29,7 +29,7 @@ AI基础设施的核心思想是构建一个高效、可靠且可扩展的系统
 以下的数据流图清晰地展示了上述过程。
 
 ```mermaid
-graph TD
+graph LR
     %% 模块命名规则："大写缩写[中文名称（英文术语）]"
     subgraph USR[用户交互层（User Interaction Layer）]
         A1[用户输入（User Input）]
@@ -66,8 +66,10 @@ graph TD
     C4 -- 数据 --> B4
     B4 -- 上下文与提示 --> D1
     D1 -- 推理结果 --> B4
-    B4 --> B2 %% 迭代循环
-    B4 --> A1 %% 输出结果
+    B4 --> B2 
+    %% 迭代循环
+    B4 --> A1 
+    %% 输出结果
 ```
 
 ### 1.3. 典型场景分析：检索增强生成 (RAG) 交互时序
@@ -156,7 +158,7 @@ graph TD
     subgraph TRAIN[模型训练与管理层（Training & Management Layer）]
         TP[训练流水线（Training Pipeline）]
         ET[实验跟踪（Experiment Tracking）]
-        DVL[数据溯源与版本控制<br>(Data Versioning & Lineage)]
+        DVL[数据溯源与版本控制<br>（Data Versioning & Lineage）]
     end
 
     subgraph DATA[数据与特征层（Data & Feature Layer）]
