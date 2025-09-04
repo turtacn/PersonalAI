@@ -42,14 +42,22 @@
 
 所有业务与技术分析来源于，对"企业"这种商业体的全面业务与技术分析，例如
 
-* **[baidu.com](examples/BA/baidu.com/01-overview.md)** 
-* **[bytedance.com](examples/BA/bytedance.com/01-overview.md)** 
+* **[公司案例 baidu.com](examples/BA/baidu.com/01-overview.md)** 
+* **[公司案例 bytedance.com](examples/BA/bytedance.com/01-overview.md)** 
 * **...**
 
 再进一步，围绕给定的企业现状，针对发挥自我优势、所在行业的技术趋势、关联的业务板块，给出完整的产品战略分析和原型化设计，例如
 
-* **[sec-ai-cloud](examples/prototype/security-cloud-ai.md)**
+* **[行业洞察 sec-ai-cloud](examples/prototype/security-cloud-ai.md)**
 * **...**
+
+同时，时刻密切关注、参与和贡献社区，例如
+
+* **[标准 Kubernetes AI Conformance](community/CNCF/Kubernetes/01_CNCF-Kubernetes-AI-Conformance.md)**
+* **[提议 Kubernetes AI Conformance](community/CNCF/Kubernetes/02_Proposal-of-CNCF-SIG-on-Kubernetes-AI-Conformance-AAI-perspecitve-CN-v2-g3.md)**
+* **...**
+
+
 
 进而，针对具体的产品和软件规划，快速通过AI辅助架构设计，快速产出原型实现，直接消除各类无效/低效文档的工作，例如
 
