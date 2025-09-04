@@ -232,16 +232,16 @@ graph TD
 
 **本表格新增“部署场景适应性”一列，为不同交付目标提供选型参考。**
 
-| 组件名称\<br/\>(Component Name) | 版本\<br/\>(Version) | 主要功能 (Main Function) | 可选方案 (Alternatives) | 部署场景适应性 (Scenario Adaptability) | 主要特性 (Main Features) | 必要性度量\<br/\>(1-5, 5为最高) |
+| 组件名称<br/>(Component Name) | 版本<br/>(Version) | 主要功能 (Main Function) | 可选方案 (Alternatives) | 部署场景适应性 (Scenario Adaptability) | 主要特性 (Main Features) | 必要性度量<br/>(1-5, 5为最高) |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| **计算编排**\<br/\>Kubernetes | Latest Stable | 容器化应用的部署、扩展和管理 | Docker Swarm, Nomad | **云/私有化**: 极佳\<br\>**边缘**: 需K3s/KubeEdge等轻量版 | 声明式API、自动扩缩容、高可用、强大的生态系统 | **5** (事实标准) |
-| **分布式计算**\<br/\>Ray | Latest Stable | 提供简单、通用的API进行分布式应用编程 | Dask, Apache Spark | **云/私有化**: 极佳\<br\>**边缘**: 资源开销大，不推荐 | Actor模型、轻量级API、无缝扩展、丰富的生态库(Tune, Serve, RLlib) | **4** (对于大规模AI负载) |
-| **向量数据库**\<br/\>Milvus | Latest Stable | 存储、索引和管理海量向量数据 | Pinecone, Weaviate | **云/私有化**: 极佳\<br\>**边缘**: 可用Lite版，但有功能限制 | 高性能相似性搜索、多种索引类型、标量字段过滤、云原生可扩展 | **5** (对于GenAI/RAG应用) |
-| **MLOps平台**\<br/\>MLflow | Latest Stable | 端到端的机器学习生命周期管理 | Weights & Biases | **云/私有化/边缘**: 普遍适用 | 开源、框架无关、模块化设计（Tracking, Projects, Models, Registry） | **5** (保障研发规范与效率) |
-| **数据溯源与版本控制**\<br/\>DVC | Latest Stable | 对数据、模型、代码进行版本控制 | Pachyderm, LakeFS | **云/私有化/边缘**: 普遍适用 | 基于Git、不存储大数据本身、与语言/框架无关、CI/CD集成 | **4** (对于严肃的ML项目) |
-| **模型推理服务**\<br/\>KServe | Latest Stable | 在Kubernetes上部署标准化的AI推理服务 | BentoML, Triton | **云/私有化**: 极佳\<br\>**边缘**: 较重，可考虑ONNX Runtime等 | 标准化推理协议(V2)、模型可解释性、请求批处理、基于Knative的自动伸缩 | **4** (可被BentoML等替代) |
-| **AI工作流编排**\<br/\>LangChain | Latest Stable | 简化LLM应用的开发，链接和编排组件 | LlamaIndex, CrewAI | **云/私有化/边缘**: 普遍适用，核心库轻量 | 组件化、丰富的集成、Chains/Agents概念、模板化 | **4** (快速开发的首选) |
-| **系统监控**\<br/\>Prometheus | Latest Stable | 时序数据监控与告警 | InfluxDB, VictoriaMetrics | **云/私有化**: 极佳\<br\>**边缘**: 资源开销需评估，有替代方案 | 多维数据模型、强大的查询语言(PromQL)、拉取模型、服务发现 | **5** (云原生监控基石) |
+| **计算编排**<br/>Kubernetes | Latest Stable | 容器化应用的部署、扩展和管理 | Docker Swarm, Nomad | **云/私有化**: 极佳<br/>**边缘**: 需K3s/KubeEdge等轻量版 | 声明式API、自动扩缩容、高可用、强大的生态系统 | **5** (事实标准) |
+| **分布式计算**<br/>Ray | Latest Stable | 提供简单、通用的API进行分布式应用编程 | Dask, Apache Spark | **云/私有化**: 极佳<br/>**边缘**: 资源开销大，不推荐 | Actor模型、轻量级API、无缝扩展、丰富的生态库(Tune, Serve, RLlib) | **4** (对于大规模AI负载) |
+| **向量数据库**<br/>Milvus | Latest Stable | 存储、索引和管理海量向量数据 | Pinecone, Weaviate | **云/私有化**: 极佳<br/>**边缘**: 可用Lite版，但有功能限制 | 高性能相似性搜索、多种索引类型、标量字段过滤、云原生可扩展 | **5** (对于GenAI/RAG应用) |
+| **MLOps平台**<br/>MLflow | Latest Stable | 端到端的机器学习生命周期管理 | Weights & Biases | **云/私有化/边缘**: 普遍适用 | 开源、框架无关、模块化设计（Tracking, Projects, Models, Registry） | **5** (保障研发规范与效率) |
+| **数据溯源与版本控制**<br/>DVC | Latest Stable | 对数据、模型、代码进行版本控制 | Pachyderm, LakeFS | **云/私有化/边缘**: 普遍适用 | 基于Git、不存储大数据本身、与语言/框架无关、CI/CD集成 | **4** (对于严肃的ML项目) |
+| **模型推理服务**<br/>KServe | Latest Stable | 在Kubernetes上部署标准化的AI推理服务 | BentoML, Triton | **云/私有化**: 极佳<br/>**边缘**: 较重，可考虑ONNX Runtime等 | 标准化推理协议(V2)、模型可解释性、请求批处理、基于Knative的自动伸缩 | **4** (可被BentoML等替代) |
+| **AI工作流编排**<br/>LangChain | Latest Stable | 简化LLM应用的开发，链接和编排组件 | LlamaIndex, CrewAI | **云/私有化/边缘**: 普遍适用，核心库轻量 | 组件化、丰富的集成、Chains/Agents概念、模板化 | **4** (快速开发的首选) |
+| **系统监控**<br/>Prometheus | Latest Stable | 时序数据监控与告警 | InfluxDB, VictoriaMetrics | **云/私有化**: 极佳<br/>**边缘**: 资源开销需评估，有替代方案 | 多维数据模型、强大的查询语言(PromQL)、拉取模型、服务发现 | **5** (云原生监控基石) |
 
 ## 5\. 多场景部署策略与竞争力分析 (`v3.0` 核心新增)
 
