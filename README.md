@@ -61,8 +61,8 @@
 
 进而，针对具体的产品和软件规划，快速通过AI辅助架构设计，快速产出原型实现，直接消除各类无效/低效文档的工作，例如
 
-* **[AI 架构设计提示](architecture-prompts/README.md)**
-* **...**
+1. **[AI 架构设计提示](architecture-prompts/README.md)**
+2. **...**
  
 ## 🌟 核心特性
 
