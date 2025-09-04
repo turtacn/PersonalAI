@@ -366,14 +366,14 @@ journey
 
 ## 7\. 参考资料 (References)
 
-[1] OpenAI. (2023). GPT-4 Technical Report. arXiv:2303.08774.
-[2] MLOps: Continuous delivery and automation pipelines in machine learning. Google Cloud Documentation.
-[3] Kubernetes Official Website. kubernetes.io.
-[4] Ray: A fast and simple framework for building and running distributed applications. ray.io.
-[5] NVIDIA Triton Inference Server. NVIDIA Developer.
-[6] MLflow: An open source platform for the machine learning lifecycle. mlflow.org.
-[7] Lewis, P., et al. (2020). Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks. arXiv:2005.11401.
-[8] DVC - Data Version Control. dvc.org.
-[9] Wei, J., et al. (2022). Chain-of-Thought Prompting Elicits Reasoning in Large Language Models. arXiv:2201.11903.
-[10] Yao, S., et al. (2023). Tree of Thoughts: Deliberate Problem Solving with Large Language Models. arXiv:2305.10601.
-[11] K3s - Lightweight Kubernetes. k3s.io.
+* [1] OpenAI. (2023). GPT-4 Technical Report. arXiv:2303.08774.
+* [2] MLOps: Continuous delivery and automation pipelines in machine learning. Google Cloud Documentation.
+* [3] Kubernetes Official Website. kubernetes.io.
+* [4] Ray: A fast and simple framework for building and running distributed applications. ray.io.
+* [5] NVIDIA Triton Inference Server. NVIDIA Developer.
+* [6] MLflow: An open source platform for the machine learning lifecycle. mlflow.org.
+* [7] Lewis, P., et al. (2020). Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks. arXiv:2005.11401.
+* [8] DVC - Data Version Control. dvc.org.
+* [9] Wei, J., et al. (2022). Chain-of-Thought Prompting Elicits Reasoning in Large Language Models. arXiv:2201.11903.
+* [10] Yao, S., et al. (2023). Tree of Thoughts: Deliberate Problem Solving with Large Language Models. arXiv:2305.10601.
+* [11] K3s - Lightweight Kubernetes. k3s.io.
