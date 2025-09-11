@@ -543,11 +543,11 @@ graph TD
 
 ### 商业存储系统对比| 厂商系统 | 协议支持 | 内核旁路 | 性能特征 | 优势 | 劣势 |
 
-\|---------|---------|---------|---------|------|------|
-\| NetApp ONTAP | 支持NFS over RDMA、NVMe-oF over InfiniBand和RoCE | 部分支持RDMA | 100Gbps InfiniBand支持 | 企业级特性完整、兼容性强 | 性能调优复杂、许可成本高 |
-\| Pure Storage FlashArray | 支持NVMe-oF，延迟200-300微秒 | DirectFlash技术 | 相比iSCSI性能提升50% | 硬件优化深度、管理简单 | 协议选择有限、厂商锁定 |
-\| 开源Ceph | 支持iWARP RDMA集成 | 通过DPDK支持 | 4K随机I/O性能提升显著 | 开源灵活、成本控制 | 运维复杂度高、性能调优困难 |
-\| 本方案 | TCP/QUIC/RDMA/IPoIB全支持 | DPDK/SPDK深度集成 | 延迟<10μs，吞吐提升300% | 协议自适应、性能极致 | 实现复杂度较高 |
+|---------|---------|---------|---------|------|------|
+| NetApp ONTAP | 支持NFS over RDMA、NVMe-oF over InfiniBand和RoCE | 部分支持RDMA | 100Gbps InfiniBand支持 | 企业级特性完整、兼容性强 | 性能调优复杂、许可成本高 |
+| Pure Storage FlashArray | 支持NVMe-oF，延迟200-300微秒 | DirectFlash技术 | 相比iSCSI性能提升50% | 硬件优化深度、管理简单 | 协议选择有限、厂商锁定 |
+| 开源Ceph | 支持iWARP RDMA集成 | 通过DPDK支持 | 4K随机I/O性能提升显著 | 开源灵活、成本控制 | 运维复杂度高、性能调优困难 |
+| 本方案 | TCP/QUIC/RDMA/IPoIB全支持 | DPDK/SPDK深度集成 | 延迟<10μs，吞吐提升300% | 协议自适应、性能极致 | 实现复杂度较高 |
 
 ### 技术对比优势分析
 
@@ -760,22 +760,22 @@ graph TD
 
 ## 参考资料
 
-\[1] InfiniBand Trade Association. "InfiniBand Architecture Specification Volume 1". [https://www.infinibandta.org/](https://www.infinibandta.org/)
+[1] InfiniBand Trade Association. "InfiniBand Architecture Specification Volume 1". [https://www.infinibandta.org/](https://www.infinibandta.org/)
 
-\[2] NVM Express Organization. "NVM Express over Fabrics Specification". [https://nvmexpress.org/](https://nvmexpress.org/)
+[2] NVM Express Organization. "NVM Express over Fabrics Specification". [https://nvmexpress.org/](https://nvmexpress.org/)
 
-\[3] Data Plane Development Kit. "DPDK Documentation". [https://doc.dpdk.org/](https://doc.dpdk.org/)
+[3] Data Plane Development Kit. "DPDK Documentation". [https://doc.dpdk.org/](https://doc.dpdk.org/)
 
-\[4] Storage Performance Development Kit. "SPDK User Guide". [https://spdk.io/doc/](https://spdk.io/doc/)
+[4] Storage Performance Development Kit. "SPDK User Guide". [https://spdk.io/doc/](https://spdk.io/doc/)
 
-\[5] Internet Engineering Task Force. "QUIC: A UDP-Based Multiplexed and Secure Transport". RFC 9000. [https://www.rfc-editor.org/rfc/rfc9000.html](https://www.rfc-editor.org/rfc/rfc9000.html)
+[5] Internet Engineering Task Force. "QUIC: A UDP-Based Multiplexed and Secure Transport". RFC 9000. [https://www.rfc-editor.org/rfc/rfc9000.html](https://www.rfc-editor.org/rfc/rfc9000.html)
 
-\[6] Linux Foundation. "Remote Direct Memory Access (RDMA) Kernel API". [https://www.kernel.org/doc/html/latest/infiniband/](https://www.kernel.org/doc/html/latest/infiniband/)
+[6] Linux Foundation. "Remote Direct Memory Access (RDMA) Kernel API". [https://www.kernel.org/doc/html/latest/infiniband/](https://www.kernel.org/doc/html/latest/infiniband/)
 
-\[7] Cloud Native Computing Foundation. "OpenTelemetry Specification". [https://opentelemetry.io/docs/specs/](https://opentelemetry.io/docs/specs/)
+[7] Cloud Native Computing Foundation. "OpenTelemetry Specification". [https://opentelemetry.io/docs/specs/](https://opentelemetry.io/docs/specs/)
 
-\[8] Ongaro, D., & Ousterhout, J. "In Search of an Understandable Consensus Algorithm". USENIX Annual Technical Conference, 2014.
+[8] Ongaro, D., & Ousterhout, J. "In Search of an Understandable Consensus Algorithm". USENIX Annual Technical Conference, 2014.
 
-\[9] Amazon Web Services. "Amazon S3 API Reference". [https://docs.aws.amazon.com/s3/](https://docs.aws.amazon.com/s3/)
+[9] Amazon Web Services. "Amazon S3 API Reference". [https://docs.aws.amazon.com/s3/](https://docs.aws.amazon.com/s3/)
 
-\[10] Ceph Community. "Ceph Documentation". [https://docs.ceph.com/](https://docs.ceph.com/)
+[10] Ceph Community. "Ceph Documentation". [https://docs.ceph.com/](https://docs.ceph.com/)
