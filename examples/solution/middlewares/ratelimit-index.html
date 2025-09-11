@@ -1,0 +1,1673 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>限流 SLO/SLI 体系 - 实操指南与效果演示</title>
+    <!-- 外部资源 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+    <!-- Tailwind 配置 -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#165DFF',
+                        secondary: '#36CFC9',
+                        warning: '#FF7D00',
+                        danger: '#F53F3F',
+                        neutral: {
+                            100: '#F5F7FA',
+                            200: '#E8F3FF',
+                            300: '#C9D1D9',
+                            800: '#1F2937'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'Segoe UI', 'Roboto', 'sans-serif'],
+                        mono: ['Fira Code', 'Consolas', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- 自定义工具类 -->
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .card-shadow {
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            }
+            .tab-active {
+                @apply border-b-2 border-primary text-primary font-medium;
+            }
+            .gauge-ring {
+                transform: rotate(-90deg);
+                transform-origin: center;
+            }
+        }
+    </style>
+    <!-- 初始化脚本 -->
+    <script>
+        // Mermaid 配置
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'base',
+            themeVariables: {
+                primaryColor: '#165DFF',
+                lineColor: '#C9D1D9',
+                actorLineColor: '#165DFF',
+                fontSize: '14px'
+            }
+        });
+
+        // 页面加载完成后初始化交互
+        document.addEventListener('DOMContentLoaded', () => {
+            // 标签页切换
+            const tabTriggers = document.querySelectorAll('.tab-trigger');
+            tabTriggers.forEach(trigger => {
+                trigger.addEventListener('click', () => {
+                    const targetTab = trigger.dataset.tab;
+                    const tabContents = document.querySelectorAll('.tab-content');
+
+                    // 更新触发按钮状态
+                    tabTriggers.forEach(t => t.classList.remove('tab-active'));
+                    trigger.classList.add('tab-active');
+
+                    // 更新内容显示
+                    tabContents.forEach(content => {
+                        content.classList.add('hidden');
+                        if (content.id === `tab-${targetTab}`) {
+                            content.classList.remove('hidden');
+                        }
+                    });
+                });
+            });
+
+            // 折叠面板
+            const collapseTriggers = document.querySelectorAll('.collapse-trigger');
+            collapseTriggers.forEach(trigger => {
+                trigger.addEventListener('click', () => {
+                    const targetCollapse = trigger.nextElementSibling;
+                    const icon = trigger.querySelector('.collapse-icon');
+
+                    targetCollapse.classList.toggle('hidden');
+                    icon.classList.toggle('rotate-180');
+                });
+            });
+
+            // API 模拟调用
+            const apiForm = document.getElementById('api-tune-form');
+            if (apiForm) {
+                apiForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const policyId = document.getElementById('policy-id').value;
+                    const dropRate = document.getElementById('drop-rate').value;
+                    const latency = document.getElementById('latency').value;
+                    const mode = document.getElementById('tune-mode').value;
+
+                    // 模拟响应数据
+                    const response = {
+                        policy_id: policyId || 'plc_abc123',
+                        recommended_parameters: {
+                            qps_limit: mode === 'safe' ? Math.ceil((1 / (dropRate || 0.01)) * 800) : Math.ceil((1 / (dropRate || 0.01)) * 950),
+                            burst_capacity: mode === 'safe' ? 250 : 350,
+                            per_tenant_weights: { tenant_123: 1.0 }
+                        },
+                        predicted_sli: {
+                            drop_rate: parseFloat(dropRate || 0.01) * 0.8,
+                            p95_latency_ms: parseInt(latency || 200) + 5
+                        },
+                        confidence: mode === 'safe' ? 0.88 : 0.75
+                    };
+
+                    // 显示响应
+                    const responseEl = document.getElementById('api-response');
+                    responseEl.innerHTML = `<pre class="bg-neutral-800 text-white p-4 rounded-md overflow-x-auto"><code>${JSON.stringify(response, null, 2)}</code></pre>`;
+                });
+            }
+
+            // 指标筛选
+            const tenantFilter = document.getElementById('tenant-filter');
+            if (tenantFilter) {
+                tenantFilter.addEventListener('change', () => {
+                    const selectedTenant = tenantFilter.value;
+                    const rows = document.querySelectorAll('#metrics-table tbody tr');
+
+                    rows.forEach(row => {
+                        if (selectedTenant === 'all' || row.dataset.tenant === selectedTenant) {
+                            row.classList.remove('hidden');
+                        } else {
+                            row.classList.add('hidden');
+                        }
+                    });
+                });
+            }
+
+            // 告警模拟
+            const triggerAlarmBtn = document.getElementById('trigger-alarm');
+            if (triggerAlarmBtn) {
+                triggerAlarmBtn.addEventListener('click', () => {
+                    const alarmEl = document.getElementById('alarm-notification');
+                    alarmEl.classList.remove('hidden');
+                    alarmEl.classList.add('animate-pulse');
+
+                    // 3秒后自动关闭
+                    setTimeout(() => {
+                        alarmEl.classList.add('hidden');
+                        alarmEl.classList.remove('animate-pulse');
+                    }, 3000);
+                });
+            }
+
+            // 策略验证
+            const policyVerifyForm = document.getElementById('policy-verify-form');
+            if (policyVerifyForm) {
+                policyVerifyForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const sqlTemplate = document.getElementById('sql-template').value;
+                    const verifyResult = document.getElementById('verify-result');
+
+                    // 简单正则匹配订单查询SQL
+                    const orderSqlRegex = /SELECT .* FROM orders WHERE user_id\s*=\s*\?/i;
+                    if (orderSqlRegex.test(sqlTemplate)) {
+                        verifyResult.innerHTML = `<div class="bg-green-50 text-green-700 p-3 rounded-md">✅ 匹配策略：orders_read_policy（QPS限制：1000，BURST：200）</div>`;
+                    } else {
+                        verifyResult.innerHTML = `<div class="bg-red-50 text-red-700 p-3 rounded-md">❌ 未匹配任何现有策略，请创建新策略</div>`;
+                    }
+                });
+            }
+        });
+    </script>
+</head>
+<body class="bg-neutral-100 font-sans text-neutral-800">
+<!-- 顶部导航 -->
+<header class="sticky top-0 z-50 bg-white card-shadow">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center py-4">
+            <h1 class="text-xl font-bold text-primary">限流 SLO/SLI 体系 · 实操平台</h1>
+            <nav class="hidden md:flex space-x-8">
+                <a href="#concepts" class="text-neutral-800 hover:text-primary transition-colors">核心概念</a>
+                <a href="#metrics" class="text-neutral-800 hover:text-primary transition-colors">指标观测</a>
+                <a href="#tuning" class="text-neutral-800 hover:text-primary transition-colors">参数调优</a>
+                <a href="#openapi" class="text-neutral-800 hover:text-primary transition-colors">API 工具</a>
+                <a href="#scenarios" class="text-neutral-800 hover:text-primary transition-colors">场景手册</a>
+            </nav>
+            <button class="md:hidden text-neutral-800">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </button>
+        </div>
+    </div>
+</header>
+
+<!-- 主内容区 -->
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- 概览面板 -->
+    <section class="mb-12 bg-white rounded-xl p-6 card-shadow">
+        <h2 class="text-2xl font-bold mb-4">体系概览</h2>
+        <p class="text-neutral-600 mb-6">本平台提供限流机制的全流程实操支持，涵盖指标观测、参数调优、API调用、场景落地四大核心能力，帮助业务方快速实现“可观测、可对话、可调优”的限流管理。</p>
+
+        <!-- 核心能力卡片 -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="bg-neutral-100 rounded-lg p-5 hover:bg-neutral-200 transition-colors">
+                <div class="text-primary text-3xl mb-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-1a4 4 0 00-4-4H5a4 4 0 00-4 4v1" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-1a4 4 0 014-4h2a4 4 0 014 4v1" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13l-3-3m0 0l-3 3m3-3v12" />
+                    </svg>
+                </div>
+                <h3 class="font-semibold text-lg mb-2">指标观测</h3>
+                <p class="text-sm text-neutral-600">实时监控 SLI 指标（成功率、延迟、公平性），支持多粒度筛选</p>
+            </div>
+            <div class="bg-neutral-100 rounded-lg p-5 hover:bg-neutral-200 transition-colors">
+                <div class="text-primary text-3xl mb-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                </div>
+                <h3 class="font-semibold text-lg mb-2">参数调优</h3>
+                <p class="text-sm text-neutral-600">基于 SLO 目标自动推荐参数，支持安全/激进两种调优模式</p>
+            </div>
+            <div class="bg-neutral-100 rounded-lg p-5 hover:bg-neutral-200 transition-colors">
+                <div class="text-primary text-3xl mb-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4" />
+                    </svg>
+                </div>
+                <h3 class="font-semibold text-lg mb-2">API 工具</h3>
+                <p class="text-sm text-neutral-600">模拟 OpenAPI 调用流程，生成请求/响应示例，支持策略验证</p>
+            </div>
+            <div class="bg-neutral-100 rounded-lg p-5 hover:bg-neutral-200 transition-colors">
+                <div class="text-primary text-3xl mb-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                    </svg>
+                </div>
+                <h3 class="font-semibold text-lg mb-2">场景落地</h3>
+                <p class="text-sm text-neutral-600">覆盖压测、高峰期保护、租户风暴等场景，提供 step-by-step 指南</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 1. 核心概念与使用基础 -->
+    <section id="concepts" class="mb-12 bg-white rounded-xl p-6 card-shadow">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-bold">1. 核心概念与使用基础</h2>
+            <span class="text-sm text-neutral-500">面向业务集成方</span>
+        </div>
+
+        <!-- 高阶目标与设计原则 -->
+        <div class="mb-8">
+            <h3 class="text-xl font-semibold mb-4 flex items-center">
+                <span class="bg-primary text-white w-6 h-6 rounded-full flex items-center justify-center mr-2 text-sm">1</span>
+                高阶目标与设计原则
+            </h3>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- 原则列表 -->
+                <div class="bg-neutral-100 rounded-lg p-5">
+                    <h4 class="font-medium mb-3">四大核心原则</h4>
+                    <ul class="space-y-3">
+                        <li class="flex items-start">
+                            <span class="text-primary mr-2">●</span>
+                            <div>
+                                <strong>业务效果优先</strong>：用“查询成功率”“延迟占比”等业务语言定义 SLO
+                            </div>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-primary mr-2">●</span>
+                            <div>
+                                <strong>最小复杂度暴露</strong>：业务方仅需设置 <code class="bg-neutral-200 px-1 rounded text-sm">max_drop_rate</code> 等目标，系统返回参数
+                            </div>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-primary mr-2">●</span>
+                            <div>
+                                <strong>闭环可调优</strong>：支持线上观测 → 仿真回放 → 自动调优全流程
+                            </div>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-primary mr-2">●</span>
+                            <div>
+                                <strong>多粒度观测</strong>：覆盖全局/租户/API/SQL 模板四级维度
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- 实操建议 -->
+                <div class="bg-neutral-100 rounded-lg p-5">
+                    <h4 class="font-medium mb-3">业务方实操建议</h4>
+                    <div class="space-y-4">
+                        <div class="flex items-start">
+                            <span class="bg-primary/10 text-primary w-6 h-6 rounded-full flex items-center justify-center mr-3 text-sm">1</span>
+                            <div>
+                                <strong>初始 SLO 设定</strong>：优先保障核心业务（如订单查询）的 <code class="bg-neutral-200 px-1 rounded text-sm">success_rate ≥ 99.9%</code>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="bg-primary/10 text-primary w-6 h-6 rounded-full flex items-center justify-center mr-3 text-sm">2</span>
+                            <div>
+                                <strong>观测粒度选择</strong>：租户级观测用于排查“单租户风暴”，SQL 级用于优化慢查询限流
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="bg-primary/10 text-primary w-6 h-6 rounded-full flex items-center justify-center mr-3 text-sm">3</span>
+                            <div>
+                                <strong>调优模式选择</strong>：高峰期用“安全模式”，平峰期用“激进模式”探索最优参数
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLO/SLI 核心定义 -->
+        <div>
+            <h3 class="text-xl font-semibold mb-4 flex items-center">
+                <span class="bg-primary text-white w-6 h-6 rounded-full flex items-center justify-center mr-2 text-sm">2</span>
+                SLO/SLI 核心定义（业务必懂）
+            </h3>
+
+            <div class="overflow-x-auto mb-6">
+                <table class="min-w-full divide-y divide-neutral-300">
+                    <thead class="bg-neutral-100">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">指标类型</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">业务含义</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">计算公式</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">常见 SLO 目标</th>
+                    </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-neutral-200">
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap font-medium">成功率</td>
+                        <td class="px-6 py-4">未被限流/降级的请求占比</td>
+                        <td class="px-6 py-4 text-sm font-mono">
+                            <code>success_rate = 1 - drop_rate - error_rate</code>
+                        </td>
+                        <td class="px-6 py-4 text-sm">
+                            <code>≥ 99.9%（30d 滚动窗口）</code>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap font-medium">被限流率</td>
+                        <td class="px-6 py-4">因限流被拒绝的请求占比</td>
+                        <td class="px-6 py-4 text-sm font-mono">
+                            <code>drop_rate = dropped / total</code>
+                        </td>
+                        <td class="px-6 py-4 text-sm">
+                            <code>≤ 0.5%（1h 窗口）</code>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap font-medium">P95 延迟</td>
+                        <td class="px-6 py-4">95% 请求的响应时间（排除被限流请求）</td>
+                        <td class="px-6 py-4 text-sm font-mono">
+                            <code>95th percentile of response_time</code>
+                        </td>
+                        <td class="px-6 py-4 text-sm">
+                            <code>≤ 200ms（95% 1h 窗口）</code>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap font-medium">公平性</td>
+                        <td class="px-6 py-4">租户间限流率差异（避免单租户被过度限制）</td>
+                        <td class="px-6 py-4 text-sm font-mono">
+                            <code>fairness_gini = Gini(per-tenant_success)</code>
+                        </td>
+                        <td class="px-6 py-4 text-sm">
+                            <code>per-tenant_drop_std ≤ 0.5%</code>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 折叠面板：更多指标定义 -->
+            <div class="collapse-trigger flex justify-between items-center bg-neutral-100 p-3 rounded-lg cursor-pointer">
+                <span class="font-medium">查看更多指标定义（重试率/成本化指标）</span>
+                <span class="collapse-icon transition-transform duration-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </span>
+            </div>
+            <div class="collapse-content hidden mt-2 bg-white p-4 rounded-lg border border-neutral-200">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <h4 class="font-medium mb-2">重试率（Retry Rate）</h4>
+                        <p class="text-sm text-neutral-600 mb-2">客户端重试导致的额外请求占比，过高可能引发雪崩效应</p>
+                        <p class="text-sm font-mono bg-neutral-100 p-2 rounded">
+                            retry_rate = retry_requests / total_requests
+                        </p>
+                        <p class="text-sm text-warning mt-2">注意：当 retry_rate > 5% 时，需检查客户端重试逻辑是否合理</p>
+                    </div>
+                    <div>
+                        <h4 class="font-medium mb-2">成本化指标（Business Loss）</h4>
+                        <p class="text-sm text-neutral-600 mb-2">被限流请求的业务价值损失（需业务方提供映射规则）</p>
+                        <p class="text-sm font-mono bg-neutral-100 p-2 rounded">
+                            business_loss = dropped_requests * avg_order_value
+                        </p>
+                        <p class="text-sm text-primary mt-2">适用场景：电商订单查询、广告点击等可量化价值的业务</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 2. 指标观测演示 -->
+    <section id="metrics" class="mb-12 bg-white rounded-xl p-6 card-shadow">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-bold">2. 指标观测演示</h2>
+            <span class="text-sm text-primary">支持全局/租户/API 三级筛选</span>
+        </div>
+
+        <!-- 筛选栏 -->
+        <div class="flex flex-wrap gap-4 mb-6">
+            <div class="flex items-center">
+                <label class="mr-2 text-sm font-medium">租户筛选：</label>
+                <select id="tenant-filter" class="border border-neutral-300 rounded-md px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50">
+                    <option value="all">全部租户</option>
+                    <option value="tenant_123">tenant_123（订单业务）</option>
+                    <option value="tenant_456">tenant_456（商品业务）</option>
+                    <option value="tenant_789">tenant_789（用户业务）</option>
+                </select>
+            </div>
+            <div class="flex items-center">
+                <label class="mr-2 text-sm font-medium">时间窗口：</label>
+                <select class="border border-neutral-300 rounded-md px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50">
+                    <option value="1h">最近1小时</option>
+                    <option value="6h">最近6小时</option>
+                    <option value="24h" selected>最近24小时</option>
+                </select>
+            </div>
+            <div class="flex items-center">
+                <label class="mr-2 text-sm font-medium">指标类型：</label>
+                <select class="border border-neutral-300 rounded-md px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50">
+                    <option value="all" selected>全部指标</option>
+                    <option value="success">成功率</option>
+                    <option value="drop">被限流率</option>
+                    <option value="latency">P95延迟</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- 实时指标表格 -->
+        <div class="overflow-x-auto mb-8">
+            <table id="metrics-table" class="min-w-full divide-y divide-neutral-300">
+                <thead class="bg-neutral-100">
+                <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">时间</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">租户ID</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">API/SQL模板</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">请求量</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">成功率</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">被限流率</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">P95延迟(ms)</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">状态</th>
+                </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-neutral-200">
+                <tr data-tenant="tenant_123">
+                    <td class="px-6 py-4 whitespace-nowrap text-sm">14:00</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm">tenant_123</td>
+                    <td class="px-6 py-4 text-sm font-mono text-xs max-w-xs truncate" title="SELECT * FROM orders WHERE user_id = ?">
+                        SELECT * FROM orders WHERE user_id = ?
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm">12,845</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-green-600">99.8%</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm">0.2%</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm">185</td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800">正常</span>
+                    </td>
+                </tr>
+                <tr data-tenant="tenant_456">
+                    <td class="px-6 py-4 whitespace-nowrap text-sm">14:00</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm">tenant_456</td>
+                    <td class="px-6 py-4 text-sm font-mono text-xs max-w-xs truncate" title="SELECT * FROM products WHERE category = ?">
+                        SELECT * FROM products WHERE category = ?
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm">8,562</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-yellow-600">99.2%</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-yellow-600">0.8%</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm">210</td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="px-2 py-1 text-xs rounded-full bg-yellow-100 text-yellow-800">预警</span>
+                    </td>
+                </tr>
+                <tr data-tenant="tenant_789">
+                    <td class="px-6 py-4 whitespace-nowrap text-sm">14:00</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm">tenant_789</td>
+                    <td class="px-6 py-4 text-sm font-mono text-xs max-w-xs truncate" title="SELECT * FROM users WHERE phone = ?">
+                        SELECT * FROM users WHERE phone = ?
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm">5,231</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-red-600">98.5%</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-red-600">1.5%</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm">280</td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="px-2 py-1 text-xs rounded-full bg-red-100 text-red-800">异常</span>
+                    </td>
+                </tr>
+                <tr data-tenant="tenant_123">
+                    <td class="px-6 py-4 whitespace-nowrap text-sm">13:30</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm">tenant_123</td>
+                    <td class="px-6 py-4 text-sm font-mono text-xs max-w-xs truncate" title="SELECT * FROM orders WHERE user_id = ?">
+                        SELECT * FROM orders WHERE user_id = ?
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm">10,542</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-green-600">99.9%</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm">0.1%</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm">178</td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800">正常</span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 模拟仪表盘 -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- QPS 趋势 -->
+            <div class="bg-neutral-100 rounded-lg p-5">
+                <h3 class="font-semibold mb-4">QPS 趋势（最近1小时）</h3>
+                <div class="h-48 flex flex-col justify-end space-y-1">
+                    <div class="flex items-end space-x-1 h-full">
+                        <div class="w-2 bg-primary/70" style="height: 40%"></div>
+                        <div class="w-2 bg-primary/70" style="height: 55%"></div>
+                        <div class="w-2 bg-primary/70" style="height: 60%"></div>
+                        <div class="w-2 bg-primary/70" style="height: 45%"></div>
+                        <div class="w-2 bg-primary/70" style="height: 70%"></div>
+                        <div class="w-2 bg-primary/70" style="height: 85%"></div>
+                        <div class="w-2 bg-primary/70" style="height: 90%"></div>
+                        <div class="w-2 bg-primary/70" style="height: 75%"></div>
+                        <div class="w-2 bg-primary/70" style="height: 65%"></div>
+                        <div class="w-2 bg-primary/70" style="height: 72%"></div>
+                        <div class="w-2 bg-primary/70" style="height: 68%"></div>
+                        <div class="w-2 bg-primary" style="height: 80%"></div>
+                    </div>
+                    <div class="flex justify-between text-xs text-neutral-500 mt-2">
+                        <span>13:00</span>
+                        <span>13:30</span>
+                        <span>14:00</span>
+                    </div>
+                </div>
+                <p class="text-sm text-neutral-600 mt-4">当前 QPS：1,280（峰值 1,520 @13:45）</p>
+            </div>
+
+            <!-- 被限流率仪表盘 -->
+            <div class="bg-neutral-100 rounded-lg p-5 flex flex-col items-center justify-center">
+                <h3 class="font-semibold mb-4">全局被限流率</h3>
+                <div class="relative w-40 h-40">
+                    <!-- 背景环 -->
+                    <svg class="w-full h-full" viewBox="0 0 100 100">
+                        <circle class="gauge-ring" cx="50" cy="50" r="45" fill="none" stroke="#E8F3FF" stroke-width="8" />
+                        <!-- 进度环（1.2%） -->
+                        <circle class="gauge-ring" cx="50" cy="50" r="45" fill="none" stroke="#165DFF" stroke-width="8" stroke-dasharray="282.74" stroke-dashoffset="282.74 - (1.2 / 100) * 282.74" />
+                    </svg>
+                    <!-- 中心文字 -->
+                    <div class="absolute inset-0 flex flex-col items-center justify-center">
+                        <span class="text-3xl font-bold text-primary">1.2%</span>
+                        <span class="text-xs text-neutral-500">SLO 阈值：2%</span>
+                    </div>
+                </div>
+                <div class="flex space-x-4 mt-6">
+                    <span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800">正常</span>
+                    <span class="text-xs text-neutral-500">较昨日 ↓0.3%</span>
+                </div>
+            </div>
+
+            <!-- 告警通知 -->
+            <div class="bg-neutral-100 rounded-lg p-5">
+                <h3 class="font-semibold mb-4 flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-warning mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                    </svg>
+                    告警中心
+                </h3>
+                <div id="alarm-notification" class="hidden bg-red-50 border border-red-200 rounded-md p-3 mb-4">
+                    <div class="flex items-start">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-500 mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <div>
+                            <p class="text-sm font-medium text-red-800">tenant_789 被限流率异常</p>
+                            <p class="text-xs text-red-600">14:00 检测到 drop_rate = 1.5%（超阈值 1%），建议调用调优接口</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="space-y-3">
+                    <div class="bg-white p-3 rounded-md border border-neutral-200">
+                        <p class="text-xs text-neutral-600">13:30 - tenant_456 P95延迟预警（210ms > 200ms）</p>
+                    </div>
+                    <div class="bg-white p-3 rounded-md border border-neutral-200">
+                        <p class="text-xs text-neutral-600">12:15 - 全局 QPS 峰值预警（1,800 > 1,500）</p>
+                    </div>
+                </div>
+                <button id="trigger-alarm" class="mt-4 w-full bg-warning/10 text-warning text-sm py-2 rounded-md hover:bg-warning/20 transition-colors">
+                    模拟触发告警
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. 参数调优流程演示 -->
+    <section id="tuning" class="mb-12 bg-white rounded-xl p-6 card-shadow">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-bold">3. 参数调优流程演示</h2>
+            <span class="text-sm text-primary">基于 SLO 目标自动推荐参数</span>
+        </div>
+
+        <!-- 调优流程步骤 -->
+        <div class="mb-8">
+            <div class="flex items-center mb-4">
+                <div class="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center mr-3">1</div>
+                <h3 class="text-lg font-semibold">观测指标异常</h3>
+            </div>
+            <div class="pl-11 mb-6">
+                <p class="text-neutral-600 mb-2">通过指标观测发现 <code class="bg-neutral-200 px-1 rounded text-sm">tenant_789</code> 的被限流率为 1.5%，超过 SLO 目标（1%），需进行参数调优。</p>
+                <div class="bg-neutral-100 p-3 rounded-md text-sm">
+                    <strong>异常指标</strong>：drop_rate = 1.5%（阈值 1%），p95_latency = 280ms（阈值 250ms）
+                </div>
+            </div>
+
+            <div class="flex items-center mb-4">
+                <div class="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center mr-3">2</div>
+                <h3 class="text-lg font-semibold">调用调优 API</h3>
+            </div>
+            <div class="pl-11 mb-6">
+                <p class="text-neutral-600 mb-3">通过 <code class="bg-neutral-200 px-1 rounded text-sm">POST /api/v1/rl/tune</code> 接口提交调优目标，系统基于历史流量数据推荐参数。</p>
+
+                <!-- API 调用模拟表单 -->
+                <div class="bg-neutral-100 p-4 rounded-lg mb-4">
+                    <h4 class="font-medium mb-3">调优 API 模拟调用</h4>
+                    <form id="api-tune-form" class="space-y-3">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-medium mb-1">策略ID（policy_id）</label>
+                                <input type="text" id="policy-id" value="plc_789" class="w-full border border-neutral-300 rounded-md px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium mb-1">调优模式（mode）</label>
+                                <select id="tune-mode" class="w-full border border-neutral-300 rounded-md px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50">
+                                    <option value="safe" selected>safe（安全模式）</option>
+                                    <option value="aggressive">aggressive（激进模式）</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium mb-1">目标被限流率（drop_rate ≤ ?）</label>
+                                <input type="number" id="drop-rate" step="0.001" value="0.01" class="w-full border border-neutral-300 rounded-md px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium mb-1">目标 P95 延迟（p95_latency_ms ≤ ?）</label>
+                                <input type="number" id="latency" value="250" class="w-full border border-neutral-300 rounded-md px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50">
+                            </div>
+                        </div>
+                        <button type="submit" class="bg-primary text-white px-4 py-2 rounded-md text-sm hover:bg-primary/90 transition-colors">
+                            发送调优请求
+                        </button>
+                    </form>
+
+                    <!-- 模拟响应 -->
+                    <div id="api-response" class="mt-4">
+                        <p class="text-xs text-neutral-500 mb-1">点击“发送调优请求”查看模拟响应</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex items-center mb-4">
+                <div class="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center mr-3">3</div>
+                <h3 class="text-lg font-semibold">应用推荐参数</h3>
+            </div>
+            <div class="pl-11">
+                <p class="text-neutral-600 mb-3">将调优 API 返回的推荐参数通过 <code class="bg-neutral-200 px-1 rounded text-sm">PUT /api/v1/rl/policies/{id}</code> 接口更新到策略中。</p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div class="bg-neutral-100 p-3 rounded-md">
+                        <h4 class="font-medium text-sm mb-2">调整前参数</h4>
+                        <ul class="text-sm space-y-1">
+                            <li>qps_limit: 800</li>
+                            <li>burst_capacity: 150</li>
+                            <li>per_tenant_weights: { tenant_789: 0.8 }</li>
+                        </ul>
+                    </div>
+                    <div class="bg-green-50 p-3 rounded-md border border-green-200">
+                        <h4 class="font-medium text-sm mb-2">推荐参数（调整后）</h4>
+                        <ul class="text-sm space-y-1">
+                            <li>qps_limit: 1000 <span class="text-green-600">(↑25%)</span></li>
+                            <li>burst_capacity: 250 <span class="text-green-600">(↑66.7%)</span></li>
+                            <li>per_tenant_weights: { tenant_789: 1.0 } <span class="text-green-600">(↑0.2)</span></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <p class="text-sm text-primary">参数应用后，建议等待 10-15 分钟观测指标变化，确认是否达到 SLO 目标。</p>
+            </div>
+        </div>
+
+        <!-- 调优算法说明 -->
+        <div class="mt-8">
+            <h3 class="text-xl font-semibold mb-4">调优算法选择指南</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="bg-neutral-100 rounded-lg p-4">
+                    <h4 class="font-medium mb-2 flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-primary mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                        </svg>
+                        规则引擎（首选）
+                    </h4>
+                    <p class="text-xs text-neutral-600 mb-2">基于阈值+滑动窗口，适合明确 SLO 目标的场景</p>
+                    <p class="text-xs text-primary">适用：大部分业务场景（如订单、商品查询）</p>
+                </div>
+                <div class="bg-neutral-100 rounded-lg p-4">
+                    <h4 class="font-medium mb-2 flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-primary mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                        </svg>
+                        PID 控制器
+                    </h4>
+                    <p class="text-xs text-neutral-600 mb-2">连续时间平滑调整 QPS 目标，响应快速</p>
+                    <p class="text-xs text-primary">适用：流量波动大的场景（如促销活动）</p>
+                </div>
+                <div class="bg-neutral-100 rounded-lg p-4">
+                    <h4 class="font-medium mb-2 flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-primary mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        贝叶斯优化
+                    </h4>
+                    <p class="text-xs text-neutral-600 mb-2">离线寻找长期最优参数，配合回放流量</p>
+                    <p class="text-xs text-primary">适用：非高峰期参数预调优</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. OpenAPI 工具集 -->
+    <section id="openapi" class="mb-12 bg-white rounded-xl p-6 card-shadow">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-bold">4. OpenAPI 工具集</h2>
+            <span class="text-sm text-primary">模拟调用 + 策略验证</span>
+        </div>
+
+        <!-- 标签页导航 -->
+        <div class="border-b border-neutral-200 mb-6">
+            <div class="flex space-x-8">
+                <button class="tab-trigger tab-active py-3 px-1 text-sm" data-tab="policy">策略管理 API</button>
+                <button class="tab-trigger py-3 px-1 text-sm text-neutral-500" data-tab="tune">调优仿真 API</button>
+                <button class="tab-trigger py-3 px-1 text-sm text-neutral-500" data-tab="verify">策略验证工具</button>
+            </div>
+        </div>
+
+        <!-- 标签页内容 -->
+        <div class="tab-contents">
+            <!-- 策略管理 API -->
+            <div id="tab-policy" class="tab-content">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- 创建策略示例 -->
+                    <div>
+                        <h3 class="text-lg font-semibold mb-4">创建策略（POST /api/v1/rl/policies）</h3>
+                        <div class="bg-neutral-800 text-white p-4 rounded-md mb-4">
+                                <pre class="text-xs overflow-x-auto"><code>// 请求示例
+{
+  "name": "users_query_policy",
+  "scope": "tenant",
+  "scope_id": "tenant_789",
+  "qps_limit": 1000,
+  "burst_capacity": 250,
+  "sql_templates": ["SELECT * FROM users WHERE phone = ?"],
+  "slo_targets": {
+    "drop_rate": 0.01,
+    "p95_latency_ms": 250
+  },
+  "auto_tune": true
+}</code></pre>
+                        </div>
+                        <div class="bg-neutral-100 p-4 rounded-md">
+                                <pre class="text-xs overflow-x-auto"><code>// 响应示例（201 Created）
+{
+  "policy_id": "plc_789",
+  "message": "policy created",
+  "recommended_next_steps": [
+    "call /api/v1/rl/tune to refine parameters based on recent traffic"
+  ]
+}</code></pre>
+                        </div>
+                    </div>
+
+                    <!-- 查询策略示例 -->
+                    <div>
+                        <h3 class="text-lg font-semibold mb-4">查询策略（GET /api/v1/rl/policies/{id}）</h3>
+                        <div class="bg-neutral-100 p-4 rounded-md mb-4">
+                            <p class="text-sm font-medium mb-2">请求 URL</p>
+                            <p class="text-xs text-primary font-mono">GET /api/v1/rl/policies/plc_789</p>
+                        </div>
+                        <div class="bg-neutral-800 text-white p-4 rounded-md">
+                                <pre class="text-xs overflow-x-auto"><code>// 响应示例（200 OK）
+{
+  "policy_id": "plc_789",
+  "name": "users_query_policy",
+  "scope": "tenant",
+  "scope_id": "tenant_789",
+  "current_parameters": {
+    "qps_limit": 1000,
+    "burst_capacity": 250,
+    "per_tenant_weights": { "tenant_789": 1.0 }
+  },
+  "slo_targets": {
+    "drop_rate": 0.01,
+    "p95_latency_ms": 250
+  },
+  "recent_sli": {
+    "drop_rate": 0.008,
+    "p95_latency_ms": 235,
+    "success_rate": 99.2
+  },
+  "auto_tune": true,
+  "created_at": "2025-05-20T10:30:00Z",
+  "updated_at": "2025-05-20T14:15:00Z"
+}</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 调优仿真 API -->
+            <div id="tab-tune" class="tab-content hidden">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- 调优 API -->
+                    <div>
+                        <h3 class="text-lg font-semibold mb-4">调优 API（POST /api/v1/rl/tune）</h3>
+                        <div class="bg-neutral-800 text-white p-4 rounded-md mb-4">
+                                <pre class="text-xs overflow-x-auto"><code>// 请求示例
+{
+  "policy_id": "plc_789",
+  "slo_targets": {
+    "drop_rate": 0.01,
+    "p95_latency_ms": 250
+  },
+  "horizon_minutes": 60,
+  "mode": "safe"
+}</code></pre>
+                        </div>
+                        <div class="bg-neutral-100 p-4 rounded-md">
+                                <pre class="text-xs overflow-x-auto"><code>// 响应示例（200 OK）
+{
+  "policy_id": "plc_789",
+  "recommended_parameters": {
+    "qps_limit": 1000,
+    "burst_capacity": 250,
+    "per_tenant_weights": { "tenant_789": 1.0 }
+  },
+  "predicted_sli": {
+    "drop_rate": 0.008,
+    "p95_latency_ms": 235
+  },
+  "confidence": 0.88,
+  "adjustment_reason": "Current QPS (850) is below recommended limit (1000), increasing burst capacity to handle traffic spikes."
+}</code></pre>
+                        </div>
+                    </div>
+
+                    <!-- 仿真 API -->
+                    <div>
+                        <h3 class="text-lg font-semibold mb-4">仿真 API（POST /api/v1/rl/simulate）</h3>
+                        <p class="text-sm text-neutral-600 mb-4">在隔离通道回放历史流量，验证参数效果（无线上影响）</p>
+                        <div class="bg-neutral-800 text-white p-4 rounded-md mb-4">
+                                <pre class="text-xs overflow-x-auto"><code>// 请求示例
+{
+  "policy_id": "plc_789",
+  "test_parameters": {
+    "qps_limit": 1100,
+    "burst_capacity": 300
+  },
+  "replay_traffic": {
+    "time_range": "last_24h",
+    "traffic_percent": 100
+  }
+}</code></pre>
+                        </div>
+                        <div class="bg-neutral-100 p-4 rounded-md">
+                                <pre class="text-xs overflow-x-auto"><code>// 响应示例（200 OK）
+{
+  "simulation_id": "sim_12345",
+  "policy_id": "plc_789",
+  "test_parameters": {
+    "qps_limit": 1100,
+    "burst_capacity": 300
+  },
+  "simulation_result": {
+    "drop_rate": 0.005,
+    "p95_latency_ms": 220,
+    "success_rate": 99.5,
+    "retry_rate": 0.002
+  },
+  "comparison": {
+    "vs_current": {
+      "drop_rate": "-0.003",
+      "p95_latency_ms": "-15",
+      "success_rate": "+0.3"
+    },
+    "vs_slo": {
+      "drop_rate": "within target (0.01)",
+      "p95_latency_ms": "within target (250)"
+    }
+  },
+  "conclusion": "Test parameters meet SLO targets, recommended for online application."
+}</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 策略验证工具 -->
+            <div id="tab-verify" class="tab-content hidden">
+                <h3 class="text-lg font-semibold mb-4">策略验证工具</h3>
+                <p class="text-neutral-600 mb-6">输入 SQL 模板或租户信息，验证是否匹配现有限流策略</p>
+
+                <!-- 策略验证表单 -->
+                <div class="max-w-2xl mx-auto bg-neutral-100 p-6 rounded-lg mb-8">
+                    <form id="policy-verify-form" class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium mb-2">验证类型</label>
+                            <div class="flex space-x-4">
+                                <label class="flex items-center">
+                                    <input type="radio" name="verify-type" value="sql" checked class="mr-2">
+                                    <span class="text-sm">SQL 模板匹配</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="radio" name="verify-type" value="tenant" class="mr-2">
+                                    <span class="text-sm">租户策略查询</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div id="sql-input-group">
+                            <label class="block text-sm font-medium mb-2">SQL 模板</label>
+                            <textarea id="sql-template" rows="2" class="w-full border border-neutral-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50" placeholder="例如：SELECT * FROM orders WHERE user_id = ?"></textarea>
+                        </div>
+                        <div id="tenant-input-group" class="hidden">
+                            <label class="block text-sm font-medium mb-2">租户ID</label>
+                            <input type="text" id="tenant-id" class="w-full border border-neutral-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50" placeholder="例如：tenant_123">
+                        </div>
+                        <button type="submit" class="w-full bg-primary text-white py-2 rounded-md text-sm hover:bg-primary/90 transition-colors">
+                            执行验证
+                        </button>
+                    </form>
+                    <div id="verify-result" class="mt-6"></div>
+                </div>
+
+                <!-- 验证逻辑说明 -->
+                <div class="bg-neutral-100 p-4 rounded-lg">
+                    <h4 class="font-medium mb-2">验证逻辑说明</h4>
+                    <ul class="text-sm space-y-2 text-neutral-600">
+                        <li>1. SQL 模板匹配：通过正则匹配现有策略中的 <code class="bg-neutral-200 px-1 rounded text-xs">sql_templates</code> 字段</li>
+                        <li>2. 租户策略查询：返回该租户下所有生效的限流策略
+                        <li>3. 验证结果包含匹配的策略ID、参数配置及SLO目标，帮助业务方确认策略生效范围</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. 场景枚举与推荐流程 -->
+    <section id="scenarios" class="mb-12 bg-white rounded-xl p-6 card-shadow">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-bold">5. 场景枚举与推荐流程</h2>
+            <span class="text-sm text-primary">覆盖核心业务场景</span>
+        </div>
+
+        <!-- 场景切换标签 -->
+        <div class="border-b border-neutral-200 mb-6">
+            <div class="flex space-x-8">
+                <button class="tab-trigger tab-active py-3 px-1 text-sm" data-tab="scenario-a">场景A：上线前压测</button>
+                <button class="tab-trigger py-3 px-1 text-sm text-neutral-500" data-tab="scenario-b">场景B：高峰期保护</button>
+                <button class="tab-trigger py-3 px-1 text-sm text-neutral-500" data-tab="scenario-c">场景C：租户风暴</button>
+            </div>
+        </div>
+
+        <!-- 场景内容 -->
+        <div class="tab-contents">
+            <!-- 场景A：上线前压测 -->
+            <div id="tab-scenario-a" class="tab-content">
+                <div class="grid grid-cols-1 lg:grid-cols-5 gap-6">
+                    <!-- 场景描述与流程 -->
+                    <div class="lg:col-span-2">
+                        <h3 class="text-lg font-semibold mb-4">场景描述</h3>
+                        <p class="text-neutral-600 mb-4">新业务上线前，需通过压测验证限流策略有效性，确保上线后能满足 SLO 目标（如成功率 ≥ 99.9%、P95延迟 ≤ 200ms）。</p>
+
+                        <h3 class="text-lg font-semibold mb-4">推荐流程</h3>
+                        <div class="space-y-4 mb-6">
+                            <div class="flex">
+                                <div class="w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center text-xs mr-3 mt-0.5 flex-shrink-0">1</div>
+                                <div>
+                                    <p class="text-sm font-medium">创建基础策略</p>
+                                    <p class="text-xs text-neutral-600">调用 <code class="bg-neutral-200 px-1 rounded">POST /api/v1/rl/policies</code> 设置初始 QPS 与 SLO 目标</p>
+                                </div>
+                            </div>
+                            <div class="flex">
+                                <div class="w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center text-xs mr-3 mt-0.5 flex-shrink-0">2</div>
+                                <div>
+                                    <p class="text-sm font-medium">调用调优接口</p>
+                                    <p class="text-xs text-neutral-600">通过 <code class="bg-neutral-200 px-1 rounded">POST /api/v1/rl/tune</code> 获取基于历史相似流量的推荐参数</p>
+                                </div>
+                            </div>
+                            <div class="flex">
+                                <div class="w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center text-xs mr-3 mt-0.5 flex-shrink-0">3</div>
+                                <div>
+                                    <p class="text-sm font-medium">压测通道仿真</p>
+                                    <p class="text-xs text-neutral-600">使用 <code class="bg-neutral-200 px-1 rounded">POST /api/v1/rl/simulate</code> 回放压测流量，验证参数效果</p>
+                                </div>
+                            </div>
+                            <div class="flex">
+                                <div class="w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center text-xs mr-3 mt-0.5 flex-shrink-0">4</div>
+                                <div>
+                                    <p class="text-sm font-medium">确认上线参数</p>
+                                    <p class="text-xs text-neutral-600">根据仿真结果调整参数，最终通过 <code class="bg-neutral-200 px-1 rounded">PUT /api/v1/rl/policies/{id}</code> 应用配置</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 实操演示按钮 -->
+                        <button id="simulate-pressure-test" class="w-full bg-primary text-white py-2 rounded-md text-sm hover:bg-primary/90 transition-colors mb-4">
+                            模拟压测仿真
+                        </button>
+                        <div id="pressure-test-result" class="hidden bg-neutral-100 p-3 rounded-md">
+                            <h4 class="text-sm font-medium mb-2">压测仿真结果（2025-05-20 15:30）</h4>
+                            <ul class="text-xs space-y-1 text-neutral-600">
+                                <li>● 压测流量：10,000 QPS（持续5分钟）</li>
+                                <li>● 仿真参数：qps_limit=1200，burst_capacity=300</li>
+                                <li>● 结果：success_rate=99.92%，drop_rate=0.08%，p95_latency=185ms</li>
+                                <li>● 结论：满足 SLO 目标（success_rate ≥ 99.9%），可上线</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- 时序图与关键指标 -->
+                    <div class="lg:col-span-3">
+                        <h3 class="text-lg font-semibold mb-4">压测流程时序图</h3>
+                        <div class="mermaid bg-neutral-100 p-4 rounded-md mb-6">
+                            sequenceDiagram
+                            participant B as 业务方
+                            participant API as RL API
+                            participant Sim as 仿真引擎
+                            participant Press as 压测工具
+                            participant Store as 策略存储
+
+                            B->>API: POST /policies (创建基础策略)
+                            API->>Store: 保存策略
+                            API-->>B: 201 (policy_id=plc_test)
+
+                            B->>API: POST /tune (输入SLO目标)
+                            API-->>B: 返回推荐参数(qps=1200)
+
+                            B->>API: POST /simulate (提交参数+压测流量)
+                            API->>Sim: 启动仿真
+                            Sim->>Press: 接收压测流量
+                            Sim->>Store: 读取策略
+                            Sim-->>API: 仿真结果
+                            API-->>B: 仿真报告(成功率99.92%)
+
+                            B->>API: PUT /policies/{id} (确认上线参数)
+                            API->>Store: 更新策略
+                            API-->>B: 200 OK
+                        </div>
+
+                        <h3 class="text-lg font-semibold mb-4">压测关键指标对比</h3>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-neutral-300">
+                                <thead class="bg-neutral-100">
+                                <tr>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">指标</th>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">SLO目标</th>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">初始参数结果</th>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">调优后结果</th>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">是否达标</th>
+                                </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-neutral-200">
+                                <tr>
+                                    <td class="px-4 py-2 whitespace-nowrap text-xs">成功率</td>
+                                    <td class="px-4 py-2 whitespace-nowrap text-xs">≥ 99.9%</td>
+                                    <td class="px-4 py-2 whitespace-nowrap text-xs text-red-600">99.75%</td>
+                                    <td class="px-4 py-2 whitespace-nowrap text-xs text-green-600">99.92%</td>
+                                    <td class="px-4 py-2 whitespace-nowrap text-xs text-green-600">✅</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-2 whitespace-nowrap text-xs">被限流率</td>
+                                    <td class="px-4 py-2 whitespace-nowrap text-xs">≤ 0.1%</td>
+                                    <td class="px-4 py-2 whitespace-nowrap text-xs text-red-600">0.25%</td>
+                                    <td class="px-4 py-2 whitespace-nowrap text-xs text-green-600">0.08%</td>
+                                    <td class="px-4 py-2 whitespace-nowrap text-xs text-green-600">✅</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-2 whitespace-nowrap text-xs">P95延迟(ms)</td>
+                                    <td class="px-4 py-2 whitespace-nowrap text-xs">≤ 200</td>
+                                    <td class="px-4 py-2 whitespace-nowrap text-xs text-red-600">230</td>
+                                    <td class="px-4 py-2 whitespace-nowrap text-xs text-green-600">185</td>
+                                    <td class="px-4 py-2 whitespace-nowrap text-xs text-green-600">✅</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 场景B：高峰期保护 -->
+            <div id="tab-scenario-b" class="tab-content hidden">
+                <div class="grid grid-cols-1 lg:grid-cols-5 gap-6">
+                    <!-- 场景描述与流程 -->
+                    <div class="lg:col-span-2">
+                        <h3 class="text-lg font-semibold mb-4">场景描述</h3>
+                        <p class="text-neutral-600 mb-4">电商大促（如618）高峰期，流量突增导致系统负载升高，需自动触发限流保护，同时保障核心租户（如VIP用户）体验。</p>
+
+                        <h3 class="text-lg font-semibold mb-4">推荐流程</h3>
+                        <div class="space-y-4 mb-6">
+                            <div class="flex">
+                                <div class="w-6 h-6 rounded-full bg-warning text-white flex items-center justify-center text-xs mr-3 mt-0.5 flex-shrink-0">1</div>
+                                <div>
+                                    <p class="text-sm font-medium">指标异常检测</p>
+                                    <p class="text-xs text-neutral-600">系统每10s监控 SLI，当 <code class="bg-neutral-200 px-1 rounded">drop_rate > 0.2%</code> 触发预警</p>
+                                </div>
+                            </div>
+                            <div class="flex">
+                                <div class="w-6 h-6 rounded-full bg-warning text-white flex items-center justify-center text-xs mr-3 mt-0.5 flex-shrink-0">2</div>
+                                <div>
+                                    <p class="text-sm font-medium">自动调优触发</p>
+                                    <p class="text-xs text-neutral-600">Controller 调用 RL 引擎，降低全局 QPS 并提升核心租户权重</p>
+                                </div>
+                            </div>
+                            <div class="flex">
+                                <div class="w-6 h-6 rounded-full bg-warning text-white flex items-center justify-center text-xs mr-3 mt-0.5 flex-shrink-0">3</div>
+                                <div>
+                                    <p class="text-sm font-medium">临时弹性扩容</p>
+                                    <p class="text-xs text-neutral-600">若调优后仍不达标，触发资源扩容（如增加计算节点）</p>
+                                </div>
+                            </div>
+                            <div class="flex">
+                                <div class="w-6 h-6 rounded-full bg-warning text-white flex items-center justify-center text-xs mr-3 mt-0.5 flex-shrink-0">4</div>
+                                <div>
+                                    <p class="text-sm font-medium">高峰期后恢复</p>
+                                    <p class="text-xs text-neutral-600">流量回落时，自动恢复参数至常规配置，避免资源浪费</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 模拟高峰期告警 -->
+                        <button id="trigger-peak-alarm" class="w-full bg-warning text-white py-2 rounded-md text-sm hover:bg-warning/90 transition-colors mb-4">
+                            模拟高峰期告警触发
+                        </button>
+                        <div id="peak-alarm-result" class="hidden bg-neutral-100 p-3 rounded-md">
+                            <div class="flex items-start mb-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-warning mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                                </svg>
+                                <div>
+                                    <p class="text-sm font-medium text-warning">高峰期告警触发（2025-05-20 20:00）</p>
+                                </div>
+                            </div>
+                            <ul class="text-xs space-y-1 text-neutral-600 pl-7">
+                                <li>● 检测到全局 QPS 达 3,500（超常规值 200%）</li>
+                                <li>● 自动调优结果：全局 qps_limit 从 2000 降至 1800，核心租户权重提升至 1.5</li>
+                                <li>● 扩容建议：增加 2 个计算节点（已自动触发）</li>
+                                <li>● 5分钟后指标恢复：drop_rate=0.15%，p95_latency=190ms</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- 时序图与资源调度 -->
+                    <div class="lg:col-span-3">
+                        <h3 class="text-lg font-semibold mb-4">自动保护流程时序图</h3>
+                        <div class="mermaid bg-neutral-100 p-4 rounded-md mb-6">
+                            sequenceDiagram
+                            participant Sys as 业务系统
+                            participant Met as 指标采集
+                            participant Ctrl as 自动控制器
+                            participant RL as RL引擎
+                            participant Res as 资源调度
+                            participant Store as 策略存储
+
+                            loop 每10s监控
+                            Met->>Ctrl: 推送指标(drop_rate=0.3%)
+                            Ctrl->>Ctrl: 检测到超阈值(0.2%)
+                            Ctrl->>RL: 请求参数调整
+                            RL->>Store: 读取当前策略
+                            RL-->>Ctrl: 返回调整建议
+                            Ctrl->>Store: 更新策略(qps=1800)
+                            Ctrl->>Res: 请求扩容(2个节点)
+                            Res-->>Ctrl: 扩容完成
+                            Ctrl->>Sys: 应用新参数+扩容资源
+                            Sys-->>Met: 新指标反馈
+                            end
+                            </sequenceDiagram>
+                        </div>
+
+                        <h3 class="text-lg font-semibold mb-4">高峰期资源调度策略</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                            <div class="bg-neutral-100 p-4 rounded-md">
+                                <h4 class="text-sm font-medium mb-2">租户优先级调度</h4>
+                                <table class="min-w-full">
+                                    <thead>
+                                    <tr class="border-b border-neutral-300">
+                                        <th class="px-2 py-1 text-left text-xs font-medium text-neutral-500">租户类型</th>
+                                        <th class="px-2 py-1 text-left text-xs font-medium text-neutral-500">权重</th>
+                                        <th class="px-2 py-1 text-left text-xs font-medium text-neutral-500">突发额度</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr class="border-b border-neutral-300">
+                                        <td class="px-2 py-2 text-xs">VIP租户</td>
+                                        <td class="px-2 py-2 text-xs text-green-600">1.5</td>
+                                        <td class="px-2 py-2 text-xs">400</td>
+                                    </tr>
+                                    <tr class="border-b border-neutral-300">
+                                        <td class="px-2 py-2 text-xs">普通租户</td>
+                                        <td class="px-2 py-2 text-xs">1.0</td>
+                                        <td class="px-2 py-2 text-xs">200</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-2 py-2 text-xs">测试租户</td>
+                                        <td class="px-2 py-2 text-xs text-neutral-500">0.5</td>
+                                        <td class="px-2 py-2 text-xs text-neutral-500">100</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="bg-neutral-100 p-4 rounded-md">
+                                <h4 class="text-sm font-medium mb-2">资源扩容触发条件</h4>
+                                <ul class="text-xs space-y-2 text-neutral-600">
+                                    <li>● <code class="bg-neutral-200 px-1 rounded">drop_rate > 0.2% 持续2个周期</code></li>
+                                    <li>● <code class="bg-neutral-200 px-1 rounded">CPU利用率 > 85% 持续1分钟</code></li>
+                                    <li>● <code class="bg-neutral-200 px-1 rounded">内存使用率 > 80% 持续1分钟</code></li>
+                                    <li>● 扩容后自动检测，流量回落时触发缩容（延迟5分钟）</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- 高峰期指标趋势 -->
+                        <h3 class="text-lg font-semibold mb-4">高峰期指标趋势</h3>
+                        <div class="bg-neutral-100 p-4 rounded-md">
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="text-sm font-medium">2025-05-20 19:30 - 21:30 指标变化</span>
+                                <span class="text-xs text-neutral-500">单位：drop_rate(%)、latency(ms)</span>
+                            </div>
+                            <!-- 简化趋势图（用CSS模拟） -->
+                            <div class="h-40 relative border-l border-b border-neutral-300 pl-2 pb-2">
+                                <!-- 横轴时间标记 -->
+                                <div class="absolute bottom-0 left-0 w-full flex justify-between text-xs text-neutral-500">
+                                    <span style="left: 0%">19:30</span>
+                                    <span style="left: 25%">20:00</span>
+                                    <span style="left: 50%">20:30</span>
+                                    <span style="left: 75%">21:00</span>
+                                    <span style="left: 100%">21:30</span>
+                                </div>
+                                <!-- 纵轴数值标记 -->
+                                <div class="absolute top-0 left-0 h-full flex flex-col justify-between text-xs text-neutral-500">
+                                    <span style="top: 0%">300</span>
+                                    <span style="top: 25%">250</span>
+                                    <span style="top: 50%">200</span>
+                                    <span style="top: 75%">150</span>
+                                    <span style="top: 100%">0</span>
+                                </div>
+                                <!-- 被限流率曲线（红色） -->
+                                <svg class="absolute top-0 left-0 w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+                                    <path d="M0,95 L25,80 L30,30 L50,40 L75,85 L100,90" stroke="#F53F3F" stroke-width="2" fill="none" />
+                                </svg>
+                                <!-- P95延迟曲线（蓝色） -->
+                                <svg class="absolute top-0 left-0 w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+                                    <path d="M0,80 L25,70 L30,25 L50,35 L75,75 L100,78" stroke="#165DFF" stroke-width="2" fill="none" />
+                                </svg>
+                                <!-- 阈值线 -->
+                                <div class="absolute top-[30%] left-0 w-full h-0.5 bg-yellow-400" style="top: 30%"></div>
+                                <div class="absolute top-[28%] left-0 text-xs text-yellow-400">SLO阈值(200ms)</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 场景C：租户风暴 -->
+            <div id="tab-scenario-c" class="tab-content hidden">
+                <div class="grid grid-cols-1 lg:grid-cols-5 gap-6">
+                    <!-- 场景描述与流程 -->
+                    <div class="lg:col-span-2">
+                        <h3 class="text-lg font-semibold mb-4">场景描述</h3>
+                        <p class="text-neutral-600 mb-4">某单个租户（如tenant_456）因业务异常（如批量任务重复执行）导致请求量突增，占用80%系统资源，影响其他租户正常访问。</p>
+
+                        <h3 class="text-lg font-semibold mb-4">推荐流程</h3>
+                        <div class="space-y-4 mb-6">
+                            <div class="flex">
+                                <div class="w-6 h-6 rounded-full bg-danger text-white flex items-center justify-center text-xs mr-3 mt-0.5 flex-shrink-0">1</div>
+                                <div>
+                                    <p class="text-sm font-medium">租户异常诊断</p>
+                                    <p class="text-xs text-neutral-600">Evaluator 检测到 <code class="bg-neutral-200 px-1 rounded">per-tenant_drop_rate_stddev > 1%</code>，定位异常租户</p>
+                                </div>
+                            </div>
+                            <div class="flex">
+                                <div class="w-6 h-6 rounded-full bg-danger text-white flex items-center justify-center text-xs mr-3 mt-0.5 flex-shrink-0">2</div>
+                                <div>
+                                    <p class="text-sm font-medium">租户级限流下发</p>
+                                    <p class="text-xs text-neutral-600">Controller 为异常租户设置独立 QPS 上限，降低其权重</p>
+                                </div>
+                            </div>
+                            <div class="flex">
+                                <div class="w-6 h-6 rounded-full bg-danger text-white flex items-center justify-center text-xs mr-3 mt-0.5 flex-shrink-0">3</div>
+                                <div>
+                                    <p class="text-sm font-medium">业务方通知</p>
+                                    <p class="text-xs text-neutral-600">通过告警接口通知租户管理员，提供异常请求详情（如SQL模板）</p>
+                                </div>
+                            </div>
+                            <div class="flex">
+                                <div class="w-6 h-6 rounded-full bg-danger text-white flex items-center justify-center text-xs mr-3 mt-0.5 flex-shrink-0">4</div>
+                                <div>
+                                    <p class="text-sm font-medium">恢复与监控</p>
+                                    <p class="text-xs text-neutral-600">租户修复后，逐步恢复其权重，持续监控公平性指标</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 模拟租户风暴诊断 -->
+                        <button id="diagnose-tenant-storm" class="w-full bg-danger text-white py-2 rounded-md text-sm hover:bg-danger/90 transition-colors mb-4">
+                            模拟租户风暴诊断
+                        </button>
+                        <div id="tenant-storm-result" class="hidden bg-neutral-100 p-3 rounded-md">
+                            <div class="flex items-start mb-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-danger mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                <div>
+                                    <p class="text-sm font-medium text-danger">租户风暴诊断结果（2025-05-20 16:45）</p>
+                                </div>
+                            </div>
+                            <ul class="text-xs space-y-1 text-neutral-600 pl-7">
+                                <li>● 异常租户：tenant_456（商品业务）</li>
+                                <li>● 异常表现：请求量占比82%，导致其他租户 drop_rate 达 1.2%</li>
+                                <li>● 异常原因：重复执行批量商品同步任务（SQL模板：SELECT * FROM products WHERE category=?）</li>
+                                <li>● 处理措施：tenant_456 QPS 上限设为 500，权重降至 0.6</li>
+                                <li>● 处理结果：10分钟后公平性恢复，per-tenant_drop_rate_stddev=0.3%</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- 时序图与公平性指标 -->
+                    <div class="lg:col-span-3">
+                        <h3 class="text-lg font-semibold mb-4">租户风暴处理时序图</h3>
+                        <div class="mermaid bg-neutral-100 p-4 rounded-md mb-6">
+                            sequenceDiagram
+                            participant Sys as 业务系统
+                            participant Met as 指标采集
+                            participant Eva as 诊断引擎
+                            participant Ctrl as 控制器
+                            participant B as 业务方
+                            participant Store as 策略存储
+
+                            Met->>Eva: 推送租户级指标
+                            Eva->>Eva: 计算公平性(stddev=1.5%)
+                            Eva-->>Ctrl: 异常报告(tenant_456)
+                            Ctrl->>Store: 下发租户级限流(qps=500)
+                            Ctrl->>B: 发送告警通知(tenant_456异常)
+                            B->>Sys: 修复异常任务
+                            B->>Ctrl: 申请恢复租户权限
+                            Ctrl->>Store: 逐步恢复权重(0.6→1.0)
+                            Met->>Eva: 新指标反馈
+                            Eva-->>Ctrl: 公平性恢复(stddev=0.3%)
+                            </sequenceDiagram>
+                        </div>
+
+                        <!-- 租户公平性对比 -->
+                        <h3 class="text-lg font-semibold mb-4">租户公平性指标对比</h3>
+                        <div class="overflow-x-auto mb-6">
+                            <table class="min-w-full divide-y divide-neutral-300">
+                                <thead class="bg-neutral-100">
+                                <tr>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">指标</th>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">异常时(16:35)</th>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">处理后(16:45)</th>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">SLO目标</th>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">状态</th>
+                                </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-neutral-200">
+                                <tr>
+                                    <td class="px-4 py-2 whitespace-nowrap text-xs">租户请求量占比</td>
+                                    <td class="px-4 py-2 whitespace-nowrap text-xs">
+                                        tenant_456: 82%<br>
+                                        其他租户: 18%
+                                    </td>
+                                    <td class="px-4 py-2 whitespace-nowrap text-xs">
+                                        tenant_456: 25%<br>
+                                        其他租户: 75%
+                                    </td>
+                                    <td class="px-4 py-2 whitespace-nowrap text-xs">单租户≤30%</td>
+                                    <td class="px-4 py-2 whitespace-nowrap text-xs text-green-600">✅</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-2 whitespace-nowrap text-xs">租户被限流率标准差</td>
+                                    <td class="px-4 py-2 whitespace-nowrap text-xs text-red-600">1.5%</td>
+                                    <td class="px-4 py-2 whitespace-nowrap text-xs text-green-600">0.3%</td>
+                                    <td class="px-4 py-2 whitespace-nowrap text-xs">≤0.5%</td>
+                                    <td class="px-4 py-2 whitespace-nowrap text-xs text-green-600">✅</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-2 whitespace-nowrap text-xs">Gini系数</td>
+                                    <td class="px-4 py-2 whitespace-nowrap text-xs text-red-600">0.65</td>
+                                    <td class="px-4 py-2 whitespace-nowrap text-xs text-green-600">0.22</td>
+                                    <td class="px-4 py-2 whitespace-nowrap text-xs">≤0.3</td>
+                                    <td class="px-4 py-2 whitespace-nowrap text-xs text-green-600">✅</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- 租户级限流配置示例 -->
+                        <h3 class="text-lg font-semibold mb-4">租户级限流策略配置</h3>
+                        <div class="bg-neutral-800 text-white p-4 rounded-md">
+                                <pre class="text-xs overflow-x-auto"><code>// 租户级限流策略（PUT /api/v1/rl/policies/plc_456）
+{
+  "name": "tenant_456_emergency",
+  "scope": "tenant",
+  "scope_id": "tenant_456",
+  "qps_limit": 500,  // 独立QPS上限
+  "burst_capacity": 100,
+  "weights": {"tenant_456": 0.6},  // 降低权重
+  "sql_templates": ["SELECT * FROM products WHERE category=?"],
+  "slo_targets": {
+    "drop_rate": 0.02,
+    "fairness_gini": 0.3
+  },
+  "emergency": true,  // 标记为紧急策略
+  "expire_time": "2025-05-20T18:00:00Z"  // 2小时后自动过期
+}</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. 附录与工具下载 -->
+    <section id="appendix" class="mb-12 bg-white rounded-xl p-6 card-shadow">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-bold">6. 附录与工具下载</h2>
+            <span class="text-sm text-primary">快速获取配置模板</span>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- 示例配置 -->
+            <div>
+                <h3 class="text-lg font-semibold mb-4">示例策略 JSON</h3>
+                <div class="bg-neutral-800 text-white p-4 rounded-md mb-6">
+                        <pre class="text-xs overflow-x-auto"><code>{
+  "policy_id": "plc_abc123",
+  "name": "orders_read_policy",
+  "scope": "tenant",
+  "scope_id": "tenant_123",
+  "rules": [
+    {
+      "match": "SELECT .* FROM orders WHERE user_id=?",
+      "qps_limit": 1000,
+      "burst": 200,
+      "priority": 10
+    }
+  ],
+  "slo_targets": {
+    "drop_rate": 0.01,
+    "p95_latency_ms": 200,
+    "fairness_gini": 0.3
+  },
+  "auto_tune": true,
+  "created_at": "2025-05-19T10:00:00Z",
+  "updated_at": "2025-05-20T14:30:00Z"
+}</code></pre>
+                </div>
+
+                <h3 class="text-lg font-semibold mb-4">SQL-like 语法示例</h3>
+                <div class="bg-neutral-100 p-4 rounded-md">
+                        <pre class="text-xs overflow-x-auto font-mono"><code>// 创建限流策略
+CREATE RL POLICY orders_read_policy
+  ON TENANT 'tenant_123'
+  WHEN sql_template LIKE 'SELECT .* FROM orders WHERE user_id=?'
+  SET QPS=1000, BURST=200, PRIORITY=10
+  SLO DROP_RATE <= 0.01, P95_LATENCY_MS <= 200, FAIRNESS_GINI <= 0.3
+  ENABLE AUTO_TUNE;
+
+// 更新策略
+UPDATE RL POLICY orders_read_policy
+  SET QPS=1200, BURST=300
+  WHERE TENANT='tenant_123';
+
+// 查询策略
+SELECT * FROM RL_POLICIES
+  WHERE SCOPE='tenant' AND SCOPE_ID='tenant_123';
+
+// 删除策略
+DROP RL POLICY orders_read_policy;</code></pre>
+                </div>
+            </div>
+
+            <!-- 工具下载 -->
+            <div>
+                <h3 class="text-lg font-semibold mb-4">工具与模板下载</h3>
+                <div class="space-y-4 mb-6">
+                    <div class="bg-neutral-100 p-4 rounded-md flex items-center justify-between">
+                        <div>
+                            <h4 class="text-sm font-medium">Swagger/OpenAPI v3 YAML</h4>
+                            <p class="text-xs text-neutral-600">完整 API 文档，可直接导入 API 网关</p>
+                        </div>
+                        <button class="bg-primary text-white px-3 py-1 rounded-md text-xs hover:bg-primary/90 transition-colors">
+                            下载 YAML
+                        </button>
+                    </div>
+                    <div class="bg-neutral-100 p-4 rounded-md flex items-center justify-between">
+                        <div>
+                            <h4 class="text-sm font-medium">Grafana 面板 JSON</h4>
+                            <p class="text-xs text-neutral-600">包含 QPS、延迟、公平性等核心指标面板</p>
+                        </div>
+                        <button class="bg-primary text-white px-3 py-1 rounded-md text-xs hover:bg-primary/90 transition-colors">
+                            下载 JSON
+                        </button>
+                    </div>
+                    <div class="bg-neutral-100 p-4 rounded-md flex items-center justify-between">
+                        <div>
+                            <h4 class="text-sm font-medium">仿真测试脚本</h4>
+                            <p class="text-xs text-neutral-600">含流量回放器配置、压测参数模板</p>
+                        </div>
+                        <button class="bg-primary text-white px-3 py-1 rounded-md text-xs hover:bg-primary/90 transition-colors">
+                            下载脚本
+                        </button>
+                    </div>
+                </div>
+
+                <h3 class="text-lg font-semibold mb-4">常见问题（FAQ）</h3>
+                <div class="space-y-3">
+                    <div class="bg-neutral-100 p-3 rounded-md">
+                        <h4 class="text-sm font-medium mb-1">Q：如何判断是否需要开启自动调优？</h4>
+                        <p class="text-xs text-neutral-600">A：流量波动较大（如电商促销）、业务目标明确（如固定 SLO）的场景建议开启；流量稳定、参数需严格管控的场景可关闭，采用手动调优。</p>
+                    </div>
+                    <div class="bg-neutral-100 p-3 rounded-md">
+                        <h4 class="text-sm font-medium mb-1">Q：仿真接口与线上实际效果差异大吗？</h4>
+                        <p class="text-xs text-neutral-600">A：仿真采用线上流量回放，差异通常小于 5%；建议选择与目标场景相似的历史流量（如昨日同期）进行仿真，结果更准确。</p>
+                    </div>
+                    <div class="bg-neutral-100 p-3 rounded-md">
+                        <h4 class="text-sm font-medium mb-1">Q：租户级与全局限流冲突时如何处理？</h4>
+                        <p class="text-xs text-neutral-600">A：系统优先满足租户级限流，再校验全局限流；即租户请求需同时满足租户 QPS 上限和全局 QPS 上限，取两者最小值。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 结语与下一步 -->
+    <section class="conclusion bg-neutral-100 rounded-xl p-6">
+        <h2 class="text-2xl font-bold mb-4">结语与下一步建议</h2>
+        <p class="text-neutral-600 mb-6">本平台已完整覆盖限流体系的“观测-调优-落地-诊断”全流程，帮助业务方以最低复杂度实现高可用限流管理。</p>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <div class="bg-white p-4 rounded-md card-shadow">
+                <div class="text-primary text-2xl mb-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                    </svg>
+                </div>
+                <h3 class="font-semibold mb-2">生成 API 文档</h3>
+                <p class="text-xs text-neutral-600 mb-3">自动生成 Swagger/OpenAPI v3 YAML，可直接导入 API 网关或 Postman</p>
+                <button class="w-full bg-primary/10 text-primary text-sm py-2 rounded-md hover:bg-primary/20 transition-colors">
+                    生成文档
+                </button>
+            </div>
+            <div class="bg-white p-4 rounded-md card-shadow">
+                <div class="text-primary text-2xl mb-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-1a4 4 0 00-4-4H5a4 4 0 00-4 4v1" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-1a4 4 0 014-4h2a4 4 0 014 4v1" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13l-3-3m0 0l-3 3m3-3v12" />
+                    </svg>
+                </div>
+                <h3 class="font-semibold mb-2">导出 Grafana 模板</h3>
+                <p class="text-xs text-neutral-600 mb-3">包含核心指标面板（QPS、延迟、公平性），可直接导入 Grafana 监控</p>
+                <button class="w-full bg-primary/10 text-primary text-sm py-2 rounded-md hover:bg-primary/20 transition-colors">
+                    导出模板
+                </button>
+            </div>
+            <div class="bg-white p-4 rounded-md card-shadow">
+                <div class="text-primary text-2xl mb-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                </div>
+                <h3 class="font-semibold mb-2">生成仿真脚本</h3>
+                <p class="text-xs text-neutral-600 mb-3">包含流量回放器配置、压测参数模板，支持快速验证策略效果</p>
+                <button class="w-full bg-primary/10 text-primary text-sm py-2 rounded-md hover:bg-primary/20 transition-colors">
+                    生成脚本
+                </button>
+            </div>
+        </div>
+
+        <p class="text-center text-neutral-500 text-sm">若需进一步定制（如新增场景、调整指标阈值），请联系技术支持团队</p>
+    </section>
+</main>
+
+<!-- 页脚 -->
+<footer class="bg-white border-t border-neutral-200 py-6">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col md:flex-row justify-between items-center">
+            <p class="text-sm text-neutral-500 mb-4 md:mb-0">© 2025 限流 SLO/SLI 体系 | 业务集成指南</p>
+            <div class="flex space-x-6">
+                <a href="#concepts" class="text-sm text-neutral-500 hover:text-primary transition-colors">核心概念</a>
+                <a href="#metrics" class="text-sm text-neutral-500 hover:text-primary transition-colors">指标观测</a>
+                <a href="#scenarios" class="text-sm text-neutral-500 hover:text-primary transition-colors">场景手册</a>
+                <a href="#appendix" class="text-sm text-neutral-500 hover:text-primary transition-colors">工具下载</a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- 交互脚本补充 -->
+<script>
+    // 场景A：模拟压测
+    document.getElementById('simulate-pressure-test').addEventListener('click', function() {
+        const resultEl = document.getElementById('pressure-test-result');
+        resultEl.classList.toggle('hidden');
+    });
+
+    // 场景B：模拟高峰期告警
+    document.getElementById('trigger-peak-alarm').addEventListener('click', function() {
+        const resultEl = document.getElementById('peak-alarm-result');
+        resultEl.classList.toggle('hidden');
+    });
+
+    // 场景C：模拟租户风暴诊断
+    document.getElementById('diagnose-tenant-storm').addEventListener('click', function() {
+        const resultEl = document.getElementById('tenant-storm-result');
+        resultEl.classList.toggle('hidden');
+    });
+
+    // 策略验证类型切换
+    const verifyTypeRadios = document.querySelectorAll('input[name="verify-type"]');
+    verifyTypeRadios.forEach(radio => {
+        radio.addEventListener('change', function() {
+            const sqlGroup = document.getElementById('sql-input-group');
+            const tenantGroup = document.getElementById('tenant-input-group');
+
+            if (this.value === 'sql') {
+                sqlGroup.classList.remove('hidden');
+                tenantGroup.classList.add('hidden');
+            } else {
+                sqlGroup.classList.add('hidden');
+                tenantGroup.classList.remove('hidden');
+            }
+        });
+    });
+</script>
+</body>
+</html>
