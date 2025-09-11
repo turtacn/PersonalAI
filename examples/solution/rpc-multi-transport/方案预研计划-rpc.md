@@ -541,8 +541,8 @@ graph TD
 
 ## 业界最佳实践对比
 
-### 商业存储系统对比| 厂商系统 | 协议支持 | 内核旁路 | 性能特征 | 优势 | 劣势 |
-
+### 商业存储系统对比
+| 厂商系统 | 协议支持 | 内核旁路 | 性能特征 | 优势 | 劣势 |
 |---------|---------|---------|---------|------|------|
 | NetApp ONTAP | 支持NFS over RDMA、NVMe-oF over InfiniBand和RoCE | 部分支持RDMA | 100Gbps InfiniBand支持 | 企业级特性完整、兼容性强 | 性能调优复杂、许可成本高 |
 | Pure Storage FlashArray | 支持NVMe-oF，延迟200-300微秒 | DirectFlash技术 | 相比iSCSI性能提升50% | 硬件优化深度、管理简单 | 协议选择有限、厂商锁定 |
