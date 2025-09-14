@@ -91,8 +91,8 @@
 为使北汽集团在未来 3-5 年在核心技术与产品竞争中占据更有利位置，针对“高压平台（如 800V 超充）”与“城市 NOA / L3 辅助驾驶能力”生态，可考虑如下策略：
 
 ```mermaid
-graph TD
-    subgraph 技术生态建设（Technology Ecosystem）
+graph LR
+    subgraph TE[技术生态建设（Technology Ecosystem）]
         A1[高压平台（800V 超充平台）] --> B1[电池厂商合作（Battery OEM）]
         A1 --> B2[功率电子及冷却系统（Power Electronics & Thermal Management）]
         A1 --> B3[充电网络／超充站点合作（Charging Network Partners）]
@@ -101,7 +101,7 @@ graph TD
         C1 --> D3[车控软件架构＋ OTA 能力（Vehicle Control SW + OTA）]
     end
 
-    subgraph 战术建议（Tactical Actions）
+    subgraph TA[战术建议（Tactical Actions）]
         B1 --> E1[签约中长期采购与联合开发合同]
         B2 --> E2[内部研发 + 外部合作]
         B3 --> E3[建设自营超充网络 &与第三方共享]

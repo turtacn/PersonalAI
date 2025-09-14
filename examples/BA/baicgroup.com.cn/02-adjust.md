@@ -93,12 +93,12 @@
 
 ```mermaid
 graph TD
-    subgraph 优先级阶段（Priority Stages）
+    subgraph PS[优先级阶段（Priority Stages）]
         P1[阶段一（2025-2026）：盈利修复与产品结构调整] --> P2[阶段二（2026-2028）：技术生态与软件能力提升]
         P2 --> P3[阶段三（2028-2030）：国际化扩张与全价值链碳中和]
     end
 
-    subgraph 核心任务（Core Tasks）
+    subgraph CT[核心任务（Core Tasks）]
         T1[产品组合优化与高端车型比例提升] --> P1
         T2[成本控制＋制造效率提升] --> P1
         T3[自动驾驶与感知系统快速迭代＋法规落地] --> P2
