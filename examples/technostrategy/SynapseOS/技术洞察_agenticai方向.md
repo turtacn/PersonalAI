@@ -83,6 +83,9 @@
 
 通过对本企业、主要竞争对手在AgenticAI领域关键技术竞争维度上的估值（1-10分，10为最高），以雷达图形式直观展示技术差距，并评估`https://github.com/turtacn/agenticai`项目在这些维度上的表现。
 
+<img src="agenticai-radar.png"  width="100%" />
+
+<!--
 ```mermaid
 %% Legend:
 %% 蓝色线条（Blue Line）: 本企业（Our Company）
@@ -111,6 +114,7 @@ radarChart
         竞品A（Competitor A）: [9, 8, 7, 7, 9, 8]
         项目AgenticAI（Project AgenticAI）: [8, 7, 9, 7, 8, 8] %% 基于对AgenticAI项目的分析数据
 ```
+-->
 
 **图2.5-1 AgenticAI技术领域关键维度对比雷达图**
 此雷达图直观展示了本企业、竞品A以及`https://github.com/turtacn/agenticai`项目在AgenticAI技术领域的六个关键维度上的相对表现。从图中可以看出，本企业在"可靠性（Reliability）"（8分）和"安全性（Security）"（8分）方面表现良好，但"成本效益（Cost Efficiency）"（6分）和"演进能力（Evolvability）"（6分）仍有提升空间，平均与竞品存在1-3分的差距。竞品A在"性能（Performance）"（9分）和"演进能力（Evolvability）"（9分）上具有优势。`https://github.com/turtacn/agenticai`项目则在"成本效益（Cost Efficiency）"方面表现突出（9分），在其他维度也处于中上水平（平均7-8分），尤其值得本企业在开源策略中加以关注和借鉴，以弥补自身在成本效益方面的不足，并提升整体技术竞争力。
