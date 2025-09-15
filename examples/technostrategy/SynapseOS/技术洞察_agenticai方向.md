@@ -186,7 +186,7 @@ AgenticAI行业正处于快速发展期，标准体系逐步形成（例如Kuber
 对本企业在AgenticAI技术领域进行全面SWOT分析，识别内部优势与劣势，外部机会与威胁，并结合`https://github.com/turtacn/agenticai`项目可能带来的影响，提出相应的技术要求和对策。
 
 ```mermaid
-graph LR
+graph TD
     subgraph S[优势（Strengths）]
         S1[企业级解决方案经验丰富（Rich Enterprise Solution Experience）]
         S2[现有客户基础广泛（Broad Customer Base）]
@@ -201,7 +201,7 @@ graph LR
 
     subgraph O[机会（Opportunities）]
         O1[企业对AgenticAI平台需求快速增长（Rapidly Growing Demand）]
-        O2[开源生态成熟提供技术捷径（Maturing Open Source Ecosystem）<br/>(例如: https://github.com/turtacn/agenticai 项目)]
+        O2[开源生态成熟提供技术捷径（Maturing Open Source Ecosystem）]
         O3[政策支持AI基础设施发展（Policy Support for AI Infrastructure）]
     end
 
@@ -257,11 +257,11 @@ graph TD
     %% 绿色（Green）: 支撑行动（Supporting Actions）
     %% 黄色（Yellow）: 关键里程碑（Key Milestones）
 
-    legend
-        核心行动: #007bff
-        支撑行动: #28a745
-        关键里程碑: #ffc107
-    end
+    %% legend
+    %%     核心行动: #007bff
+    %%     支撑行动: #28a745
+    %%    关键里程碑: #ffc107
+    %% end
 
     A1[战略规划（Strategic Planning）] --> B1[技术评估与选型（Technology Evaluation & Selection）]
     B1 --> C1[第一阶段研发（Phase 1 R&D）]
