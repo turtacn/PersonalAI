@@ -272,12 +272,6 @@ graph TD
     %% 绿色（Green）: 支撑行动（Supporting Actions）
     %% 黄色（Yellow）: 关键里程碑（Key Milestones）
 
-    legend
-        核心行动: #007bff
-        支撑行动: #28a745
-        关键里程碑: #ffc107
-    end
-
     A1[战略规划（Strategic Planning）] --> B1[技术评估与选型（Technology Evaluation & Selection）]
     B1 --> C1[第一阶段研发（Phase 1 R&D）]
     C1 --> D1[部署与验证（Deployment & Validation）]
