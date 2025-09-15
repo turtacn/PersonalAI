@@ -87,6 +87,9 @@ IQH访谈验证了虚拟集群技术在平衡多租户隔离与资源利用率�
 
 通过对本企业、主要竞争对手在基于虚拟集群的多租户Kubernetes平台领域关键技术竞争维度上的估值，以雷达图形式直观展示技术差距，并评估`chasi-bod`项目在这些维度上的表现。
 
+<img src="chasibod-radar.png" width="100%" />
+
+<!--
 ```mermaid
 %% Legend:
 %% 蓝色线条（Blue Line）: 本企业（Our Company）
@@ -115,6 +118,7 @@ radarChart
         竞品A（Competitor A）: [9, 8, 7, 9, 8, 9]
         项目chasi-bod（Project chasi-bod）: [8, 9, 9, 7, 7, 6] %% 基于对chasi-bod项目的分析数据
 ```
+-->
 
 **图2.5-1 多租户Kubernetes平台关键维度对比雷达图**
 此雷达图直观展示了本企业、竞品A以及`chasi-bod`项目在多租户Kubernetes平台领域的六个关键维度上的相对表现。本企业在"易用性（Usability）"和"可扩展性（Scalability）"方面表现相对较好，但在"隔离强度（Isolation Strength）"和"部署速度（Deployment Speed）"上仍有提升空间。竞品A在"隔离强度（Isolation Strength）"和"可观测性（Observability）"上具有一定优势。`chasi-bod`项目则在"资源效率（Resource Efficiency）"和"部署速度（Deployment Speed）"方面表现突出，尤其在集群镜像化部署上的创新值得本企业重点关注和借鉴。
@@ -262,11 +266,11 @@ graph TD
     %% 绿色（Green）: 支撑行动（Supporting Actions）
     %% 黄色（Yellow）: 关键里程碑（Key Milestones）
 
-    legend
-        核心行动: #007bff
-        支撑行动: #28a745
-        关键里程碑: #ffc107
-    end
+    %% legend
+    %%    核心行动: #007bff
+    %%    支撑行动: #28a745
+    %%    关键里程碑: #ffc107
+    %% end
 
     A1[战略规划（Strategic Planning）] --> B1[技术评估与选型（Technology Evaluation & Selection）]
     B1 --> C1[第一阶段研发（Phase 1 R&D）]
