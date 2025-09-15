@@ -122,20 +122,20 @@ gantt
     milestone M4_Q2[生态系统初具规模 V1.0]: 2025-06-30
 
     %% 依赖关系
-    T1.1 --> T1.2
-    T1.1 --> T1.3
-    T1.3 --> T3.1
-    T2.1 --> T2.2
-    T2.2 --> T2.3
-    T3.1 --> T3.2
-    T3.2 --> T3.3
-    T1.2 --> T4.1
-    T4.1 --> T4.2
-    T1.4 --> T4.3
-    T1.3 --> M1_Q2
-    T2.3 --> M2_Q4
-    T3.3 --> M3_Q1
-    T4.2 --> M4_Q2
+    %%T1.1 --> T1.2
+    %%T1.1 --> T1.3
+    %%T1.3 --> T3.1
+    %%T2.1 --> T2.2
+    %%T2.2 --> T2.3
+    %%T3.1 --> T3.2
+    %%T3.2 --> T3.3
+    %%T1.2 --> T4.1
+    %%T4.1 --> T4.2
+    %%T1.4 --> T4.3
+    %%T1.3 --> M1_Q2
+    %%T2.3 --> M2_Q4
+    %%T3.3 --> M3_Q1
+    %%T4.2 --> M4_Q2
 ```
 
 **图表解释：KubeStack-AI技术战略目标达成路径 (2024-2025)**
@@ -170,10 +170,16 @@ gantt
 
 **参考资料**
 
-\[1] GitHub项目: `<https://github.com/turtacn/kubestack-ai>`
-\[2] Cloud Native Computing Foundation. (2023). *Cloud Native Landscape*. Retrieved from [https://landscape.cncf.io/](https://landscape.cncf.io/)
-\[3] Datadog. (2023). *The State of Cloud Native Monitoring*. Retrieved from [https://www.datadoghq.com/state-of-cloud-native-monitoring/](https://www.datadoghq.com/state-of-cloud-native-monitoring/)
-\[4] k8sgpt-ai项目 - [https://github.com/k8sgpt-ai/k8sgpt](https://github.com/k8sgpt-ai/k8sgpt)
-\[5] kubectl-ai项目 - [https://github.com/GoogleCloudPlatform/kubectl-ai](https://github.com/GoogleCloudPlatform/kubectl-ai)
-\[6] NASA. (2020). *Technology Readiness Levels (TRL)*. Retrieved from [https://www.nasa.gov/directorates/heo/scan/engineering/technology/readiness\_levels](https://www.nasa.gov/directorates/heo/scan/engineering/technology/readiness_levels)
-\[7] Project Management Institute. (2017). *A Guide to the Project Management Body of Knowledge (PMBOK® Guide)*. Newtown Square, PA: PMI.
+[1] GitHub项目: `<https://github.com/turtacn/kubestack-ai>`
+
+[2] Cloud Native Computing Foundation. (2023). *Cloud Native Landscape*. Retrieved from [https://landscape.cncf.io/](https://landscape.cncf.io/)
+
+[3] Datadog. (2023). *The State of Cloud Native Monitoring*. Retrieved from [https://www.datadoghq.com/state-of-cloud-native-monitoring/](https://www.datadoghq.com/state-of-cloud-native-monitoring/)
+
+[4] k8sgpt-ai项目 - [https://github.com/k8sgpt-ai/k8sgpt](https://github.com/k8sgpt-ai/k8sgpt)
+
+[5] kubectl-ai项目 - [https://github.com/GoogleCloudPlatform/kubectl-ai](https://github.com/GoogleCloudPlatform/kubectl-ai)
+
+[6] NASA. (2020). *Technology Readiness Levels (TRL)*. Retrieved from [https://www.nasa.gov/directorates/heo/scan/engineering/technology/readiness_levels](https://www.nasa.gov/directorates/heo/scan/engineering/technology/readiness_levels)
+
+[7] Project Management Institute. (2017). *A Guide to the Project Management Body of Knowledge (PMBOK® Guide)*. Newtown Square, PA: PMI.
