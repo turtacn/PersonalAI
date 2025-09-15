@@ -88,34 +88,10 @@ KubeStack-AI项目在插件化架构、AI与RAG集成以及部署灵活性方面
 
 通过对本企业、主要竞争对手在云原生中间件智能运维领域关键技术竞争维度上的估值，以雷达图形式直观展示技术差距，并评估KubeStack-AI项目在这些维度上的表现。
 
-```mermaid
-%% Legend:
-%% 蓝色线条（Blue Line）: 本企业（Our Company）
-%% 红色线条（Red Line）: 竞品A（Competitor A - Datadog）
-%% 绿色线条（Green Line）: KubeStack-AI项目（Project KubeStack-AI）
 
-pie
-    title 技术竞争力对比雷达图（Technical Competitiveness Radar Chart）
-    "本企业（Our Company）" : 蓝色（Blue）
-    "竞品A（Competitor A）" : 红色（Red）
-    "KubeStack-AI项目（Project KubeStack-AI）" : 绿色（Green）
 
-radarChart
-    title 云原生中间件智能运维技术领域关键维度对比
-    %% 维度名称（Dimension Name）: 最大值（Max Value）
-    中间件覆盖度（Middleware Coverage）: 10
-    AI智能度（AI Intelligence）: 10
-    易用性（Usability）: 10
-    部署灵活性（Deployment Flexibility）: 10
-    扩展性（Extensibility）: 10
-    企业级特性（Enterprise Features）: 10
-    
-    %% 数据点（Data Points）: [维度1, 维度2, ..., 维度N]
-    data
-        本企业（Our Company）: [7, 5, 8, 8, 6, 8]
-        竞品A（Competitor A）: [9, 8, 9, 6, 7, 9]
-        KubeStack-AI项目（Project KubeStack-AI）: [6, 8, 7, 9, 9, 5]
-```
+<img src="kubestackai-radar.png" width="100%"/>
+
 
 **图2.5-1 云原生中间件智能运维技术领域关键维度对比雷达图**
 此雷达图直观展示了本企业、竞品A（Datadog）以及KubeStack-AI项目在云原生中间件智能运维领域的六个关键维度上的相对表现。评估分数范围为1（最低）到10（最高）。从图中可以看出，本企业在"部署灵活性（8分）"和"企业级特性（8分）"方面表现相对良好，但在"AI智能度（5分）"和"扩展性（6分）"方面仍有提升空间。竞品A在"中间件覆盖度（9分）"和"易用性（9分）"上具有显著优势。KubeStack-AI项目则在"部署灵活性（9分）"、"扩展性（9分）"和"AI智能度（8分）"方面表现突出，尤其值得本企业在开源策略和技术路线规划中加以关注和借鉴。
@@ -203,7 +179,7 @@ graph LR
 
     subgraph O[机会（Opportunities）]
         O1[企业智能化运维需求爆发（Booming Demand for Intelligent Ops）]
-        O2[开源生态快速发展（Rapidly Developing Open Source Ecosystem）<br/>(例如: KubeStack-AI项目的崛起)]
+        O2[开源生态快速发展（Rapidly Developing Open Source Ecosystem）]
         O3[国产化替代政策支持（Policy Support for Localization）]
     end
 
@@ -265,11 +241,11 @@ graph TD
     %% 绿色（Green）: 支撑行动（Supporting Actions）
     %% 黄色（Yellow）: 关键里程碑（Key Milestones）
 
-    legend
-        核心行动: #007bff
-        支撑行动: #28a745
-        关键里程碑: #ffc107
-    end
+    %%legend
+    %%    核心行动: #007bff
+    %%    支撑行动: #28a745
+    %%    关键里程碑: #ffc107
+    %%end
 
     A1[战略规划（Strategic Planning）] --> B1[技术评估与选型（Technology Evaluation & Selection）]
     B1 --> C1[第一阶段研发（Phase 1 R&D）]
