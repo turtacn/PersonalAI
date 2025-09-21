@@ -113,11 +113,11 @@ IAM领域标准迭代加速，并购活动与开源生态竞争加剧。QuantaID
 gantt
     dateFormat  YYYY-MM-DD
     title 技术战略目标达成路径（QuantaID）
-    legend
-        核心技术突破: #007bff
-        生态兼容与扩展: #28a745
-        长期技术储备: #ffc107
-    end
+    %%legend
+    %%    核心技术突破: #007bff
+    %%    生态兼容与扩展: #28a745
+    %%    长期技术储备: #ffc107
+    %%end
 
     section 核心技术突破
     1.1 轻量架构性能优化: active, 2025-07-01, 2025-09-30
