@@ -5,18 +5,18 @@
 #### **功能全景图**
 
 ```mermaid
-graph TD
+graph LR
     %% ------------------- Legend: 顶层图例 -------------------
-    subgraph LEGEND[图例（Legend）]
-        direction LR
-        L1[外部实体]:::external --- L2[核心能力模块]:::module
-        L2 --- L3[平台服务/门户]:::portal
-        L3 --- L4[运维/基础设施]:::infra
-        style L1 fill:#FFF,stroke:#333,stroke-width:2px
-        style L2 fill:#D6EAF8,stroke:#2980B9
-        style L3 fill:#E8F8F5,stroke:#1ABC9C
-        style L4 fill:#FADBD8,stroke:#C0392B
-    end
+    %% subgraph LEGEND[图例（Legend）]
+    %%    direction LR
+    %%    L1[外部实体]:::external --- L2[核心能力模块]:::module
+    %%    L2 --- L3[平台服务/门户]:::portal
+    %%    L3 --- L4[运维/基础设施]:::infra
+    %%    style L1 fill:#FFF,stroke:#333,stroke-width:2px
+    %%    style L2 fill:#D6EAF8,stroke:#2980B9
+    %%    style L3 fill:#E8F8F5,stroke:#1ABC9C
+    %%    style L4 fill:#FADBD8,stroke:#C0392B
+    %% end
     classDef external fill:#F5B7B1,stroke:#B03A2E,stroke-width:2px,color:#000
     classDef portal fill:#D5F5E3,stroke:#239B56,stroke-width:2px,color:#000
     classDef module fill:#D6EAF8,stroke:#2980B9,stroke-width:2px,color:#000
