@@ -698,7 +698,7 @@ graph TD
 
 ### 2.3 KOCA技术平台深度剖析
 
-KOCA(Kingdee Open Cloud-native Architecture,金证开放云原生平台)是金证所有技术战略的基石。
+KOCA(Kingdom Open Cloud-native Architecture,金证开放云原生平台)是金证所有技术战略的基石。
 
 #### 2.3.1 KOCA平台架构
 
